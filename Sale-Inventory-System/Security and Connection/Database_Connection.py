@@ -1,5 +1,6 @@
-import pymysql
 import json
+
+import pymysql
 
 creds = r".creds/credentials.json"
 
