@@ -1,10 +1,13 @@
-import pymysql
+#Decrepted for time being
+
+import json
+import os
 import random
 import smtplib
 from email.message import EmailMessage
-import json
+import pymysql
 
-creds = r".creds/credentials.json"
+creds = ".creds/credentials.json"
 
 with open(creds, "r") as f:
     credentials = json.load(f)
