@@ -37,9 +37,13 @@ class View(tk.Tk):
 
     def main(self):
         self.mainloop()
-    
-    def register(self):
-        self.controller.register(self)
+
+
+    def register(self,name,number,address,access,email,username,password):
+        register_var = [name, number, address, access, email, username, password]
+
+        self.controller.register(register_var)
+
         messagebox.showinfo('Registrion', 'Registraion Successful!')
         self._switch_page(self._login_page)
 
@@ -127,7 +131,7 @@ class View(tk.Tk):
         email_entry = tk.Entry(entryFrame,textvariable=self.email_val)
         username_entry = tk.Entry(entryFrame,textvariable=self.r_username_val)
         password_entry = tk.Entry(entryFrame,textvariable=self.r_password_val)
-        register_btn = tk.Button(entryFrame,font=font.Font(family='Poppins',weight='bold'), text="Register", command=lambda:self.register)
+        register_btn = tk.Button(entryFrame,font=font.Font(family='Poppins',weight='bold'), text="Register", command=lambda:self.register(self.name_val.get(),self.number_val.get(),self.address_val.get(),self.access_val.get(),self.email_val.get(),self.r_username_val.get(),self.r_password_val.get()))
 
         name_lbl.grid(row=0,column=0,padx=5,pady=5)
         name_entry.grid(row=0,column=1,padx=5,pady=5)
