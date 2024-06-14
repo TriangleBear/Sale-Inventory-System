@@ -4,12 +4,7 @@ import os
 import datetime
 from hashlib import sha256
 
-creds = 'credentials.json'
-
-# Check if the credentials file exists
-if not os.path.exists(creds):
-    with open(creds, "r") as f:
-        credentials = json.load(f)
+credentials = json.load(open("D:\Programming\CS 304\Sale-Inventory-System\Sale-Inventory-System\Model\credentials.json"))
 
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()

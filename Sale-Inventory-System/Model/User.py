@@ -1,21 +1,16 @@
-import datetime
 import pymysql
-from pymysql.cursors import DictCursor
+import pymysql.cursors
 import json
 from hashlib import sha256
-import os
 
-creds = './.creds/credentials.json'
-
-# Check if the credentials file exists
-if not os.path.exists(creds):
-    with open(creds, "r") as f:
-        credentials = json.load(f)
+credentials = json.load(open("D:\Programming\CS 304\Sale-Inventory-System\Sale-Inventory-System\Model\credentials.json"))
 
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
 class User:
+    def __init__(self) -> None:
+        pass
     @staticmethod
     def check_username(username):
         vivdb = pymysql.connect(

@@ -5,6 +5,7 @@ from View.view import View
 class Controller:
     def __init__(self):
         self.view = View(self)
+        self.Model = User(self)
 
     def main(self):
         self.view.main()
