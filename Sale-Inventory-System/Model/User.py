@@ -5,7 +5,7 @@ import json
 from hashlib import sha256
 import os
 
-creds = r".creds/credentials.json"
+creds = r"credentials.json"
 
 # Check if the credentials file exists
 if not os.path.exists(creds):

@@ -4,7 +4,7 @@ import os
 import datetime
 from hashlib import sha256
 
-creds = r".creds/credentials.json"
+creds = r"credentials.json"
 
 # Check if the credentials file exists
 if not os.path.exists(creds):
