@@ -9,8 +9,6 @@ def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
 class User:
-    def __init__(self) -> None:
-        pass
     @staticmethod
     def check_username(username):
         vivdb = pymysql.connect(
