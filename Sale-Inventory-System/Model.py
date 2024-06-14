@@ -3,7 +3,7 @@ import pymysql
 from pymysql.cursors import DictCursor
 import json
 from hashlib import sha256
-
+#webhook applied
 creds = r".creds/credentials.json"
 
 with open(creds, "r") as f:
