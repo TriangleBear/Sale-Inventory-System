@@ -1,6 +1,5 @@
 import pymysql.cursors
 import json
-import os
 import datetime
 from hashlib import sha256
 
