@@ -5,14 +5,12 @@ import json
 from hashlib import sha256
 import os
 
-creds = r"credentials.json"
+creds = './.creds/credentials.json'
 
 # Check if the credentials file exists
 if not os.path.exists(creds):
-    raise FileNotFoundError(f"Credentials file not found: {creds}")
-
-with open(creds, "r") as f:
-    credentials = json.load(f)
+    with open(creds, "r") as f:
+        credentials = json.load(f)
 
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()

@@ -152,3 +152,4 @@ cython_debug/
 #.idea/
 /Sale-Inventory-System/.creds
 Sale-Inventory-System/Model/credentials.json
+/Sale-Inventory-System/creds
