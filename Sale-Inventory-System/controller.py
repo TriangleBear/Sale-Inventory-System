@@ -1,5 +1,5 @@
 import sys
-from Model.Model import User, Registration
+from Model import User, Registration
 from View.view import View
 
 class Controller:
