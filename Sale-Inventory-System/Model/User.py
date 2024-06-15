@@ -1,9 +1,6 @@
-import pymysql
-import pymysql.cursors
-import json
+# user.py
 from hashlib import sha256
-
-credentials = json.load(open("D:\Programming\CS 304\Sale-Inventory-System\Sale-Inventory-System\Model\credentials.json"))
+from Utils.Database import get_db_connection
 
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
@@ -11,47 +8,23 @@ def hash_pass(password):
 class User:
     @staticmethod
     def check_username(username):
-        vivdb = pymysql.connect(
-            host=credentials["host"],
-            user=credentials["username"],
-            password=credentials["password"],
-            db="viviandbTEST",
-            port=22577,
-            cursorclass=pymysql.cursors.DictCursor,
-        )
-        try:
+        with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = "SELECT * FROM User WHERE username=%s"
                 cursor.execute(sql, (username,))
-                result = cursor.fetchone()
-                return result
-        finally:
-            vivdb.close()
+                return cursor.fetchone()
 
-    def check_password(store_password, provided_password):
-        if store_password == hash_pass(provided_password):
-            return True
-        return False
-        
+    @staticmethod
+    def check_password(stored_password, provided_password):
+        return stored_password == hash_pass(provided_password)
 
     @staticmethod
     def get_password(username):
-        vivdb = pymysql.connect(
-            host=credentials["host"],
-            user=credentials["username"],
-            password=credentials["password"],
-            db="viviandbTEST",
-            port=22577,
-            cursorclass=pymysql.cursors.DictCursor,
-        )
-        try:
+        with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = "SELECT passwordHash FROM User WHERE username=%s"
                 cursor.execute(sql, (username,))
-                stored_password = cursor.fetchone()
-                if stored_password:
-                    return stored_password['passwordHash']
+                result = cursor.fetchone()
+                if result:
+                    return result['passwordHash']
                 return None
-        finally:
-            vivdb.close()
-            
