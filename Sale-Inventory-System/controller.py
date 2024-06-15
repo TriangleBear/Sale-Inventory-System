@@ -1,4 +1,5 @@
-from Model import User, Registration
+from Model.User import User
+from Model.Registration import Registration
 from View.view import View
 
 class Controller:
