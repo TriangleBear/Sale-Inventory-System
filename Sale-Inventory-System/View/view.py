@@ -72,22 +72,13 @@ class View(tk.Tk):
     def checkInput(self, user, password):
         logging.debug(f"Attempting login with username: {user}")
         user_type = self.controller.checkInput(user, password)
-        logging.debug(f"Received user data: {user_type}")
-        try:
-            if not user_type:
-                messagebox.showerror('Login Error', 'Invalid username or password')
-                self._switch_page(self._login_page)
-                return
-            
-            if user_type == "Manager":
-                self._switch_page(self._manager_page)
-            elif user_type == "Staff":
-                self._switch_page(self._staff_page)
-            else:
-                messagebox.showerror('Login Error', 'Invalid username or password')
-                self._switch_page(self._login_page)
-        except Exception as e:
-            messagebox.showerror('Login Error', str(e))
+        logging.debug(f"Received user data: {user_type}")    
+        if user_type == "Manager":
+            self._switch_page(self._manager_page)
+        elif user_type == "Staff":
+            self._switch_page(self._staff_page)
+        else:
+            messagebox.showerror('Login Error', 'Invalid username or password')
             self._switch_page(self._login_page)
             
     def _win_frame(self):
