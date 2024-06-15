@@ -1,10 +1,6 @@
-import pymysql.cursors
-import json
 import datetime
 from Utils.Database import get_db_connection
 from hashlib import sha256
-
-credentials = json.load(open("D:\Programming\CS 304\Sale-Inventory-System\Sale-Inventory-System\Model\credentials.json"))
 
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
