@@ -12,7 +12,8 @@ class Registration:
             with connection.cursor() as cursor:
                 hash_password = hash_pass(password)
                 created_on = datetime.datetime.now()
-                sql = "INSERT INTO User (user_id, user_type, username, passwordHash, email, created_on) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = """INSERT INTO User (user_id, user_type, username, passwordHash, email, created_on) 
+                VALUES (%s, %s, %s, %s, %s, %s)"""
                 cursor.execute(sql, (number, access, username, hash_password, email, created_on))
                 connection.commit()
             connection.close()

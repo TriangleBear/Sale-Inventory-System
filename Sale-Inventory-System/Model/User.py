@@ -10,7 +10,7 @@ class User:
     def check_username(username):
         with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
-                sql = "SELECT * FROM User WHERE username=%s"
+                sql = """SELECT * FROM User WHERE username=%s"""
                 cursor.execute(sql, (username,))
                 return cursor.fetchone()
 
@@ -22,7 +22,7 @@ class User:
     def get_password(username):
         with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
-                sql = "SELECT passwordHash FROM User WHERE username=%s"
+                sql = """SELECT passwordHash FROM User WHERE username=%s"""
                 cursor.execute(sql, (username,))
                 result = cursor.fetchone()
                 if result:
