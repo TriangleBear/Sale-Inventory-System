@@ -10,8 +10,8 @@ class Controller:
     def main(self):
         self.view.main()
 
-    def register(self, number, access, email, username, password):
-        Registration.create_user(number, access, username, password, email)
+    def register(self, user_id, access, email, username, password):
+        Registration.create_user(user_id, access, username, password, email)
 
     def checkInput(self, username, password):
         user = User.check_username(username)
@@ -23,7 +23,21 @@ class Controller:
                 return "Incorrect password"
         else:
             return "No such user was found"
+        
+    def get_user_id(self, username):
+        return User.get_user_id(username)
+    
+    def get_email(self, user_id):
+        return User.get_email(user_id)
+    
+    def get_otp(self):
+        return User.generate_otp()
+    
+    def send_otp_email(self, email, otp):
+        User.send_otp_email(email, otp)
 
+    def validate_otp(otp, user_input):
+        return otp == int(user_input)
 
 if __name__ == '__main__':
     controller = Controller()

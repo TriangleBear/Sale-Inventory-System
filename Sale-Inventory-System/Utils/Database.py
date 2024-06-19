@@ -17,3 +17,9 @@ def get_db_connection():
     )
     yield vivdb
     vivdb.close()
+
+def get_sender_email():
+    return Credentials.sender_email
+
+def get_sender_password():
+    return Credentials.sender_password
