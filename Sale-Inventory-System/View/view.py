@@ -80,15 +80,15 @@ class View(tk.Tk):
         else:
             messagebox.showerror('OTP Verification Error', 'Invalid OTP')
 
-    logging.basicConfig(level=logging.DEBUG)
+    #logging.basicConfig(level=logging.DEBUG)
     
     def checkInput(self, user, password):
-        logging.debug(f"Attempting login with username: {user}")
-        id = self.controller.get_user_id(user)
-        email = self.controller.get_email(id)
+        #logging.debug(f"Attempting login with username: {user}")
+        email = self.controller.get_email(user)
+        print(email)
         otp = self.controller.get_otp()
         user_type = self.controller.checkInput(user, password)
-        self.otp_verification(otp, email)
+        self.otp_verification(email, otp)
         logging.debug(f"Received user data: {user_type}")    
         if user_type == "Manager":
             self._switch_page(self._manager_page)

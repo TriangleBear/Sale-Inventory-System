@@ -1,6 +1,6 @@
 #controller.py
-from Model.User import User
-from Model.Registration import Registration
+from Model.loginModel import User
+from Model.registerModel import Registration
 from View.view import View
 
 class Controller:
@@ -25,10 +25,10 @@ class Controller:
             return "No such user was found"
         
     def get_user_id(self, username):
-        return User.get_user_id(username)
+        return User.check_username(username)
     
-    def get_email(self, user_id):
-        return User.get_email(user_id)
+    def get_email(self, username):
+        return User.get_email(username)
     
     def get_otp(self):
         return User.generate_otp()

@@ -10,7 +10,6 @@ def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
 
-
 class User:
     def generate_otp():
         otp = random.randint(100000, 999999)
@@ -22,6 +21,7 @@ class User:
             with vivdb.cursor() as cursor:
                 sql = """SELECT * FROM User WHERE username=%s"""
                 cursor.execute(sql, (username,))
+                print(cursor.fetchone())
                 return cursor.fetchone()
 
     @staticmethod
@@ -38,26 +38,19 @@ class User:
                 if result:
                     return result['passwordHash']
                 return None
-            
-    def get_email(self, user_id):
+    @staticmethod     
+    def get_email(username):
         with get_db_connection() as vivbd:
             with vivbd.cursor() as cursor:
-                sql = """SELECT email FROM User WHERE user_id=%s"""
-                cursor.execute(sql, (user_id,))
-                user = cursor.fetchone()
-                return user.get('email')
-            
-    def get_user_id(self, username):
-        with get_db_connection() as vivbd:
-            with vivbd.cursor() as cursor:
-                sql = """SELECT user_id FROM User WHERE username=%s"""
+                sql = """SELECT email FROM User WHERE username=%s"""
                 cursor.execute(sql, (username,))
                 user = cursor.fetchone()
-                return user.get('user_id')
+                print(cursor.fetchone())
+                return user.get('email')
             
     def send_otp_email(email, otp):
         sender_email = Credentials.appemail
-        sender_password = Credentials.apppassword
+        sender_password = Credentials.apppass
 
         msg = EmailMessage()
         msg['Subject'] = "OTP Verification"
