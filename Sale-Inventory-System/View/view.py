@@ -1,6 +1,8 @@
+#view.py
 import tkinter as tk
 from tkinter import *
 from tkinter import font, ttk, messagebox
+from tkinter.simpledialog import askstring
 import logging
 
 class View(tk.Tk):
@@ -26,7 +28,7 @@ class View(tk.Tk):
         self.l_password_val = tk.StringVar()
 
         # register
-        self.number_val = tk.StringVar()
+        self.user_id_val = tk.StringVar()
         self.access_val = tk.StringVar()
         self.email_val = tk.StringVar()
         self.r_username_val = tk.StringVar()
@@ -37,13 +39,10 @@ class View(tk.Tk):
     def main(self):
         self.mainloop()
 
-    def register(self, number, access, email, username, password):
-        try:
-            self.controller.register(number, access, email, username, password)
-            messagebox.showinfo('Registration', 'Registration Successful!')
-            self._switch_page(self._login_page)
-        except Exception as e:
-            messagebox.showerror('Registration Error', str(e))
+    def register(self, user_id, access, email, username, password):
+        self.controller.register(user_id, access, email, username, password)
+        messagebox.showinfo('Registration', 'Registration Successful!')
+        self._switch_page(self._login_page)
 
 
     def _switch_page(self, page):
@@ -67,11 +66,30 @@ class View(tk.Tk):
         messagebox.showerror('Invalid Input', 'No such user was found')
         self._switch_page(self._login_page)
     
-    logging.basicConfig(level=logging.DEBUG)
+    def otp_verification(self, email, otp):
+        self.controller.send_otp_email(email, otp) # Replace send_otp_email() with your email sending logic
+        
 
+        message = askstring('OTP Verification', 'Enter OTP sent to your email')
+        #self.controller.validate_otp(otp, f'{message}')
+        print(f'FROM otp_verification: {message}')
+        try:
+            if message == otp:
+                self._switch_page(self._login_page)
+        except Exception as e:
+            print(f'Error: {e}')
+            messagebox.showerror('OTP Verification Error', 'Invalid OTP')
+
+    logging.basicConfig(level=logging.DEBUG)
+    
     def checkInput(self, user, password):
         logging.debug(f"Attempting login with username: {user}")
         user_type = self.controller.checkInput(user, password)
+        email = self.controller.get_email(user)
+        print(f'From checkInput EMAIL: {email}')
+        otp = self.controller.get_otp()
+        print(f'From checkInput OTP: {otp}')
+        self.otp_verification(email, otp)
         logging.debug(f"Received user data: {user_type}")    
         if user_type == "Manager":
             self._switch_page(self._manager_page)
@@ -119,21 +137,21 @@ class View(tk.Tk):
         entryFrame = tk.Frame(self.registerFrame, background="Gray82")
         entryFrame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
-        number_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Number ")
+        user_id_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="user_id ")
         access_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Access ")
         email_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Email ")
         username_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Username ")
         password_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Password ")
-        number_entry = tk.Entry(entryFrame, textvariable=self.number_val)
+        user_id_entry = tk.Entry(entryFrame, textvariable=self.user_id_val)
         access_entry = ttk.Combobox(entryFrame, values=["Manager", "Staff"], textvariable=self.access_val)
         email_entry = tk.Entry(entryFrame, textvariable=self.email_val)
         username_entry = tk.Entry(entryFrame, textvariable=self.r_username_val)
         password_entry = tk.Entry(entryFrame, textvariable=self.r_password_val, show="*")
         register_btn = tk.Button(entryFrame, font=font.Font(family='Poppins', weight='bold'), text="Register",
-                         command=lambda: self.register(self.number_val.get(), self.access_val.get(), self.email_val.get(), self.r_username_val.get(), self.r_password_val.get())) # Pass all parameters here
+                         command=lambda: self.register(self.user_id_val.get(), self.access_val.get(), self.email_val.get(), self.r_username_val.get(), self.r_password_val.get())) # Pass all parameters here
 
-        number_lbl.grid(row=0, column=0, padx=5, pady=5)
-        number_entry.grid(row=0, column=1, padx=5, pady=5)
+        user_id_lbl.grid(row=0, column=0, padx=5, pady=5)
+        user_id_entry.grid(row=0, column=1, padx=5, pady=5)
         access_lbl.grid(row=2, column=0, padx=5, pady=5)
         access_entry.grid(row=2, column=1, padx=5, pady=5)
         email_lbl.grid(row=2, column=2, padx=5, pady=5)

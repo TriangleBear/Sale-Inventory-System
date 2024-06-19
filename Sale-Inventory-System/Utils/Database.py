@@ -1,3 +1,4 @@
+#database.py
 import pymysql
 import pymysql.cursors
 from Utils.credentials import Credentials
@@ -14,7 +15,4 @@ def get_db_connection():
         port=22577,
         cursorclass=pymysql.cursors.DictCursor,
     )
-    try:
-        yield vivdb
-    finally:
-        vivdb.close()
+    yield vivdb
