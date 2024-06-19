@@ -5,7 +5,7 @@ from tkinter import font, ttk, messagebox
 
 #initialization of
 
-class MainView(tk.Tk,Functions):
+class MainView(tk.Tk):
     def __init__(self, mainController):
         super().__init__()
         self.mainController = mainController
@@ -36,13 +36,5 @@ class MainView(tk.Tk,Functions):
         self.windowFrame.pack(fill=tk.BOTH,expand=True)
         
     def _start_button(self):
-        start_btn = tk.Button(self.windowFrame,font=font.Font(family='Poppins',weight='bold'),text="Start",borderwidth=0,background="Gray82", command=lambda:Functions.switch_page(self.windowFrame,self.mainController.login_page,self.windowFrame))
+        start_btn = tk.Button(self.windowFrame,font=font.Font(family='Poppins',weight='bold'),text="Start",borderwidth=0,background="Gray82", command=lambda:Functions.switch_page(self.windowFrame,self.mainController.loginController))
         start_btn.place(relx=0.5,rely=0.5,anchor=CENTER)
-
-
-
-
-
-
-
-        

@@ -7,7 +7,7 @@ class MainController:
     def main(self):
         self.view.main()
     
-    def login_page(self,frame):
+    def loginController(self,frame):
         from Controller import LoginController
         login_page = LoginController(frame)
         login_page.main()

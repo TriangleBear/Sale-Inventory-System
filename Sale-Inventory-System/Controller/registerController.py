@@ -1,8 +1,14 @@
 from View import RegisterPage
-from Model import register
+from Model import RegisterModel
 
 class RegisterController:
     def __init__(self,parentFrame):
-        self.parentFrame = parentFrame
-        self.view = RegisterPage(self, self.parentFrame)
-        self.model = 
+        self.frame = parentFrame
+        self.view = RegisterPage(self, self.frame)
+        self.model = RegisterModel()
+
+    def main(self):
+        self.view.main()
+    
+
+    
