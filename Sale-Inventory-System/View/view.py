@@ -26,7 +26,6 @@ class View(tk.Tk):
         # login
         self.l_username_val = tk.StringVar()
         self.l_password_val = tk.StringVar()
-        self.otp_val = tk.StringVar()
 
         # register
         self.user_id_val = tk.StringVar()
@@ -41,12 +40,9 @@ class View(tk.Tk):
         self.mainloop()
 
     def register(self, user_id, access, email, username, password):
-        try:
-            self.controller.register(user_id, access, email, username, password)
-            messagebox.showinfo('Registration', 'Registration Successful!')
-            self._switch_page(self._login_page)
-        except Exception as e:
-            messagebox.showerror('Registration Error', str(e))
+        self.controller.register(user_id, access, email, username, password)
+        messagebox.showinfo('Registration', 'Registration Successful!')
+        self._switch_page(self._login_page)
 
 
     def _switch_page(self, page):
@@ -70,24 +66,29 @@ class View(tk.Tk):
         messagebox.showerror('Invalid Input', 'No such user was found')
         self._switch_page(self._login_page)
     
-    def otp_verification(self, otp, email):
-        generated_otp = self.controller.get_otp  # Replace generate_otp() with your OTP generation logic
+    def otp_verification(self, email, otp):
         self.controller.send_otp_email(email, otp) # Replace send_otp_email() with your email sending logic
+        
 
         message = askstring('OTP Verification', 'Enter OTP sent to your email')
-        if message == generated_otp:
-            self._switch_page(self._login_page)
-        else:
+        #self.controller.validate_otp(otp, f'{message}')
+        print(f'FROM otp_verification: {message}')
+        try:
+            if message == otp:
+                self._switch_page(self._login_page)
+        except Exception as e:
+            print(f'Error: {e}')
             messagebox.showerror('OTP Verification Error', 'Invalid OTP')
 
-    #logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     
     def checkInput(self, user, password):
-        #logging.debug(f"Attempting login with username: {user}")
-        email = self.controller.get_email(user)
-        print(email)
-        otp = self.controller.get_otp()
+        logging.debug(f"Attempting login with username: {user}")
         user_type = self.controller.checkInput(user, password)
+        email = self.controller.get_email(user)
+        print(f'From checkInput EMAIL: {email}')
+        otp = self.controller.get_otp()
+        print(f'From checkInput OTP: {otp}')
         self.otp_verification(email, otp)
         logging.debug(f"Received user data: {user_type}")    
         if user_type == "Manager":

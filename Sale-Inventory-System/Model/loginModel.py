@@ -10,7 +10,7 @@ def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
 
-class User:
+class LoginModel:
     def generate_otp():
         otp = random.randint(100000, 999999)
         return otp
@@ -19,10 +19,12 @@ class User:
     def check_username(username):
         with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
-                sql = """SELECT * FROM User WHERE username=%s"""
+                sql = 'SELECT * FROM User WHERE username=%s'
                 cursor.execute(sql, (username,))
-                print(cursor.fetchone())
-                return cursor.fetchone()
+                userdata = cursor.fetchone()
+                print(userdata)
+                vivdb.close()
+                return userdata
 
     @staticmethod
     def check_password(stored_password, provided_password):
@@ -32,22 +34,24 @@ class User:
     def get_password(username):
         with get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
-                sql = """SELECT passwordHash FROM User WHERE username=%s"""
+                sql = 'SELECT passwordHash FROM User WHERE username=%s'
                 cursor.execute(sql, (username,))
                 result = cursor.fetchone()
+                print(result)
                 if result:
+                    vivdb.close()
                     return result['passwordHash']
                 return None
     @staticmethod     
     def get_email(username):
-        with get_db_connection() as vivbd:
-            with vivbd.cursor() as cursor:
-                sql = """SELECT email FROM User WHERE username=%s"""
+        with get_db_connection() as vivdb:
+            with vivdb.cursor() as cursor:
+                sql = 'SELECT email FROM User WHERE username=%s'
                 cursor.execute(sql, (username,))
                 user = cursor.fetchone()
-                print(cursor.fetchone())
+                vivdb.close()
                 return user.get('email')
-            
+
     def send_otp_email(email, otp):
         sender_email = Credentials.appemail
         sender_password = Credentials.apppass
@@ -58,10 +62,14 @@ class User:
         msg['To'] = email
         msg.set_content(f"Your OTP is {otp}")
 
-        with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(sender_email, sender_password)
-            server.send_message(msg)
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                server.starttls()
+                server.login(sender_email, sender_password)
+                print(f"From send_otp_email (sender_email): {sender_email}")
+                server.send_message(msg)
+            print("OTP sent successfully!")
+        except Exception as e:
+            print(f"Failed to send OTP: {e}")
 
-    def validate_otp(otp, user_input):
-        return otp == int(user_input)
+    

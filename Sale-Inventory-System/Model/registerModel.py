@@ -5,7 +5,7 @@ from hashlib import sha256
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
-class Registration:
+class RegisterModel:
     @staticmethod
     def create_user(user_id, access, username, password, email):
         with get_db_connection() as connection:
@@ -17,3 +17,4 @@ class Registration:
                 cursor.execute(sql, (user_id, access, username, hash_password, email, created_on))
                 connection.commit()
             connection.close()
+        return 0

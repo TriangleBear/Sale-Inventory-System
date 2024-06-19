@@ -16,4 +16,3 @@ def get_db_connection():
         cursorclass=pymysql.cursors.DictCursor,
     )
     yield vivdb
-    vivdb.close()
