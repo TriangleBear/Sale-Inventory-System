@@ -11,6 +11,7 @@ class Controller:
         self.view.main()
 
     def register(self, user_id, access, email, username, password):
+        RegisterModel.check_password_criteraia(email, username, password)
         RegisterModel.create_user(user_id, access, username, password, email)
 
     def checkInput(self, username, password):
