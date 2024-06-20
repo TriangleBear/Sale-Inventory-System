@@ -29,6 +29,8 @@ class View(tk.Tk):
 
         # register
         self.user_id_val = tk.StringVar()
+        self.first_name_val = tk.StringVar()
+        self.last_name_val = tk.StringVar()
         self.access_val = tk.StringVar()
         self.email_val = tk.StringVar()
         self.r_username_val = tk.StringVar()
@@ -39,8 +41,8 @@ class View(tk.Tk):
     def main(self):
         self.mainloop()
 
-    def register(self, user_id, access, email, username, password):
-        self.controller.register(user_id, access, email, username, password)
+    def register(self, user_id, access, first, last, email, username, password):
+        self.controller.register(user_id, access, first, last, email, username, password)
         messagebox.showinfo('Registration', 'Registration Successful!')
         self._switch_page(self._login_page)
 
@@ -73,6 +75,7 @@ class View(tk.Tk):
         message = askstring('OTP Verification', 'Enter OTP sent to your email')
         #self.controller.validate_otp(otp, f'{message}')
         print(f'FROM otp_verification: {message}')
+        #print(f'FROM otp_verification: {message}')
         try:
             if message == otp:
                 self._switch_page(self._login_page)
@@ -90,6 +93,7 @@ class View(tk.Tk):
         otp = self.controller.get_otp()
         print(f'From checkInput OTP: {otp}')
         self.otp_verification(email, otp)
+        messagebox.showinfo('Login Status', 'Login Successful!')
         logging.debug(f"Received user data: {user_type}")    
         if user_type == "Manager":
             self._switch_page(self._manager_page)
@@ -140,15 +144,20 @@ class View(tk.Tk):
         user_id_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="user_id ")
         access_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Access ")
         email_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Email ")
+        first_name_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="First Name ")
+        last_name_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Last Name ")
         username_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Username ")
         password_lbl = tk.Label(entryFrame, borderwidth=0, background="Gray82", text="Password ")
         user_id_entry = tk.Entry(entryFrame, textvariable=self.user_id_val)
         access_entry = ttk.Combobox(entryFrame, values=["Manager", "Staff"], textvariable=self.access_val)
         email_entry = tk.Entry(entryFrame, textvariable=self.email_val)
+        first_name_entry = tk.Entry(entryFrame, textvariable=self.first_name_val)
+        last_name_entry = tk.Entry(entryFrame, textvariable=self.last_name_val)
         username_entry = tk.Entry(entryFrame, textvariable=self.r_username_val)
         password_entry = tk.Entry(entryFrame, textvariable=self.r_password_val, show="*")
         register_btn = tk.Button(entryFrame, font=font.Font(family='Poppins', weight='bold'), text="Register",
-                         command=lambda: self.register(self.user_id_val.get(), self.access_val.get(), self.email_val.get(), self.r_username_val.get(), self.r_password_val.get())) # Pass all parameters here
+                         command=lambda: self.register(self.user_id_val.get(), self.access_val.get(), self.email_val.get(), 
+                         self.first_name_val.get(), self.last_name_val.get(), self.r_username_val.get(), self.r_password_val.get())) # Pass all parameters here
 
         user_id_lbl.grid(row=0, column=0, padx=5, pady=5)
         user_id_entry.grid(row=0, column=1, padx=5, pady=5)
@@ -156,8 +165,12 @@ class View(tk.Tk):
         access_entry.grid(row=2, column=1, padx=5, pady=5)
         email_lbl.grid(row=2, column=2, padx=5, pady=5)
         email_entry.grid(row=2, column=3, padx=5, pady=5)
-        username_lbl.grid(row=3, column=0, padx=5, pady=5)
-        username_entry.grid(row=3, column=1, padx=5, pady=5)
-        password_lbl.grid(row=3, column=2, padx=5, pady=5)
-        password_entry.grid(row=3, column=3, padx=5, pady=5)
-        register_btn.grid(row=4, columnspan=4, sticky='e', padx=5, pady=5)
+        first_name_lbl.grid(row=3, column=0, padx=5, pady=5)
+        first_name_entry.grid(row=3, column=1, padx=5, pady=5)
+        last_name_lbl.grid(row=3, column=2, padx=5, pady=5)
+        last_name_entry.grid(row=3, column=3, padx=5, pady=5)
+        username_lbl.grid(row=4, column=0, padx=5, pady=5)
+        username_entry.grid(row=4, column=1, padx=5, pady=5)
+        password_lbl.grid(row=4, column=2, padx=5, pady=5)
+        password_entry.grid(row=4, column=3, padx=5, pady=5)
+        register_btn.grid(row=5, columnspan=4, sticky='e', padx=5, pady=5)

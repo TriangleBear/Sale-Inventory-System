@@ -10,8 +10,9 @@ class Controller:
     def main(self):
         self.view.main()
 
-    def register(self, user_id, access, email, username, password):
-        RegisterModel.create_user(user_id, access, username, password, email)
+    def register(self, user_id, access, first, last, email, username, password):
+        RegisterModel.check_password_criteraia(email, username, password)
+        RegisterModel.create_user(user_id, access, first, last, username, password, email)
 
     def checkInput(self, username, password):
         user = LoginModel.check_username(username)
@@ -43,8 +44,8 @@ class Controller:
     def send_otp_email(self, email, otp):
         LoginModel.send_otp_email(email, otp)
 
-    def validate_otp(otp, user_input):
-        return otp == int(user_input)
+    # def validate_otp(otp, user_input):
+    #     return otp == user_input
 
 if __name__ == '__main__':
     controller = Controller()
