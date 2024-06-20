@@ -53,13 +53,13 @@ class View(tk.Tk):
     def _manager_page(self):
         self.managerFrame = tk.Frame(self.windowFrame, background="GhostWhite")
         self.managerFrame.pack(fill=tk.BOTH, expand=True)
-        temp_label = tk.Label(self.managerFrame, text="COMING SOON")
+        temp_label = tk.Label(self.managerFrame, text="MANAGER DASHBOARD")
         temp_label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     def _staff_page(self):
         self.staffFrame = tk.Frame(self.windowFrame, background="GhostWhite")
         self.staffFrame.pack(fill=tk.BOTH, expand=True)
-        temp_label = tk.Label(self.staffFrame, text="COMING SOON")
+        temp_label = tk.Label(self.staffFrame, text="STAFF DASHBOARD")
         temp_label.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     def _invalid_input_page(self):
