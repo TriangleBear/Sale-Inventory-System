@@ -10,15 +10,13 @@ class Controller:
     def main(self):
         self.view.main()
 
-    def register(self, user_id, access, first, last, email, username, password):
-        RegisterModel.check_password_criteraia(email, username, password)
+    def register(self, user_id, access, first, last, username, password, email):
         RegisterModel.create_user(user_id, access, first, last, username, password, email)
 
     def checkInput(self, username, password):
         user = LoginModel.check_username(username)
         stored_password = LoginModel.get_password(username)
-        otp = self.get_otp()
-        email = self.get_email(username)
+
         if stored_password is not None:  # Assuming 'password' is the column name in the database
             if LoginModel.check_password(stored_password, password):
                 return user['user_type']  # Assuming 'user_type' is the column name in the database
@@ -31,6 +29,8 @@ class Controller:
     #     generated_otp = self.get_otp()
     #     emaildata = self.get_email(username)
         
+    def check_password_criteria(self,first, last, username, password, email):
+        return RegisterModel.check_password_criteria(first, last, username, password, email)
 
     def get_user_id(self, username):
         return LoginModel.check_username(username)
