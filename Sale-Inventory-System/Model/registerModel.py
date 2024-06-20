@@ -21,14 +21,15 @@ class RegisterModel:
         return 0
 
     @staticmethod
-    def create_user(user_id, access, username, password, email):
+    def create_user(user_id, access, first, last, username, password, email):
+
         with get_db_connection() as connection:
             with connection.cursor() as cursor:
                 hash_password = hash_pass(password)
                 created_on = datetime.datetime.now()
-                sql = """INSERT INTO User (user_id, user_type, username, passwordHash, email, created_on) 
-                VALUES (%s, %s, %s, %s, %s, %s)"""
-                cursor.execute(sql, (user_id, access, username, hash_password, email, created_on))
+                sql = """INSERT INTO User (user_id, user_type, fname, lname, username, passwordHash, email, created_on) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+                cursor.execute(sql, (user_id, access, first, last, username, hash_password, email, created_on))
                 connection.commit()
             connection.close()
         return 0
