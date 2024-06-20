@@ -41,10 +41,14 @@ class View(tk.Tk):
     def main(self):
         self.mainloop()
 
-    def register(self, user_id, access, first, last, email, username, password):
-        self.controller.register(user_id, access, first, last, email, username, password)
-        messagebox.showinfo('Registration', 'Registration Successful!')
-        self._switch_page(self._login_page)
+    def register(self, user_id, access, first, last, username, password,email):
+        check_pass = self.controller.check_password_criteria(first, last, username, password, email)
+        if check_pass == 0:
+            self.controller.register(user_id, access, first, last, username, password, email)
+            messagebox.showinfo('Registration', 'Registration Successful!')
+            self._switch_page(self._login_page)
+        else:
+            messagebox.showerror('Registration Error', check_pass)
 
 
     def _switch_page(self, page):
@@ -92,6 +96,7 @@ class View(tk.Tk):
         otp = self.controller.get_otp()
         print(f'From checkInput OTP: {otp}')
         self.otp_verification(email, otp)
+
         messagebox.showinfo('Login Status', 'Login Successful!')
         logging.debug(f"Received user data: {user_type}")    
         if user_type == "Manager":
@@ -155,8 +160,8 @@ class View(tk.Tk):
         username_entry = tk.Entry(entryFrame, textvariable=self.r_username_val)
         password_entry = tk.Entry(entryFrame, textvariable=self.r_password_val, show="*")
         register_btn = tk.Button(entryFrame, font=font.Font(family='Poppins', weight='bold'), text="Register",
-                         command=lambda: self.register(self.user_id_val.get(), self.access_val.get(), self.email_val.get(), 
-                         self.first_name_val.get(), self.last_name_val.get(), self.r_username_val.get(), self.r_password_val.get())) # Pass all parameters here
+                         command=lambda: self.register(self.user_id_val.get(), self.access_val.get(), self.first_name_val.get(), self.last_name_val.get(), 
+                          self.r_username_val.get(), self.r_password_val.get(),self.email_val.get())) # Pass all parameters here
 
         user_id_lbl.grid(row=0, column=0, padx=5, pady=5)
         user_id_entry.grid(row=0, column=1, padx=5, pady=5)
