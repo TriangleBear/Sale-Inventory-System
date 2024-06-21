@@ -1,4 +1,5 @@
 from View import MainView
+from View import Functions
 
 class MainController:
     def __init__(self):
@@ -7,9 +8,10 @@ class MainController:
     def main(self):
         self.view.main()
     
-    def loginController(self,frame):
+    def loginController(self,master):
+        Functions.destroy_page(master)
         from Controller import LoginController
-        login_page = LoginController(frame)
+        login_page = LoginController(master)
         login_page.main()
     
 

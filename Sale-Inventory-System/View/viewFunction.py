@@ -29,20 +29,6 @@ class Functions:
             else:
                 current_column +=1 
 
-    # def register(register_inputs:list):
-
-    #     register_var = [val.get() for val in register_inputs]
-
-    #     controller.register(register_var)
-
-    #     messagebox.showinfo('Registrion', 'Registraion Successful!')
-    #     switch_page(login_page)
-
-    def clear_frame(page_to_destroy):
+    def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
-
-    def switch_page(page_to_destroy,function):
-        for child in page_to_destroy.winfo_children():
-            child.destroy()
-        function(page_to_destroy)
