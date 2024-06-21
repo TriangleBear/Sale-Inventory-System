@@ -38,11 +38,21 @@ class Functions:
     #     messagebox.showinfo('Registrion', 'Registraion Successful!')
     #     switch_page(login_page)
 
+    # def checkInput(self, username, password):
+    #     user = LoginModel.check_username(username)
+    #     stored_password = LoginModel.get_password(username)
+    #     if stored_password is not None:  # Assuming 'password' is the column name in the database
+    #         if LoginModel.check_password(stored_password, password):
+    #             return user['user_type']  # Assuming 'user_type' is the column name in the database
+    #         else:
+    #             return "Incorrect password"
+    #     else:
+    #         return "No such user was found"
+
     def clear_frame(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
 
-    def switch_page(page_to_destroy,function):
+    def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
-        function(page_to_destroy)

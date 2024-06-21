@@ -23,10 +23,6 @@ class Controller:
                 return "Incorrect password"
         else:
             return "No such user was found"
-    
-    # def otp_verify(self, otp, email, username):
-    #     generated_otp = self.get_otp()
-    #     emaildata = self.get_email(username)
         
     def check_password_criteria(self,first, last, username, password, email):
         return RegisterModel.check_password_criteria(first, last, username, password, email)
@@ -42,9 +38,6 @@ class Controller:
     
     def send_otp_email(self, email, otp):
         LoginModel.send_otp_email(email, otp)
-
-    # def validate_otp(otp, user_input):
-    #     return otp == user_input
 
 if __name__ == '__main__':
     controller = Controller()

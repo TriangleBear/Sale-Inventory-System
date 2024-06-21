@@ -8,6 +8,7 @@ def hash_pass(password):
 class RegisterModel:
     def __init__(self):
         pass
+    
     @staticmethod
     def check_password_criteria(first, last, username, password, email):
         if len(password) < 8 or len(username) > 15:
