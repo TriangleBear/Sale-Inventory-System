@@ -6,6 +6,10 @@ from tkinter.simpledialog import askstring
 import logging
 
 
+"""
+    REMOVE ALL PRINT STATEMENTS
+"""
+
 class LoginView(tk.Frame):
     def __init__(self,loginController,master):
         super().__init__(master)
@@ -51,15 +55,16 @@ class LoginView(tk.Frame):
         username = entryData[0]
         logging.debug(f"Attempting login with username: {username}")
         userData = self.loginController.checkInput(entryData) # returns a list of user type, email and otp
-        # logging.debug(f"Received user data: {userData}")
+        logging.debug(f"Received user data: {userData}")
         print(f"from checkInput; userData: {userData}")
-        self.loginController.user_otp_verification(userData)
+        # uncomment if send otp to email is needed for testing/demo
+        # self.loginController.user_otp_verification(userData)
         messagebox.showinfo('OTP Sent', 'Check Email for OTP')
         provided_otp = askstring('OTP Verification', 'Enter OTP')
         logging.debug("Sent OTP!")
-        print(f"from checkInput loginView; otp|userData[2]: {userData[2]}")
-        print(f"from checkInput loginView; provided_otp: {provided_otp}")
-        if provided_otp == userData[2]:
+        if str(provided_otp) == str(userData[2]):
+            print(f"from checkInput loginView; otp|userData[2]: {userData[2]}")
+            print(f"from checkInput loginView; provided_otp: {provided_otp}")
             messagebox.showinfo('Login Status', 'Login Successful!')
             if userData[0] == "Manager":
                 self.loginController._switch_page(self.loginController._manager_page)
