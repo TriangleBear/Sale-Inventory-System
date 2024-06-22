@@ -1,5 +1,5 @@
 import datetime
-from Utils.Database import get_db_connection
+from Utils import Database
 from hashlib import sha256
 
 def hash_pass(password):
@@ -32,7 +32,7 @@ class RegisterModel:
     @staticmethod
     def create_user(user_id, access, first, last, username, password,email):
 
-        with get_db_connection() as connection:
+        with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 hash_password = hash_pass(password)
                 created_on = datetime.datetime.now()

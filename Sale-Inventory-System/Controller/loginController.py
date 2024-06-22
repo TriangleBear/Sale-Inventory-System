@@ -15,8 +15,8 @@ class LoginController:
         self.storedPassword = self.model.get_user_password()
         self.email = self.model.get_user_email()
         self.otp = self.model.get_login_otp()
-        if self.storedPassword == self.model.password:
-                return [self.userType, self.email, self.otp]
+        if self.model.check_password:
+            return [self.userType, self.email, self.otp]
 
     def user_otp_verification(self, user_data:list):
         self.model.send_otp_email(user_data[1], user_data[2])

@@ -6,6 +6,10 @@ from tkinter.simpledialog import askstring
 import logging
 
 
+"""
+    REMOVE ALL PRINT STATEMENTS
+"""
+
 class LoginView(tk.Frame):
     def __init__(self,loginController,master):
         super().__init__(master)
@@ -42,22 +46,25 @@ class LoginView(tk.Frame):
         register_btn.grid(row=2,columnspan=2,sticky='e',padx=5,pady=5)
 
     def _login_button(self):
-        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:Functions.checkInput(self.login_entry_boxes))
+        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self.checkInput(self.login_entry_boxes))
 
         login_btn.grid(row=3,columnspan=2,sticky='e',padx=5,pady=5)
 
     def checkInput(self, data:list):
         entryData = [entry.get() for entry in data]
-        username = entryData[0].get()
-        password = entryData[1].get()
+        username = entryData[0]
         logging.debug(f"Attempting login with username: {username}")
         userData = self.loginController.checkInput(entryData) # returns a list of user type, email and otp
         logging.debug(f"Received user data: {userData}")
-        self.loginController.user_otp_verification(userData)
+        print(f"from checkInput; userData: {userData}")
+        # uncomment if send otp to email is needed for testing/demo
+        # self.loginController.user_otp_verification(userData)
         messagebox.showinfo('OTP Sent', 'Check Email for OTP')
         provided_otp = askstring('OTP Verification', 'Enter OTP')
         logging.debug("Sent OTP!")
-        if provided_otp == userData[2]:
+        if str(provided_otp) == str(userData[2]):
+            print(f"from checkInput loginView; otp|userData[2]: {userData[2]}")
+            print(f"from checkInput loginView; provided_otp: {provided_otp}")
             messagebox.showinfo('Login Status', 'Login Successful!')
             if userData[0] == "Manager":
                 self.loginController._switch_page(self.loginController._manager_page)
