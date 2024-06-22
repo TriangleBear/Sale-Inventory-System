@@ -1,7 +1,7 @@
 # user.py
 from hashlib import sha256
-from Utils.Database import get_db_connection
-from Utils.credentials import Credentials
+from Utils import Database
+from Utils import Credentials
 from email.message import EmailMessage
 import smtplib
 import random
@@ -52,7 +52,7 @@ class LoginModel:
 
     """GET USERDATA FUNCTIONS"""
     def get_user_email(self):
-        with get_db_connection() as vivdb:
+        with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = 'SELECT email FROM User WHERE username=%s'
                 cursor.execute(sql, (self.username,))
@@ -61,7 +61,7 @@ class LoginModel:
                 return email.get('email')
 
     def get_user_password(self):
-        with get_db_connection() as vivdb:
+        with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = 'SELECT passwordHash FROM User WHERE username=%s'
                 cursor.execute(sql, (self.username,))
@@ -74,7 +74,7 @@ class LoginModel:
                     return None
 
     def get_user_type(self):
-        with get_db_connection() as vivdb:
+        with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = 'SELECT user_type FROM User WHERE username=%s'
                 cursor.execute(sql, (self.username,))
