@@ -25,7 +25,7 @@ class LoginModel:
     def get_login_otp(self):
         return self.otp
             
-    def get_password(self):
+    def check_password(self):
         return self.stored_password == self.hash_pass(self.password)
     
     
@@ -81,4 +81,4 @@ class LoginModel:
                 userType = cursor.fetchone()
                 print(userType)
                 vivdb.close()
-                return userType
+                return userType.get('user_type')
