@@ -5,13 +5,13 @@ class RegisterController():
     def __init__(self,master):
         self.master = master
         self.view = RegisterView(self, self.master)
-        self.model = RegisterModel()
 
     def main(self):
         self.view.main()
 
     def check_password_criteria(self, data:list):
-        return RegisterModel.check_password_criteria(data)
+        self.model = RegisterModel(data)
+        return self.model.check_password_criteria()
     
 
 if __name__ == "__main__":
