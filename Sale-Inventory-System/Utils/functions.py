@@ -5,10 +5,47 @@ from Utils import *
 from email.message import EmailMessage
 import smtplib
 import tkinter as tk
-import random
+import random, string
 
 
 class Functions:
+    def check_password_criteria(password,username,email,fname,lname,):
+        # first, last, username, password, email
+        if len(password) < 8 or len(username) > 15:
+            return ValueError("Password must be at least 8-15 characters long")
+        if not any(char.isdigit() for char in password):
+            return ValueError("Password must have at least one numeral")
+        if not any(char.isupper() for char in password):
+            return ValueError("Password must have at least one uppercase letter")
+        if not any(char.islower() for char in password):
+            return ValueError("Password must have at least one lowercase letter")
+        if not any(char in ['$', '@', '#', '%', '!', '&', '*'] for char in password):
+            return ValueError("Password must have at least one special character")
+        if username in password:
+            return ValueError("Username and password cannot be the same")
+        if email in username:
+            return ValueError("Email and username cannot be the same")
+        if (fname in password) or (lname in password):
+            return ValueError("First and last name cannot be part of the Password")
+        return 0
+
+    def generate_unique_id(access_level:str):
+        with Database.get_db_connection() as vivdb:
+            with vivdb.cursor() as cursor:
+                while TRUE:
+                    digits = ''.join(random.choices(string.digits, k=4))
+                    if access_level == "Staff":
+                        letter = "S"
+                    elif access_level == "Manager":
+                        letter = "M"
+                    unique_id = letter + digits
+                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
+                    cursor.execute(sql, (unique_id,))
+                    if not cursor.fetchone():
+                        vivdb.close()
+                        return unique_id
+                vivdb.close()
+
     def send_otp_email(email, otp):
         sender_email = Credentials.appemail
         sender_password = Credentials.apppass
@@ -32,17 +69,15 @@ class Functions:
     def generate_otp():
         otp = random.randint(100000, 999999)
         return otp
-    
-
 
     def create_entry_box_using_grid(frame, labels:dict, entryList:list, max_columns:int, max_rows:int=None,current_r=0,current_c=0, bgColor:str="Grey82",borderW:int=0,xPadding=5, yPadding=5, entryWidth=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]
-        print(refName)
+        # print(refName)
         for string in refName:
             l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:")
-            l.grid(row=current_r,column=current_c,padx=xPadding,pady=yPadding)
+            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
 
             current_column += 1
 

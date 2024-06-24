@@ -24,13 +24,13 @@ class LoginController:
 
     def checkInput(self, data:list):
         self.model = LoginModel(data)
-        self.userId = self.model.get_user_id()
-        self.userType = self.model.get_user_type()
-        self.storedPassword = self.model.get_user_password()
-        self.email = self.model.get_user_email()
-        self.otp = self.model.get_login_otp()
+        userId = self.model.get_user_id()
+        userType = self.model.get_user_type()
+        storedPassword = self.model.get_user_password()
+        email = self.model.get_user_email()
+        otp = self.model.get_login_otp()
         if self.model.check_password:
-            return [self.userId,self.userType, self.email, self.otp]
+            return [userId,userType,email,otp]
 
     def user_otp_verification(self, user_data:list):
-        self.model.send_otp_email(user_data[2], user_data[3])#(user_data[2]:email,user_data[3]:otp)
+        Functions.send_otp_email(user_data[2], user_data[3])#(user_data[2]:email,user_data[3]:otp)

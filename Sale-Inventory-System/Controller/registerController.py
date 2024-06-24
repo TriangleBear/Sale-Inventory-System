@@ -9,9 +9,13 @@ class RegisterController():
     def main(self):
         self.view.main()
 
+    def register(self, data:list):
+        model = RegisterModel(data)
+        return model.create_user()
+
     def check_password_criteria(self, data:list):
-        self.model = RegisterModel(data)
-        return self.model.check_password_criteria()
+        model = RegisterModel(data)
+        return model.check_password_criteria() 
     
 
 if __name__ == "__main__":

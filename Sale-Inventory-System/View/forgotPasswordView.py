@@ -83,12 +83,12 @@ class ForgotPasswordView(tk.Frame):
             self._reset_password_page()
 
     def _checkInput(self, data:list,state:str):
-
         entryData = [entry.get() if entry.get()!='' else None for entry in data]
         if state == "email":
             self._checkAccount(entryData)
             return
         elif state == "password":
             self._checkPassword(entryData)
+            
             return
 

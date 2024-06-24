@@ -28,8 +28,11 @@ class MainView(tk.Tk):
         self.mainloop()
         
     def _start_button(self):
-        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", command=lambda: self.loginController())
+        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", command=lambda: self.registerController())
         start_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def loginController(self):
         self.mainController.loginController(self)
+
+    def registerController(self):
+        self.mainController.registerController(self)

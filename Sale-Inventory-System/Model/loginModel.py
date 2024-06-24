@@ -19,26 +19,6 @@ class LoginModel:
     def get_login_otp(self):
         return self.otp
 
-    def send_otp_email(self,email, otp):
-        sender_email = Credentials.appemail
-        sender_password = Credentials.apppass
-
-        msg = EmailMessage()
-        msg['Subject'] = "OTP Verification"
-        msg['From'] = sender_email
-        msg['To'] = email
-        msg.set_content(f"Your OTP is {otp}")
-
-        try:
-            with smtplib.SMTP("smtp.gmail.com", 587) as server:
-                server.starttls()
-                server.login(sender_email, sender_password)
-                print(f"From send_otp_email (sender_email): {sender_email}")
-                server.send_message(msg)
-            print("OTP sent successfully!")
-        except Exception as e:
-            print(f"Failed to send OTP: {e}")
-
     """GET USERDATA FUNCTIONS"""
     def get_user_id(self):
         with Database.get_db_connection() as vivdb:
