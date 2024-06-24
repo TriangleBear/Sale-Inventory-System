@@ -33,14 +33,16 @@ class Functions:
         otp = random.randint(100000, 999999)
         return otp
     
-    def create_entry_box_using_grid(frame, labels:dict, entryList:list, max_columns:int, max_rows:int=None, bgColor:str="Grey82",borderW:int=0,xPadding=5, yPadding=5, entryWidth=None):
-        current_row = 0 
-        current_column = 0 
+
+
+    def create_entry_box_using_grid(frame, labels:dict, entryList:list, max_columns:int, max_rows:int=None,current_r=0,current_c=0, bgColor:str="Grey82",borderW:int=0,xPadding=5, yPadding=5, entryWidth=None):
+        current_row = current_r
+        current_column = current_c
         refName = [label for label in labels.keys()]
         print(refName)
         for string in refName:
             l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:")
-            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
+            l.grid(row=current_r,column=current_c,padx=xPadding,pady=yPadding)
 
             current_column += 1
 

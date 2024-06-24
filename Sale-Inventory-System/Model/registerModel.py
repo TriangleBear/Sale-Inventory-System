@@ -10,7 +10,8 @@ class RegisterModel:
         pass
     
     @staticmethod
-    def check_password_criteria(first, last, username, password, email):
+    def check_password_criteria(data:list):
+        # first, last, username, password, email
         if len(password) < 8 or len(username) > 15:
             return ValueError("Password must be at least 8-15 characters long")
         if not any(char.isdigit() for char in password):
@@ -30,15 +31,15 @@ class RegisterModel:
         return 0
 
     @staticmethod
-    def create_user(user_id, access, first, last, username, password,email):
+    def create_user(user_id, access, first, last, username, password,email, address):
 
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 hash_password = hash_pass(password)
                 created_on = datetime.datetime.now()
-                sql = """INSERT INTO User (user_id, user_type, fname, lname, username, passwordHash, email, created_on) 
+                sql = """INSERT INTO User (user_id, user_type, fname, lname, username, passwordHash, email, address, created_on) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-                cursor.execute(sql, (user_id, access, first, last, username, hash_password, email, created_on))
+                cursor.execute(sql, (user_id, access, first, last, username, hash_password, email, address, created_on))
                 connection.commit()
             connection.close()
         return 0

@@ -10,8 +10,14 @@ class RegisterController():
     def main(self):
         self.view.main()
 
-    def check_password_criteria(self,first, last, username, password, email):
+    def check_password_criteria(self, first, last, username, password, email):
         return RegisterModel.check_password_criteria(first, last, username, password, email)
+    
+
+if __name__ == "__main__":
+    import tkinter as tk
+    registerController = RegisterController(tk.Tk)
+
     
 
     
