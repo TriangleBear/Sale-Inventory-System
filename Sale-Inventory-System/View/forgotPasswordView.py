@@ -54,12 +54,18 @@ class ForgotPasswordView(tk.Frame):
             return
         else:
             data.append(self.username) #[old_password, new_password, confirm_password, username]
+            check_pass = self.forgotPasswordController.checkPassInput(data)
+            if check_pass == 0:
+                self.forgotPasswordController.update_password(data)
+                messagebox.showinfo('Registration', 'Registration Successful!')
+                self._switch_page(self._login_page)
+            else:
+                messagebox.showerror('Registration Error', check_pass)
             self.forgotPasswordController.checkPassInput([data[0],data[1],data[3]])
 
 
 
     def _checkAccount(self,data:list): #[username,email]
-        
         if data[0] is None and data[1] is None:
             messagebox.showerror('No Input', 'No provided Username and Email')
             return
@@ -71,6 +77,11 @@ class ForgotPasswordView(tk.Frame):
             return
         else:
             userData = self.forgotPasswordController.checkAccountInputs(data) #userData = [username,email, otp]
+        
+        if userData == 0:
+            messagebox.showerror('Account Error', 'No account found with provided Username and Email')
+            return
+        else:
             print(f"from _checkAccount | userData:{userData}")
             # self.forgotPasswordController.user_otp_verification(userData)
             messagebox.showinfo('OTP sent', 'Check Email for OTP')          

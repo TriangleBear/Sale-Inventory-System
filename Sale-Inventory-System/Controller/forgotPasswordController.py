@@ -9,23 +9,23 @@ class ForgotPasswordController:
     def main(self):
         self.view.main()
 
+    def update_password(self,data:list):
+        pass
+
     def checkPassInput(self,data:list):
-        old_password = data[0]
-        username = data[2]
-        password_model = ForgotPasswordModel(provided_username=username,old_password=old_password)
-        return password_model.check_old_password()
-
-    def checkUsernameInput(self,provided_username):
-        username_model = ForgotPasswordModel(provided_username=provided_username)
-        return username_model.check_provided_username()
-
+        pass
 
     def checkAccountInputs(self, data:list):
-        provided_username = data[0]
-        provided_email = data[1]
-        email_model = ForgotPasswordModel(provided_email=provided_email,provided_username=provided_username)
-        if email_model.check_provided_username() and email_model.check_user_email():
-            return [email_model.provided_username,email_model.provided_email,email_model.get_forgot_password_otp()]
+        account_data = ForgotPasswordModel(provided_username=data[0],provided_email=data[1])
+        #account_data.
+        
+        # provided_username = data[0]
+        # provided_email = data[1]
+        # email_model = ForgotPasswordModel(provided_email=provided_email,provided_username=provided_username)
+        # if email_model.check_provided_username() and email_model.check_user_email():
+        #     return [email_model.provided_username,email_model.provided_email,email_model.get_forgot_password_otp()]
+        # else:
+        #     return 0
     
     def user_otp_verification(self, user_data:list):
         Functions.send_otp_email(user_data[1], user_data[2])

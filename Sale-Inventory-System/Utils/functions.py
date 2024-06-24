@@ -9,8 +9,10 @@ import random, string
 
 
 class Functions:
-    def check_password_criteria(password,username,email,fname,lname,):
+    def check_password_criteria(password,username,email,fname,lname,old_password=None):
         # first, last, username, password, email
+        if password == "":
+            return ValueError("Password cannot be empty")
         if len(password) < 8 or len(username) > 15:
             return ValueError("Password must be at least 8-15 characters long")
         if not any(char.isdigit() for char in password):
@@ -21,6 +23,8 @@ class Functions:
             return ValueError("Password must have at least one lowercase letter")
         if not any(char in ['$', '@', '#', '%', '!', '&', '*'] for char in password):
             return ValueError("Password must have at least one special character")
+        if old_password != None and old_password == password:
+            return ValueError("New password cannot be the same as the old password")
         if username in password:
             return ValueError("Username and password cannot be the same")
         if email in username:

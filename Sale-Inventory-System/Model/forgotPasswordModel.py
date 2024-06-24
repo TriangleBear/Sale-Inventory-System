@@ -16,11 +16,12 @@ class ForgotPasswordModel:
         if self.new_password == None:
             self.otp = Functions.generate_otp()
     
-    def get_forgot_password_otp(self):
-        return self.otp
 
     def send_otp_email(self,email,otp):
         Functions.send_otp_email(email,otp)
+
+    def check_old_password(self):
+        pass
 
     def check_old_password(self):
         with Database.get_db_connection() as vivdb:
@@ -43,31 +44,25 @@ class ForgotPasswordModel:
                 vivdb.commit()
                 vivdb.close()
                 return
-
-    def check_provided_username(self):
+            
+    def check_account_existence(self):
         with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
-                sql = 'SELECT username FROM User WHERE username=%s'
-                cursor.execute(sql, (self.provided_username,))
+                sql = 'SELECT email FROM User WHERE username=%s AND email=%s'
+                cursor.execute(sql, (self.provided_username,self.provided_email))
                 username = cursor.fetchone()
                 vivdb.close()
                 if username.get('username'):
                     return True
                 else:
-                    return False
+                    return ValueError('No account found with provided Username and Email')
 
-    def check_user_email(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT email FROM User WHERE username=%s'
-                cursor.execute(sql, (self.provided_username,))
-                email = cursor.fetchone()
-                vivdb.close()
-                if email.get('email') == self.provided_email:
-                    return True
-                else:
-                    return False
+    
 
+    """GETTERS"""            
+    def get_forgot_password_otp(self):
+        return self.otp
+    
     def get_user_password(self):
         with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
