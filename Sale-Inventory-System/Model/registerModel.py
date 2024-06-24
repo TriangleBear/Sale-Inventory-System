@@ -5,9 +5,10 @@ from hashlib import sha256
 def hash_pass(password):
     return sha256(password.encode('utf-8')).hexdigest()
 
+#user_id, user_type, fname, lname, birthdate, contact_num, email, address, username, password, created_on
 class RegisterModel:
-    def __init__(self):
-        pass
+    def __init__(self,data:list):
+        #user_id, user_type, fname, lname, birthdate, contact_num, email, address, username, password, created_on
     
     @staticmethod
     def check_password_criteria(data:list):
