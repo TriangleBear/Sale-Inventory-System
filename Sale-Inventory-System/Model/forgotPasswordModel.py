@@ -44,16 +44,26 @@ class ForgotPasswordModel:
                 vivdb.commit()
                 vivdb.close()
                 return
-            
+
+    def checkInput(self):
+        if self.provided_username == '' and self.provided_email == '':
+            return ValueError('No provided Username and Email')
+        if self.provided_username == '':
+            return ValueError('No provided Username')
+        if self.provided_email == '':
+            return ValueError('No provided Email')
+        return
+
     def check_account_existence(self):
+        self.checkInput()
         with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
                 sql = 'SELECT email FROM User WHERE username=%s AND email=%s'
                 cursor.execute(sql, (self.provided_username,self.provided_email))
-                username = cursor.fetchone()
+                email = cursor.fetchone()
                 vivdb.close()
-                if username.get('username'):
-                    return True
+                if email.get('email'):
+                    return 0
                 else:
                     return ValueError('No account found with provided Username and Email')
 

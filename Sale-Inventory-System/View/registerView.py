@@ -38,7 +38,6 @@ class RegisterView(tk.Frame):
 
     def _register_widgets(self):
         subset_one = {key:self.register_labels_with_colspan[key] for key in ["First Name","Last Name","Access"] if key in self.register_labels_with_colspan}
-        print(subset_one)
         Functions.create_entry_box_using_grid(frame=self.entryFrame,
                                               labels=subset_one,
                                               entryList=self.register_entry_boxes,
@@ -69,8 +68,9 @@ class RegisterView(tk.Frame):
         register_btn.grid(row=5,columnspan=4,sticky='e',padx=5,pady=5)
             
     def _checkInput(self, data:list): 
-        entryData = [entry.get() for entry in data]#user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
-        print(entryData)
+        #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
+        entryData = [entry.get().strip() for entry in data]
+        print(f"from _checkInput;RegisterView|entryData:\n{entryData}")
         check_pass = self.registerController.check_password_criteria(entryData)
         if check_pass == 0:
             self.registerController.register(entryData)

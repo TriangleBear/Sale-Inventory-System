@@ -10,8 +10,8 @@ import random, string
 
 class Functions:
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
-        # first, last, username, password, email
-        if password == "":
+        #fname, lname, user_type, birthdate, contact_num, email,address, username, password
+        if password == '':
             return ValueError("Password cannot be empty")
         if len(password) < 8 or len(username) > 15:
             return ValueError("Password must be at least 8-15 characters long")

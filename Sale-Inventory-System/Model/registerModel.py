@@ -22,8 +22,12 @@ class RegisterModel:
         return sha256(password.encode('utf-8')).hexdigest()
 
     def check_password_criteria(self):
-        Functions.check_password_criteria(self.password, self.username, self.email, self.fname, self.lname)
-
+        return Functions.check_password_criteria(password=self.password,
+                                          username=self.username, 
+                                          email=self.email, 
+                                          fname=self.fname, 
+                                          lname=self.lname)
+        
     def create_user(self):
         user_id = Functions.generate_unique_id(self.user_type)
         with Database.get_db_connection() as connection:

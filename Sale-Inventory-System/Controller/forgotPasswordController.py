@@ -13,19 +13,25 @@ class ForgotPasswordController:
         pass
 
     def checkPassInput(self,data:list):
+        password_model = ForgotPasswordModel()
         pass
 
-    def checkAccountInputs(self, data:list):
-        account_data = ForgotPasswordModel(provided_username=data[0],provided_email=data[1])
-        #account_data.
+    def checkAccountInput(self, data:list):
+        email_model = ForgotPasswordModel(provided_username=data[0]
+                                          ,provided_email=data[1])
+        noAccount = email_model.check_account_existence()
         
-        # provided_username = data[0]
-        # provided_email = data[1]
-        # email_model = ForgotPasswordModel(provided_email=provided_email,provided_username=provided_username)
-        # if email_model.check_provided_username() and email_model.check_user_email():
-        #     return [email_model.provided_username,email_model.provided_email,email_model.get_forgot_password_otp()]
-        # else:
-        #     return 0
+        if noAccount == 0: 
+            return [email_model.provided_username,email_model.provided_email,email_model.get_forgot_password_otp()]
+        else: 
+            return noAccount
     
+    def loginController(self,master):
+        Functions.destroy_page(master)
+        from Controller import LoginController
+        login_page = LoginController(master)
+        login_page.main()
+
+
     def user_otp_verification(self, user_data:list):
         Functions.send_otp_email(user_data[1], user_data[2])
