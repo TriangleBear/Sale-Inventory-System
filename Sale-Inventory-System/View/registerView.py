@@ -1,9 +1,9 @@
 from tkinter import *
 import tkinter as tk
-from View import Functions
+from Utils import Functions
 from tkinter import font
 
-class RegisterPage:
+class RegisterView:
     def __init__(self,registerController,frame):
         self.registerController = registerController
         self.frame = frame

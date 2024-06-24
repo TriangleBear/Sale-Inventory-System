@@ -1,8 +1,8 @@
-from View.viewFunction import Functions
 from View.mainView import MainView
 from View.loginView import LoginView
-from View.registerView import RegisterPage
+from View.forgotPasswordView import ForgotPasswordView
+from View.registerView import RegisterView
 from View.managerView import ManagerDashboard
-from View.staffView import StaffDashboard
+# from View.staffView import StaffDashboard
 
-__all__ = ["Functions","MainView","LoginView"]
+__all__ = ["MainView","LoginView","ForgotPasswordView","RegisterView","ManagerDashboard"]

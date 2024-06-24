@@ -1,9 +1,38 @@
-import tkinter as tk
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
+from Utils import *
+from email.message import EmailMessage
+import smtplib
+import tkinter as tk
+import random
+
 
 class Functions:
+    def send_otp_email(email, otp):
+        sender_email = Credentials.appemail
+        sender_password = Credentials.apppass
+
+        msg = EmailMessage()
+        msg['Subject'] = "OTP Verification"
+        msg['From'] = sender_email
+        msg['To'] = email
+        msg.set_content(f"Your OTP is {otp}")
+
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587) as server:
+                server.starttls()
+                server.login(sender_email, sender_password)
+                print(f"From send_otp_email (sender_email): {sender_email}")
+                server.send_message(msg)
+            print("OTP sent successfully!")
+        except Exception as e:
+            print(f"Failed to send OTP: {e}")
+
+    def generate_otp():
+        otp = random.randint(100000, 999999)
+        return otp
+    
     def create_entry_box_using_grid(frame, labels:dict, entryList:list, max_columns:int, max_rows:int=None, bgColor:str="Grey82",borderW:int=0,xPadding=5, yPadding=5, entryWidth=None):
         current_row = 0 
         current_column = 0 

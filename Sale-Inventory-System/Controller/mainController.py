@@ -1,5 +1,5 @@
 from View import MainView
-from View import Functions
+from Utils import Functions
 
 class MainController:
     def __init__(self):
