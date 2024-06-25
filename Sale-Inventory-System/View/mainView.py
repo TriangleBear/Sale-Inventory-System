@@ -8,7 +8,6 @@ class MainView(tk.Tk):
         self.mainController = mainController
         
         self._main_window_attributes()  # set window attributes
-        self._win_frame()  # put a main frame inside main window
         self._start_button()
 
     def _main_window_attributes(self):
@@ -27,16 +26,14 @@ class MainView(tk.Tk):
     def main(self):
         self.protocol("WM_DELETE_WINDOW", self.quit())
         self.mainloop()
-
-    def _win_frame(self):
-        self.windowFrame = tk.Frame(self)
-        self.windowFrame.pack(fill=tk.BOTH, expand=True)
         
     def _start_button(self):
-        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", command=lambda: self.loginController())
+        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", 
+                              command=lambda: self.loginController())
         start_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def loginController(self):
-        from Controller import LoginController
-        loginController = LoginController(self.windowFrame)
-        loginController.main()
+        self.mainController.loginController(self)
+
+    def registerController(self):
+        self.mainController.registerController(self)

@@ -1,5 +1,5 @@
 from View import MainView
-from View import Functions
+from Utils import Functions
 
 class MainController:
     def __init__(self):
@@ -13,6 +13,12 @@ class MainController:
         from Controller import LoginController
         login_page = LoginController(master)
         login_page.main()
+    
+    def registerController(self,master):
+        Functions.destroy_page(master)
+        from Controller import RegisterController
+        register_page = RegisterController(master)
+        register_page.main()
     
 
 

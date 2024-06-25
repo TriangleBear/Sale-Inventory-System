@@ -1,56 +1,34 @@
 # user.py
 from hashlib import sha256
-from Utils import Database
-from Utils import Credentials
+from Utils import Database,Credentials,Functions
 from email.message import EmailMessage
 import smtplib
-import random
-
-
 
 class LoginModel:
     def __init__(self,provided_credentials:list):
-        self.provided_credentials = [cred for cred in provided_credentials]
         self.username = provided_credentials[0]
         self.password = provided_credentials[1]
-        self.otp = self.generate_otp()       
+        self.otp = Functions.generate_otp()       
 
-    def hash_pass(self):
-        return sha256(self.password.encode('utf-8')).hexdigest()
-    
-    def generate_otp(self):
-        otp = random.randint(100000, 999999)
-        return otp
-    
-    def get_login_otp(self):
-        return self.otp
+    def hash_pass(self,password):
+        return sha256(password.encode('utf-8')).hexdigest()
             
     def check_password(self):
         return self.stored_password == self.hash_pass(self.password)
     
-    
-
-    def send_otp_email(self,email, otp):
-        sender_email = Credentials.appemail
-        sender_password = Credentials.apppass
-
-        msg = EmailMessage()
-        msg['Subject'] = "OTP Verification"
-        msg['From'] = sender_email
-        msg['To'] = email
-        msg.set_content(f"Your OTP is {otp}")
-
-        try:
-            with smtplib.SMTP("smtp.gmail.com", 587) as server:
-                server.starttls()
-                server.login(sender_email, sender_password)
-                print(f"From send_otp_email (sender_email): {sender_email}")
-                server.send_message(msg)
-            print("OTP sent successfully!")
-        except Exception as e:
-            print(f"Failed to send OTP: {e}")
+    def get_login_otp(self):
+        return self.otp
 
     """GET USERDATA FUNCTIONS"""
+    def get_user_id(self):
+        with Database.get_db_connection() as vivdb:
+            with vivdb.cursor() as cursor:
+                sql = 'SELECT user_id FROM User WHERE username=%s'
+                cursor.execute(sql, (self.username,))
+                user_id = cursor.fetchone()
+                vivdb.close()
+                return user_id.get('user_id')
+
     def get_user_email(self):
         with Database.get_db_connection() as vivdb:
             with vivdb.cursor() as cursor:
