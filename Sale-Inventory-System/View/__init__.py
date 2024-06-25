@@ -5,4 +5,4 @@ from View.registerView import RegisterView
 from View.managerView import ManagerDashboard
 # from View.staffView import StaffDashboard
 
-__all__ = ["MainView","LoginView","ForgotPasswordView","RegisterView","ManagerDashboard"]
+__all__ = ["MainView","LoginView","ForgotPasswordView","RegisterView","ManagerDashboard","StaffDashboard"]
