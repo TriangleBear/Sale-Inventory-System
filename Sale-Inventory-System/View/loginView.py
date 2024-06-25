@@ -28,31 +28,28 @@ class LoginView(tk.Frame):
         self._forgot_password_button()
         self._login_button()
 
-    def checkLoginInput(self, data:list):
-        entryData = [entry.get() for entry in data]
-        username = entryData[0]
-        logging.debug(f"Attempting login with username: {username}")
-        userData = self.loginController.checkInput(entryData) # returns a list of [userId,userType, email,otp]
-        logging.debug(f"Received user data: {userData}")
-        print(f"from checkInput; userData: {userData}")
-        # uncomment if send otp to email is needed for testing/demo
-        # self.loginController.user_otp_verification(userData)
-        messagebox.showinfo('OTP Sent', 'Check Email for OTP')
+    def _askOTP(self,verifiedUserData:list):#[userID,userType,email,otp]
         provided_otp = askstring('OTP Verification', 'Enter OTP')
-        logging.debug("Sent OTP!")
-        if userData == None:
-            messagebox.showerror('Login Error', 'Invalid Username or Password')
-            return
+        if str(provided_otp) == str(verifiedUserData[3]):
+            messagebox.showinfo('Login Status', 'Login Successful!')
+            if verifiedUserData[1] == "Manager":
+                self.loginController.managerController(self.master,verifiedUserData[0])
+            if verifiedUserData[1] == "Staff":
+                self.loginController.staffController(self.master,verifiedUserData[0])
+
+    def _checkLoginInput(self, data:list):
+        entryData = [entry.get() for entry in data]
+        # username = entryData[0]
+        userData = self.loginController.checkInput(entryData) 
+        # userData = [userId,userType, email,otp]
+
+        if type(userData) == list:
+            # self.loginController.user_otp_verification(userData)
+            messagebox.showinfo('OTP Sent', 'Check Email for OTP')
+            print(f"from _checkLoginInput;loginView|userData:{userData}")
+            self._askOTP(userData)
         else:
-            if str(provided_otp) == str(userData[3]):
-                print(f"from checkInput loginView; otp|userData[2]: {userData[3]}")
-                print(f"from checkInput loginView; provided_otp: {provided_otp}")
-                messagebox.showinfo('Login Status', 'Login Successful!')
-                if userData[1] == "Manager":
-                    self.loginController.managerPage(self.loginController.managerPage,self.master,userData[0])
-                elif userData[1] == "Staff":
-                    self.loginController._switch_page(self.loginController.staffPage,self.master,userData[0])
-        
+            messagebox.showerror('Invalid Input',userData)
 
     def _center_frame(self):
         self.entryFrame = tk.Frame(self,background="Gray82")
@@ -62,13 +59,11 @@ class LoginView(tk.Frame):
         Functions.create_entry_box_using_grid(frame=self.entryFrame,labels=self.login_labels_with_colspan,entryList=self.login_entry_boxes,max_columns=1)
         
     def _forgot_password_button(self):
-        forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',weight='bold'),text="Forgot Password",borderwidth=0,background="Gray82", command=lambda:self.loginController.forgotPasswordController(self.master))
-        
+        forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),text="Forgot Password",borderwidth=0,background="Gray82", command=lambda:self.loginController.forgotPasswordController(self.master))
         forgot_password_btn.grid(row=2,columnspan=2,sticky='e',padx=5,pady=5)        
         
     def _login_button(self):
-        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self.checkLoginInput(self.login_entry_boxes))
-
+        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self._checkLoginInput(self.login_entry_boxes))
         login_btn.grid(row=3,columnspan=2,sticky='e',padx=5,pady=5)
 
     

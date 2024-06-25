@@ -9,8 +9,12 @@ class ForgotPasswordView(tk.Frame):
         super().__init__(self.master, background="GhostWhite")
         self.forgotPasswordController = forgotPasswordController
 
-        self.confirm_password_labels_with_colspan = {"Old Password":1,"New Password":1,"Confirm Password":1}
+        self.confirm_password_labels_with_colspan = {"New Password":1,"Confirm Password":1}
         self.email_label_with_colspan = {"Username":1,"Email":1}
+        self.userId = None
+        self.username = None
+        self.email = None
+
         self.forgot_password_entry_boxes = []
         self.pack(fill=tk.BOTH,expand=True)
     
@@ -44,58 +48,40 @@ class ForgotPasswordView(tk.Frame):
         confirm_btn = tk.Button(self.entryFrame,text="Confirm",borderwidth=1,background="AntiqueWhite1",command=lambda:self._checkConfirmInput(self.forgot_password_entry_boxes,state))
         confirm_btn.grid(row=3,column=1,sticky='e',padx=5,pady=5)
     
-    def _checkPassword(self,data:list):
-        userData = self.forgotPasswordController.checkPassInput(data) 
-        #[old_password, new_password, confirm_password, username]
+    def _changePassword(self,data:list):
+        data.append(self.userId)
+        data.append(self.username)
+        data.append(self.email)
+        update_pass = self.forgotPasswordController.checkPassInput(data) 
+        #[new_password, confirm_password, user_id, username,email]
         
-        if type(userData) == list:
-            # self.forgotPasswordController.user_otp_verification(userData)
-            print(f"from _checkAccount;forgotPasswordView|userData:\n{userData}")
-            self._askOTP()
+        if update_pass == 0:
+            self.forgotPasswordController.update_password(data)
+            messagebox.showinfo('Process', 'Password successfully updated!')
+            self.forgotPasswordController.loginController(self.master)
         else:
-            messagebox.showerror('Invalid Input', userData)   
-        # if all(_ is None for _ in data):
-        #     messagebox.showerror('No Input', 'No provided Input')
-        # elif data[0] is None:
-        #     messagebox.showerror('No Input', 'No provided Old Password')
-        #     return
-        # elif data[1] is None:
-        #     messagebox.showerror('No Input', 'No provided New Password')
-        #     return
-        # elif data[2] is None:
-        #     messagebox.showerror('No Input', 'No provided Confirm Password')
-        #     return
-        # elif not data[2] == data[1]:
-        #     messagebox.showerror('Invalid Input', 'Confirm Password must match New Password')
-        #     return
-        # else:
-        #     data.append(self.username) #[old_password, new_password, confirm_password, username]
-        #     check_pass = self.forgotPasswordController.checkPassInput(data)
-        #     if check_pass == 0:
-        #         self.forgotPasswordController.update_password(data)
-        #         messagebox.showinfo('Registration', 'Registration Successful!')
-        #         self._switch_page(self._login_page)
-        #     else:
-        #         messagebox.showerror('Registration Error', check_pass)
-        #     self.forgotPasswordController.checkPassInput([data[0],data[1],data[3]])
+            messagebox.showerror('Invalid Input', update_pass)
 
 
     def _askOTP(self, verifiedUserData:list):
         provided_otp = askstring('OTP Verification', 'Enter OTP')
-        if str(provided_otp) == str(verifiedUserData[2]):
+        if str(provided_otp) == str(verifiedUserData[3]):
             Functions.destroy_page(self)
             self.forgot_password_entry_boxes = []
-            self.username = verifiedUserData[0]
+            self.userId = verifiedUserData[0]
+            self.username = verifiedUserData[1]
+            self.email = verifiedUserData[2]
             self._reset_password_page()
 
     def _checkAccount(self,data:list): #[username,email]
         userData = self.forgotPasswordController.checkAccountInput(data) 
-        #userData = [username,email, otp] or 0
+        #userData = [user_id,username,email, otp] or 0
         
         if type(userData) == list:
             # self.forgotPasswordController.user_otp_verification(userData)
+            messagebox.showinfo('OTP Sent', 'Check Email for OTP')
             print(f"from _checkAccount;forgotPasswordView|userData:\n{userData}")
-            self._askOTP()
+            self._askOTP(userData)
         else:
             messagebox.showerror('Invalid Input', userData)          
         
@@ -113,7 +99,7 @@ class ForgotPasswordView(tk.Frame):
             self._checkAccount(entryData) #[username,email]
             return
         if state == "password":
-            self._checkPassword(entryData) #[old_password,new_password,confirm_password]
+            self._changePassword(entryData) #[old_password,new_password,confirm_password]
             
             return
 

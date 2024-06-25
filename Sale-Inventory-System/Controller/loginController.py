@@ -9,13 +9,16 @@ class LoginController:
     def main(self):
         self.view.main()
 
-    def _switch_page(self,page):
-        self.loginController._switch_page(page)
+    def managerController(self,master,user_id):
+        Functions.destroy_page(master)
+        from Controller import ManagerController
+        manager_dashboard = ManagerController(master,user_id)
+        manager_dashboard.main()
 
-    def staffPage(self,master,user_id):
+    def staffController(self,master,user_id):
         Functions.destroy_page(master)
         from Controller import StaffController
-        staff_dashboard = StaffController(master,user_id)
+        staff_dashboard = StaffController(master, user_id)
         staff_dashboard.main()
     
     def forgotPasswordController(self,master):
@@ -26,16 +29,16 @@ class LoginController:
 
 
     def checkInput(self, data:list):
-        self.model = LoginModel(data)
-        userId = self.model.get_user_id()
-        userType = self.model.get_user_type()
-        storedPassword = self.model.get_user_password()
-        email = self.model.get_user_email()
-        otp = self.model.get_login_otp()
-        if userId == None:
-            return ValueError("Invalid Username or Password")
-        elif self.model.check_password:
-            return [userId,userType,email,otp]
+        print(f"from checkInput;loginController|data:{data}")
+        model = LoginModel(data)
+        invalidInput = model.check_password()
+        if invalidInput == 0:
+            return [model.user_id,
+                    model.get_user_type(),
+                    model.get_user_email(),
+                    model.get_login_otp()]
+        else:
+            return invalidInput
 
     def user_otp_verification(self, user_data:list):
         Functions.send_otp_email(user_data[2], user_data[3])#(user_data[2]:email,user_data[3]:otp)
