@@ -9,6 +9,12 @@ class LoginController:
     def main(self):
         self.view.main()
 
+    def registerController(self,master):
+        Functions.destroy_page(master)
+        from Controller import RegisterController
+        register_page = RegisterController(master)
+        register_page.main()
+
     def managerController(self,master,user_id):
         Functions.destroy_page(master)
         from Controller import ManagerController
