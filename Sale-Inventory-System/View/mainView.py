@@ -9,6 +9,7 @@ class MainView(tk.Tk):
         
         self._main_window_attributes()  # set window attributes
         self._start_button()
+        self._register_button()
 
     def _main_window_attributes(self):
         # main window
@@ -26,6 +27,11 @@ class MainView(tk.Tk):
     def main(self):
         self.protocol("WM_DELETE_WINDOW", self.quit())
         self.mainloop()
+
+    def _register_button(self):
+        register_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Register", borderwidth=0, background="Gray82", 
+                                 command=lambda: self.registerController())
+        register_btn.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
         
     def _start_button(self):
         start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", 

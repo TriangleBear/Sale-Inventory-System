@@ -23,7 +23,7 @@ class StaffDashboard(tk.Tk):
         x = int((screen_width / 2) - (w / 2)) - 12
         y = int((screen_height / 2) - (h / 2)) - 40
 
-        self.title('S.I.M.S')
+        self.title(f'Welcome Staff! {self.user_id}')
         self.geometry(f"{w}x{h}+{x}+{y}")
         self.resizable(False, False)
 

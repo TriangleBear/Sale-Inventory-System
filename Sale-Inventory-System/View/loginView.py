@@ -40,14 +40,19 @@ class LoginView(tk.Frame):
         messagebox.showinfo('OTP Sent', 'Check Email for OTP')
         provided_otp = askstring('OTP Verification', 'Enter OTP')
         logging.debug("Sent OTP!")
-        if str(provided_otp) == str(userData[3]):
-            print(f"from checkInput loginView; otp|userData[2]: {userData[3]}")
-            print(f"from checkInput loginView; provided_otp: {provided_otp}")
-            messagebox.showinfo('Login Status', 'Login Successful!')
-            if userData[1] == "Manager":
-                self.loginController.managerPage(self.master,userData[0])
-            elif userData[1] == "Staff":
-                self.loginController._switch_page(self.loginController._staff_page)
+        if userData == None:
+            messagebox.showerror('Login Error', 'Invalid Username or Password')
+            return
+        else:
+            if str(provided_otp) == str(userData[3]):
+                print(f"from checkInput loginView; otp|userData[2]: {userData[3]}")
+                print(f"from checkInput loginView; provided_otp: {provided_otp}")
+                messagebox.showinfo('Login Status', 'Login Successful!')
+                if userData[1] == "Manager":
+                    self.loginController.managerPage(self.loginController.managerPage,self.master,userData[0])
+                elif userData[1] == "Staff":
+                    self.loginController._switch_page(self.loginController.staffPage,self.master,userData[0])
+        
 
     def _center_frame(self):
         self.entryFrame = tk.Frame(self,background="Gray82")
@@ -65,6 +70,8 @@ class LoginView(tk.Frame):
         login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self.checkLoginInput(self.login_entry_boxes))
 
         login_btn.grid(row=3,columnspan=2,sticky='e',padx=5,pady=5)
+
+    
 
 
 

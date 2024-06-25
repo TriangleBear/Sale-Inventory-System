@@ -27,7 +27,10 @@ class LoginModel:
                 cursor.execute(sql, (self.username,))
                 user_id = cursor.fetchone()
                 vivdb.close()
-                return user_id.get('user_id')
+                if user_id:
+                    return user_id.get('user_id')
+                elif user_id == None:
+                    return ValueError("User ID not found")
 
     def get_user_email(self):
         with Database.get_db_connection() as vivdb:
@@ -36,7 +39,10 @@ class LoginModel:
                 cursor.execute(sql, (self.username,))
                 email = cursor.fetchone()
                 vivdb.close()
-                return email.get('email')
+                if email:
+                    return email.get('email')
+                elif email == None:
+                    return ValueError('User Email not found')
 
     def get_user_password(self):
         with Database.get_db_connection() as vivdb:
@@ -48,8 +54,8 @@ class LoginModel:
                 if result:
                     vivdb.close()
                     return result.get('passwordHash')
-                else:
-                    return None
+                elif result == None:
+                    return ValueError('User Password not found')
 
     def get_user_type(self):
         with Database.get_db_connection() as vivdb:
@@ -59,4 +65,7 @@ class LoginModel:
                 userType = cursor.fetchone()
                 print(userType)
                 vivdb.close()
-                return userType.get('user_type')
+                if userType:
+                    return userType.get('user_type')
+                elif userType == None:
+                    return ValueError('User Type not found')

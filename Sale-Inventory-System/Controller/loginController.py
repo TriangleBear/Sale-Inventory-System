@@ -9,11 +9,8 @@ class LoginController:
     def main(self):
         self.view.main()
 
-    def managerPage(self,master,user_id):
-        Functions.destroy_page(master)
-        from Controller import ManagerController
-        manager_dashboard = ManagerController(master,user_id)
-        manager_dashboard.main()
+    def _switch_page(self,page):
+        self.loginController._switch_page(page)
 
     def staffPage(self,master,user_id):
         Functions.destroy_page(master)
@@ -35,7 +32,9 @@ class LoginController:
         storedPassword = self.model.get_user_password()
         email = self.model.get_user_email()
         otp = self.model.get_login_otp()
-        if self.model.check_password:
+        if userId == None:
+            return ValueError("Invalid Username or Password")
+        elif self.model.check_password:
             return [userId,userType,email,otp]
 
     def user_otp_verification(self, user_data:list):
