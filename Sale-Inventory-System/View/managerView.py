@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import font, CENTER
 import tkinter as tk
 class ManagerDashboard(tk.Frame):
     def __init__(self,managerController,master,user_id):
@@ -12,6 +12,10 @@ class ManagerDashboard(tk.Frame):
         self._main_window_attributes()
         self._manager_frame()
         self._temp_label()
+        self._register_button()
+        self._inventory_button()
+        self._supplies_button()
+        self._pos_button()
 
     def _main_window_attributes(self):
         # main window
@@ -33,3 +37,7 @@ class ManagerDashboard(tk.Frame):
     def _temp_label(self):
         temp_label = tk.Label(self.managerFrame,text=f"manager dasherboard | user ID: {self.user_id}")
         temp_label.place(relx=0.5,rely=0.5,anchor=CENTER)
+
+    def _register_button(self):
+        self.register_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.managerController.registerController(self.master))
+        self.register_btn.pack()
