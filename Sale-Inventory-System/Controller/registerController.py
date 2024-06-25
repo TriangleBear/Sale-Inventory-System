@@ -16,7 +16,12 @@ class RegisterController():
 
     def check_password_criteria(self, data:list):
         pass_model = RegisterModel(data)
-        return pass_model.check_password_criteria() 
+        return pass_model.check_password_criteria()
+    
+    def registerController(self,master):
+        Functions.destroy_page(master)
+        register_page = RegisterController(master)
+        register_page.main()
     
 
 if __name__ == "__main__":

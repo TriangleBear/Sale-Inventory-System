@@ -1,10 +1,11 @@
 from tkinter import font, CENTER
 import tkinter as tk
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,master,user_id):
+    def __init__(self,managerController,registerController,master,user_id):
         self.master = master
         super().__init__(self.master)
         self.managerController = managerController
+        self.registerController = registerController
         self.user_id = user_id
         self.pack(fill=tk.BOTH,expand=True)
     
@@ -39,5 +40,5 @@ class ManagerDashboard(tk.Frame):
         temp_label.place(relx=0.5,rely=0.5,anchor=CENTER)
 
     def _register_button(self):
-        self.register_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.managerController.registerController(self.master))
+        self.register_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.registerController.registerController(self.master))
         self.register_btn.pack()
