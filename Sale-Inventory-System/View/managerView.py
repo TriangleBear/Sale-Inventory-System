@@ -1,22 +1,18 @@
-from tkinter import font, CENTER
+from tkinter import *
 import tkinter as tk
+from tkinter import font
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,registerController,master,user_id):
+    def __init__(self,managerController,master,user_id):
         self.master = master
         super().__init__(self.master)
         self.managerController = managerController
-        self.registerController = registerController
         self.user_id = user_id
         self.pack(fill=tk.BOTH,expand=True)
     
     def main(self):
         self._main_window_attributes()
-        self._manager_frame()
-        self._temp_label()
-        self._register_button()
-        self._inventory_button()
-        self._supplies_button()
-        self._pos_button()
+        self._header_frame()
+        self._user_label()
 
     def _main_window_attributes(self):
         # main window
@@ -31,14 +27,14 @@ class ManagerDashboard(tk.Frame):
         self.master.geometry(f"{w}x{h}+{x}+{y}")
         self.master.resizable(False, False)
 
-    def _manager_frame(self):
-        self.managerFrame = tk.Frame(self,background="GhostWhite")
-        self.managerFrame.pack(fill=tk.BOTH,expand=True)
+    def _header_frame(self):
+        self.headerFrame = tk.Frame(self,background="GhostWhite")
+        self.headerFrame.place(relx=0.5,rely=0.2,anchor='n')
 
-    def _temp_label(self):
-        temp_label = tk.Label(self.managerFrame,text=f"manager dasherboard | user ID: {self.user_id}")
-        temp_label.place(relx=0.5,rely=0.5,anchor=CENTER)
+    def _user_label(self):
+        user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"manager dasherboard | user ID: {self.user_id}")
+        user_label.pack()
 
-    def _register_button(self):
-        self.register_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.registerController.registerController(self.master))
-        self.register_btn.pack()
+    # def _register_button(self):
+    #     self.register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.managerController.registerController(self.master))
+    #     self.register_btn.pack()
