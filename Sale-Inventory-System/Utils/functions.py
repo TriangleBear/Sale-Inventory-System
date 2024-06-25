@@ -9,6 +9,27 @@ import random, string
 
 
 class Functions:
+    def create_buttons_using_grid(frame,
+                                  labels:dict,
+                                  entryList:list,
+                                  max_columns:int,
+                                  max_rows:int=None,
+                                  current_r=0,
+                                  current_c=0,
+                                  bgColor:str="Grey82",
+                                  borderW:int=1,
+                                  xPadding=5,
+                                  yPadding=5,
+                                  entryWidth=None):
+        current_row = current_r
+        current_column = current_c
+        refName = [label for label in labels.keys()]
+        for string in refName:
+            b = tk.Button(frame,
+                          borderwidth=borderW,
+                          background=bgColor,)
+        
+
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
         if password == '':
@@ -74,7 +95,17 @@ class Functions:
         otp = random.randint(100000, 999999)
         return otp
 
-    def create_entry_box_using_grid(frame, labels:dict, entryList:list, max_columns:int, max_rows:int=None,current_r=0,current_c=0, bgColor:str="Grey82",borderW:int=0,xPadding=5, yPadding=5, entryWidth=None):
+    def create_entry_box_using_grid(frame,
+                                    labels:dict,
+                                    entryList:list,
+                                    max_columns:int,
+                                    max_rows:int=None,
+                                    current_r=0,
+                                    current_c=0,
+                                    bgColor:str="Grey82",
+                                    borderW:int=0,xPadding=5,
+                                    yPadding=5,
+                                    entryWidth=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]
