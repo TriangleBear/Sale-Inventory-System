@@ -12,10 +12,8 @@ class ManagerDashboard(tk.Frame):
         self._main_window_attributes()
         self._header_frame()
         self._manager_label()
-        self._button_frame()
         self._header_buttons()
         self._body_frame()
-        self._body_buttons()
 
     def _main_window_attributes(self):
         # main window
@@ -35,8 +33,8 @@ class ManagerDashboard(tk.Frame):
         self.headerFrame.place(relx=0.5,rely=0.1,anchor='n')
     
     def _body_frame(self):
-        self.bodyFrame = tk.Frame(self, background="GhostWhite")
-        self.bodyFrame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        self.bodyFrame = tk.Frame(self,background="GhostWhite")
+        self.bodyFrame.place(relx=0.5,rely=0., anchor=CENTER)
 
     def _manager_label(self):
         self.manager_label = tk.Label(self.headerFrame,text=f"manager dasherboard | user ID: {self.user_id}")
@@ -47,16 +45,12 @@ class ManagerDashboard(tk.Frame):
         self.button_frame.place(relx=0.7,rely=0.5,anchor='e')
 
     def _header_buttons(self):
-        self.home_btn = tk.Button(self.button_frame, text="Home", borderwidth=1, background="AntiqueWhite1", command=lambda: self.managerController.homePage(self.master))
-        self.home_btn.grid(row=0, column=0, padx=5, pady=5)
+        self.home_btn = tk.Button(self.button_frame, text="=Home",borderwidth=1,background="AntiqueWhite1", command=lambda:self.managerController.homePage(self.bodyFrame))
+        self.home_btn.grid(row=0,column=0,padx=5,pady=5)
 
-        self.logout_btn = tk.Button(self.button_frame, text="Logout", borderwidth=1, background="AntiqueWhite1", command=lambda: self.managerController.logout(self.master))
-        self.logout_btn.grid(row=0, column=1, padx=5, pady=5)
+        self.logout_btn = tk.Button(self.button_frame, text="=Logout",borderwidth=1,background="AntiqueWhite1", command=lambda:self.managerController.loginController(self.master))
+        self.logout_btn.grid(row=0,column=1,padx=5,pady=5)
 
     def _body_buttons(self):
-        self.logout_btn = tk.Button(self.button_frame, text="Logout", borderwidth=1, background="AntiqueWhite1", command=lambda: self.managerController.registerController(self.master))
-        self.logout_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-
-    def _register_button(self):
-        self.register_btn = tk.Button(self.entryFrame,font=tk.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.managerController.registerController(self.master))
-        self.register_btn.pack()
+        self.logout_btn = tk.Button(self.button_frame, text="=Logout",borderwidth=1,background="AntiqueWhite1", command=lambda:self.managerController.registerController(self.master))
+        self.logout_btn.place(relx=0.5,rely=0.5,anchor=CENTER)
