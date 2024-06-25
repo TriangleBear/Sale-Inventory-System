@@ -9,11 +9,17 @@ class LoginController:
     def main(self):
         self.view.main()
 
-    def managerPage(self,master,user_id):
+    def managerController(self,master,user_id):
         Functions.destroy_page(master)
         from Controller import ManagerController
         manager_dashboard = ManagerController(master,user_id)
         manager_dashboard.main()
+
+    def staffController(self,master,user_id):
+        Functions.destroy_page(master)
+        from Controller import StaffController
+        staff_dashboard = StaffController(master, user_id)
+        staff_dashboard.main()
     
     def forgotPasswordController(self,master):
         Functions.destroy_page(master)
@@ -23,14 +29,16 @@ class LoginController:
 
 
     def checkInput(self, data:list):
-        self.model = LoginModel(data)
-        userId = self.model.get_user_id()
-        userType = self.model.get_user_type()
-        storedPassword = self.model.get_user_password()
-        email = self.model.get_user_email()
-        otp = self.model.get_login_otp()
-        if self.model.check_password:
-            return [userId,userType,email,otp]
+        print(f"from checkInput;loginController|data:{data}")
+        model = LoginModel(data)
+        invalidInput = model.check_password()
+        if invalidInput == 0:
+            return [model.user_id,
+                    model.get_user_type(),
+                    model.get_user_email(),
+                    model.get_login_otp()]
+        else:
+            return invalidInput
 
     def user_otp_verification(self, user_data:list):
         Functions.send_otp_email(user_data[2], user_data[3])#(user_data[2]:email,user_data[3]:otp)

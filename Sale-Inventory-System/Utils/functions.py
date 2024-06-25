@@ -6,6 +6,7 @@ from email.message import EmailMessage
 import smtplib
 import tkinter as tk
 import random, string
+from hashlib import sha256
 
 
 class Functions:
@@ -44,7 +45,7 @@ class Functions:
             return ValueError("Password must have at least one lowercase letter")
         if not any(char in ['$', '@', '#', '%', '!', '&', '*'] for char in password):
             return ValueError("Password must have at least one special character")
-        if old_password != None and old_password == password:
+        if old_password != None and old_password == sha256(password.encode()).hexdigest():
             return ValueError("New password cannot be the same as the old password")
         if username in password:
             return ValueError("Username and password cannot be the same")
