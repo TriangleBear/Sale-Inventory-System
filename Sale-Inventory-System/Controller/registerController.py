@@ -1,5 +1,6 @@
 from View import RegisterView
 from Model import RegisterModel
+from Utils import Functions
 
 class RegisterController():
     def __init__(self,master):
