@@ -1,6 +1,5 @@
 from View import ManagerDashboard
 from Model import ManagerModel
-from Utils import Functions
 
 class ManagerController:
     def __init__(self, master,user_id):
@@ -10,19 +9,3 @@ class ManagerController:
     
     def main(self):
         self.view.main()
-
-    def homePage(self,master):
-        Functions.destroy_page(master)
-        self.main()
-
-    def loginController(self,master):
-        Functions.destroy_page(master)
-        from Controller import LoginController
-        login_page = LoginController(master)
-        login_page.main()
-
-    def registerController(self,master):
-        Functions.destroy_page(master)
-        from Controller import RegisterController
-        register_page = RegisterController(master)
-        register_page.main()
