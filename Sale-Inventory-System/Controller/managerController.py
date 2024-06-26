@@ -1,6 +1,8 @@
 from View import ManagerDashboard
 from Model import ManagerModel
 from Utils import Functions
+from Controller.suppliesController import SuppliesController
+from Controller.posController import PosController
 
 class ManagerController:
     def __init__(self, master,user_id=None):
@@ -19,8 +21,24 @@ class ManagerController:
 
     def registerController(self,master):
         Functions.destroy_page(master)
-        from Controller import UserRegisterController
-        user_register_page = UserRegisterController(master,self)
-        user_register_page.main()
+        from Controller import RegisterController
+        register_page = RegisterController(master)
+        register_page.main()
 
-    
+    def inventoryController(self,master):
+        Functions.destroy_page(master)
+        from Controller import InventoryController
+        inventory_page = InventoryController(master)
+        inventory_page.main()
+
+    def suppliesController(self,master):
+        Functions.destroy_page(master)
+        from Controller import SuppliesController
+        supplies_page = SuppliesController(master)
+        supplies_page.main()
+
+    def posController(self,master):
+        Functions.destroy_page(master)
+        from Controller import POSController
+        pos_page = POSController(master)
+        pos_page.main()
