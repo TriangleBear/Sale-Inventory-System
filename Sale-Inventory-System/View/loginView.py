@@ -66,6 +66,8 @@ class LoginView(tk.Frame):
         login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self._checkLoginInput(self.login_entry_boxes))
         login_btn.grid(row=3,columnspan=2,sticky='e',padx=5,pady=5)
 
+    
+
 
 
 

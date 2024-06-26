@@ -3,7 +3,7 @@ import tkinter as tk
 from Utils import Functions
 from tkinter import font, messagebox
 from tkcalendar import DateEntry
-class RegisterView(tk.Frame):
+class UserRegisterView(tk.Frame):
     def __init__(self,registerController,master):
         self.registerController = registerController
         self.master = master
@@ -21,40 +21,46 @@ class RegisterView(tk.Frame):
         self.register_entry_boxes = []
         self.register_inputs = []
         self.pack(fill=tk.BOTH,expand=True)
+        self.mainBg = "Gray89"
 
     def main(self):
         self._register_frame()  
         self._entry_frame()
         self._register_widgets()
         self._register_button()
+        self._back_button()
 
     def _register_frame(self):
         self.registerFrame = tk.Frame(self,background="GhostWhite")
         self.registerFrame.pack(fill=tk.BOTH,expand=True)
 
     def _entry_frame(self):
-        self.entryFrame = tk.Frame(self.registerFrame,background="Gray82")
+        self.entryFrame = tk.Frame(self.registerFrame,background=self.mainBg)
         self.entryFrame.place(relx =0.5,rely=0.5,anchor=CENTER)
 
     def _register_widgets(self):
         subset_one = {key:self.register_labels_with_colspan[key] for key in ["First Name","Last Name","Access"] if key in self.register_labels_with_colspan}
         Functions.create_entry_box_using_grid(frame=self.entryFrame,
                                               labels=subset_one,
+                                              bgColor=self.mainBg,
                                               entryList=self.register_entry_boxes,
+                                              borderW=1,
                                               max_columns=2,
                                               entryWidth=54)
         self._register_birthdate_widget()
         subset_two = {key:self.register_labels_with_colspan[key] for key in ["Contact No.","Email","Address","Username","Password"] if key in self.register_labels_with_colspan}
         Functions.create_entry_box_using_grid(frame=self.entryFrame,
                                               labels=subset_two,
+                                              bgColor=self.mainBg,
                                               entryList=self.register_entry_boxes,
+                                              borderW=1,
                                               max_columns=2,
                                               current_r=2,
                                               current_c=0,
                                               entryWidth=54)
     
     def _register_birthdate_widget(self):
-        self.birthdate_lbl = tk.Label(self.entryFrame,text="Birthdate",background="Gray82")
+        self.birthdate_lbl = tk.Label(self.entryFrame,text="Birthdate",background=self.mainBg)
         self.birthdate_lbl.grid(row=1,column=2,padx=5,pady=5)
 
         self.birthdate = DateEntry(self.entryFrame,borderwidth=0,year=2000,date_pattern='YYYY-MM-DD')
@@ -65,7 +71,11 @@ class RegisterView(tk.Frame):
 
     def _register_button(self):
         register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self._checkInput(self.register_entry_boxes))
-        register_btn.grid(row=5,columnspan=4,sticky='e',padx=5,pady=5)
+        register_btn.grid(row=5,column=4,sticky='w',padx=5,pady=5)
+    
+    def _back_button(self):
+        back_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", command=lambda:self.registerController.manager_body(self.master))
+        back_btn.grid(row=5,column=3,sticky='e',padx=5,pady=5)
             
     def _checkInput(self, data:list): 
         #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
