@@ -110,3 +110,4 @@ class ManagerDashboard(tk.Frame):
             self.managerController.userRegisterController(self.bodyFrame)
         if string == "Item Registration":
             self.managerController.itemRegisterController()
+

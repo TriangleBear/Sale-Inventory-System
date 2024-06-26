@@ -1,5 +1,5 @@
 from View import ManagerDashboard
-from Model import ManagerModel
+#from Model import ManagerModel
 from Utils import Functions
 from Controller.suppliesController import SuppliesController
 from Controller.posController import PosController
@@ -7,8 +7,8 @@ from Controller.posController import PosController
 class ManagerController:
     def __init__(self, master,user_id=None):
         self.master = master
-        self.id = user_id
-        self.view = ManagerDashboard(self,self.master,self.id)
+        self.user_id = user_id
+        self.view = ManagerDashboard(self,self.master,self.user_id)
     
     def main(self):
         self.view.main()

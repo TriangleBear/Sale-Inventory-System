@@ -4,6 +4,7 @@ class ItemRegisterController:
     def __init__(self,managerController):
         self.managerController = managerController
         self.view = ItemRegisterView(self)
+        self.user_id = self.managerController.user_id
 
     def main(self):
         self.view.main()
@@ -15,5 +16,5 @@ class ItemRegisterController:
     
     def register(self,data:list):
         from Model import ItemRegisterModel
-        item = ItemRegisterModel(data)
+        item = ItemRegisterModel(data,self.user_id)
         item.registerItemData()
