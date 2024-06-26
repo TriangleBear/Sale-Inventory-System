@@ -28,11 +28,13 @@ class ItemRegisterView(tk.Toplevel):
 
         self.categories = ["Vegetable","Meat","Spice"]
 
+
     def main(self):
         self._item_register_frame()
         self._item_register_widgets()
-
+        self._register_button()
         self._back_button()
+        self.mainloop()
 
 
     def _window_attributes(self):
@@ -46,7 +48,7 @@ class ItemRegisterView(tk.Toplevel):
         self.title('Item Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
-
+        self.grab_set()
         self.protocol("WM_DELETE_WINDOW", self.quit())
 
     def _item_register_frame(self):
@@ -54,6 +56,7 @@ class ItemRegisterView(tk.Toplevel):
         self.registerFrame.place(relx=0.5,rely=0.5,anchor=CENTER)
     
     def _item_register_widgets(self):
+        entrywidth = 23
         subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity","Price","Supplier","Expiry Date"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.registerFrame,
@@ -62,8 +65,9 @@ class ItemRegisterView(tk.Toplevel):
             entryList=self.item_entry_boxes,
             borderW=1,
             max_columns=2,
+            entryWidth=entrywidth
         )
-        self._category_dropdown()
+        self._category_dropdown() #row=2 column=(2-3)
         subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.registerFrame,
@@ -71,16 +75,22 @@ class ItemRegisterView(tk.Toplevel):
             bgColor=self.mainBg,
             entryList=self.item_entry_boxes,
             borderW=1,
-            max_columns=2
+            max_columns=2,
+            current_c=0,
+            current_r=3,
+            entryWidth=entrywidth
         )
 
     def _category_dropdown(self):
+        category_lbl = tk.Label(self.registerFrame,text="Category: ",background=self.mainBg,width=20)
+        category_lbl.grid(row=2,column=2,padx=5,pady=5)
         category = ttk.Combobox(self.registerFrame,values=self.categories)
+        category.grid(row=2,column=3,padx=5,pady=5)
         self.item_entry_boxes.append(category)
 
     def _register_button(self):
-        register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self._check_input(self.item_entry_boxes))
-        register_btn.grid(row=5,column=4,sticky='w',padx=5,pady=5)
+        register_btn = tk.Button(self.registerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self._checkInput(self.item_entry_boxes))
+        register_btn.grid(row=4,column=3,sticky='w',padx=5,pady=5)
 
     def _checkInput(self, data:list): 
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling
@@ -95,5 +105,5 @@ class ItemRegisterView(tk.Toplevel):
             messagebox.showerror('Item Registration Error', check_input)
     
     def _back_button(self):
-        back_btn = tk.Button(self.registerFrame, text="Back", command=lambda: self.quit())
-        back_btn.place(relx=0.9, rely=0.5,anchor=CENTER)
+        back_btn = tk.Button(self.registerFrame, text="Back", command=lambda: self.destroy())
+        back_btn.grid(row=4,column=2,sticky='e',padx=5,pady=5)

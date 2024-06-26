@@ -9,15 +9,17 @@ class UserRegisterView(tk.Frame):
         self.master = master
         super().__init__(self.master, background="GhostWhite")
 
-        self.register_labels_with_colspan = {"First Name":1,
-                                             "Last Name":1,
-                                             "Access":1,
-                                             "Birthdate":1,
-                                             "Contact No.":1,
-                                             "Email":1,
-                                             "Address":3,
-                                             "Username":1,
-                                             "Password":1}
+        self.register_labels_with_colspan = {
+            "First Name":1,
+            "Last Name":1,
+            "Access":1,
+            "Birthdate":1,
+            "Contact No.":1,
+            "Email":1,
+            "Address":3,
+            "Username":1,
+            "Password":1
+        }
         self.register_entry_boxes = []
         self.register_inputs = []
         self.pack(fill=tk.BOTH,expand=True)
@@ -40,24 +42,28 @@ class UserRegisterView(tk.Frame):
 
     def _register_widgets(self):
         subset_one = {key:self.register_labels_with_colspan[key] for key in ["First Name","Last Name","Access"] if key in self.register_labels_with_colspan}
-        Functions.create_entry_box_using_grid(frame=self.entryFrame,
-                                              labels=subset_one,
-                                              bgColor=self.mainBg,
-                                              entryList=self.register_entry_boxes,
-                                              borderW=1,
-                                              max_columns=2,
-                                              entryWidth=54)
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame,
+            labels=subset_one,
+            bgColor=self.mainBg,
+            entryList=self.register_entry_boxes,
+            borderW=1,
+            max_columns=2,
+            entryWidth=54
+        )
         self._register_birthdate_widget()
         subset_two = {key:self.register_labels_with_colspan[key] for key in ["Contact No.","Email","Address","Username","Password"] if key in self.register_labels_with_colspan}
-        Functions.create_entry_box_using_grid(frame=self.entryFrame,
-                                              labels=subset_two,
-                                              bgColor=self.mainBg,
-                                              entryList=self.register_entry_boxes,
-                                              borderW=1,
-                                              max_columns=2,
-                                              current_r=2,
-                                              current_c=0,
-                                              entryWidth=54)
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame,
+            labels=subset_two,
+            bgColor=self.mainBg,
+            entryList=self.register_entry_boxes,
+            borderW=1,
+            max_columns=2,
+            current_r=2,
+            current_c=0,
+            entryWidth=54
+        )
     
     def _register_birthdate_widget(self):
         self.birthdate_lbl = tk.Label(self.entryFrame,text="Birthdate",background=self.mainBg)

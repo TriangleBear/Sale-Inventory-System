@@ -1,7 +1,7 @@
 from Model.inventoryModel import InventoryModel
 from View.inventoryView import InventoryView
 class InventoryController:
-    def __init__(self,master):
+    def __init__(self,master,):
         self.master = master
         self.view = InventoryView(self, master)
 

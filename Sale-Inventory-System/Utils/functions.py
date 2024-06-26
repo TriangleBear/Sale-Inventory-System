@@ -77,7 +77,7 @@ class Functions:
                         letter = "S"
                     elif access_level == "Manager":
                         letter = "M"
-                    elif access_level == "Item"
+                    elif access_level == "Item":
                         letter = "I"
                     unique_id = letter + digits
                     sql = 'SELECT user_id FROM User WHERE user_id = %s'
@@ -132,7 +132,7 @@ class Functions:
 
             current_column += 1
 
-            entry = tk.Entry(frame,borderwidth=borderW)
+            entry = tk.Entry(frame,borderwidth=borderW,width=entryWidth)
             entry.grid(row=current_row,column=current_column,columnspan=labels.get(f"{string}"),padx=xPadding,pady=yPadding)
             entryList.append(entry)
 
