@@ -1,6 +1,8 @@
-from Utils.database import Database
+from Utils import Functions
+from Utils import Database
 class ItemRegisterModel:
-    def __init__(self, data:list):
+    def __init__(self,data:list):
+        self.item_id = Functions.generate_unique_id("Item")
         self.item_name = data[0]
         self.quantity = data[1]
         self.price = data[2]
@@ -10,7 +12,14 @@ class ItemRegisterModel:
         self.ceiling = data[6]
         self.stock_level = data[7]
 
-    def create_item(self):
+
+    def checkInput(self):
+        #check error if error return ValueError else return 0
+        if not self.item_name:
+            return ValueError("Item name cannot be empty")
+
+    def registerItemData(self):
+        #register item to data base
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """INSERT INTO Item (item_name, quantity, price, supplier, expiry_date, flooring, ceiling, stock_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
@@ -18,7 +27,7 @@ class ItemRegisterModel:
             connection.commit()
             connection.close()
         return 0
-    
+
     def checkStockLevel(self):
         if self.quantity > self.flooring and self.quantity < self.ceiling:
             self.stock_level = "Average"

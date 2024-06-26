@@ -132,7 +132,7 @@ class Functions:
 
             current_column += 1
 
-            entry = tk.Entry(frame,borderwidth=borderW)
+            entry = tk.Entry(frame,borderwidth=borderW,width=entryWidth)
             entry.grid(row=current_row,column=current_column,columnspan=labels.get(f"{string}"),padx=xPadding,pady=yPadding)
             entryList.append(entry)
 
