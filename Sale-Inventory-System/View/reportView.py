@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 
-class ReportView:
-    def __init__(self):
-        self.table = []
-
-    def add_activity(self, user_id, username, activity, datetime):
-        self.table.append((user_id, username, activity, datetime))
+class ReportView(tk.Frame):
+    def __init__(self, reportController, master):
+        self.master = master
+        super().__init__(self.master, background="Gray90")
+        self.reportController = reportController
+        self.table = ['user_id', 'username', 'activity', 'datetime']
 
     def display_table(self):
         root = tk.Tk()

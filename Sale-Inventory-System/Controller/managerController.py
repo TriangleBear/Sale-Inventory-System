@@ -13,6 +13,9 @@ class ManagerController:
     def main(self):
         self.view.main()
 
+    def close_toplevel(self):
+        self.view.quit()
+
     def loginController(self,master):
         Functions.destroy_page(master)
         from Controller import LoginController
@@ -48,10 +51,10 @@ class ManagerController:
         from Controller import POSController
         pos_page = POSController(master,self)
         pos_page.main()
+
     def itemRegisterController(self,master):
-        Functions.destroy_page(master)
         from Controller import ItemRegisterController
-        item_register_page = ItemRegisterController(master,self)
+        item_register_page = ItemRegisterController(self)
         item_register_page.main()
 
     

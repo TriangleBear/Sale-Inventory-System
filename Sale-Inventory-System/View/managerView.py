@@ -25,14 +25,17 @@ class ManagerDashboard(tk.Frame):
         self._body_frame()
         self.body()
 
+
+
     def body(self):
         self._center_frame()
         self._body_buttons()
 
+
+
     def register_page(self):
         self._center_frame()
-        self.main_register_page() # load buttons
-
+        self.main_register_buttons() # load buttons
         self._back_button("register_page")
 
     def _main_window_attributes(self):
@@ -75,7 +78,7 @@ class ManagerDashboard(tk.Frame):
                                             yPadding=10,
                                             cmd=self._check_buttons_command)
 
-    def main_register_page(self):
+    def main_register_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
                                             labels=self.registration_btn,
                                             entryList=self.btns,
@@ -97,13 +100,10 @@ class ManagerDashboard(tk.Frame):
 
     def _check_buttons_command(self,string):
         if string == "Registration":
-            self.managerController.registerController(self.bodyFrame)
-        if string == "Register User":
-            self.managerController.userRegisterController(self.bodyFrame)
-        if string == "Report":
+            Functions.destroy_page(self.bodyFrame)
+            self.register_page()
+        if string == "Report": 
             self.managerController.reportController(self.bodyFrame)
-
-    
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
         if string == "User Registration":
