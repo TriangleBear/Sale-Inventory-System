@@ -83,7 +83,7 @@ class ItemRegisterView(tk.Toplevel):
         register_btn.grid(row=5,column=4,sticky='w',padx=5,pady=5)
 
     def _checkInput(self, data:list): 
-        #item name,quantity,price,supplier,expiry date, category, flooring, ceiling
+        #item name,quantity,price,supplier,expiry date, category, flooring, ceiling, stock_level
         entryData = [entry.get().strip() for entry in data]
         print(f"from _checkInput;RegisterView|entryData:\n{entryData}")
         check_input = self.itemRegisterController.checkInput(entryData)
