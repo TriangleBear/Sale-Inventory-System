@@ -4,8 +4,8 @@ from Utils import Functions
 from tkinter import font, messagebox
 from tkcalendar import DateEntry
 class UserRegisterView(tk.Frame):
-    def __init__(self,registerController,master):
-        self.registerController = registerController
+    def __init__(self,userRegisterController,master):
+        self.userRegisterController = userRegisterController
         self.master = master
         super().__init__(self.master, background="GhostWhite")
 
@@ -74,7 +74,7 @@ class UserRegisterView(tk.Frame):
         register_btn.grid(row=5,column=4,sticky='w',padx=5,pady=5)
     
     def _back_button(self):
-        back_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", command=lambda:self.registerController.manager_body(self.master))
+        back_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", command=lambda:self.userRegisterController.manager_body(self.master))
         back_btn.grid(row=5,column=3,sticky='e',padx=5,pady=5)
             
     def _checkInput(self, data:list): 
@@ -85,6 +85,6 @@ class UserRegisterView(tk.Frame):
         if check_pass == 0:
             self.registerController.register(entryData)
             messagebox.showinfo('Registration', 'Registration Successful!')
-            self._switch_page(self._login_page)
+            self.userRegisterController.managerController(self.master)
         else:
             messagebox.showerror('Registration Error', check_pass)

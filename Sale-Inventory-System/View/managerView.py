@@ -15,7 +15,8 @@ class ManagerDashboard(tk.Frame):
         self.mainBg = 'Grey90'
 
         #buttons
-        self.btn_lbls = ["Security", "Registration", "Inventory", "Supplies", "Point of Sale", "Report", "Maintenance","Register User"]
+        self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance"]
+        self.registration_btn = ["User Registration","Item Registration","product Registration","recipe Registration"]
         self.btns = []
     
     def main(self):
@@ -65,7 +66,7 @@ class ManagerDashboard(tk.Frame):
 
     def _body_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.btn_lbls,
+                                            labels=self.main_btn_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
                                             w=16,
@@ -75,12 +76,14 @@ class ManagerDashboard(tk.Frame):
                                             cmd=self._check_buttons_command)
 
     def main_register_page(self):
-        subset_lbls = [self.btn_lbls[7]]
         Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=subset_lbls,
+                                            labels=self.registration_btn,
                                             entryList=self.btns,
                                             max_columns=2,
-                                            xPadding=5,
+                                            w=21,
+                                            h=1,
+                                            xPadding=10,
+                                            yPadding=10,
                                             cmd=self._check_buttons_command)
 
     def _back_button(self,state:str):
@@ -96,7 +99,7 @@ class ManagerDashboard(tk.Frame):
         if string == "Registration":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
-        if string == "Register User":
-            self.managerController.registerController(self.bodyFrame)
-
-    
+        if string == "User Registration":
+            self.managerController.userRegisterController(self.bodyFrame)
+        if string == "Item Registration":
+            self.managerController.itemRegisterController(self.bodyFrame)
