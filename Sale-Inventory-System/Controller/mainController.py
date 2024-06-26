@@ -19,6 +19,12 @@ class MainController:
         from Controller import RegisterController
         register_page = RegisterController(master)
         register_page.main()
+
+    def managerController(self,master,user_id):
+        Functions.destroy_page(master)
+        from Controller import ManagerController
+        manager_dashboard = ManagerController(master,user_id)
+        manager_dashboard.main()
     
 
 

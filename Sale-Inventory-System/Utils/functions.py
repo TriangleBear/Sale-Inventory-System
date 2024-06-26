@@ -11,24 +11,37 @@ from hashlib import sha256
 
 class Functions:
     def create_buttons_using_grid(frame,
-                                  labels:dict,
+                                  labels:list,
                                   entryList:list,
                                   max_columns:int,
                                   max_rows:int=None,
                                   current_r=0,
                                   current_c=0,
-                                  bgColor:str="Grey82",
+                                  bgColor:str=None,
                                   borderW:int=1,
-                                  xPadding=5,
+                                  w=None,
+                                  h=None,
+                                  xPadding=10,
                                   yPadding=5,
-                                  entryWidth=None):
+                                  cmd=None):
         current_row = current_r
         current_column = current_c
-        refName = [label for label in labels.keys()]
-        for string in refName:
+        for string in labels:
             b = tk.Button(frame,
+                          font=font.Font(family='Courier New',size=9,weight='bold'),
                           borderwidth=borderW,
-                          background=bgColor,)
+                          background=bgColor,
+                          text=f"{string}", width=w,height=h,
+                          command=lambda var=string:cmd(f"{var}"))
+            current_column +=1
+            b.grid(row=current_row,column=current_column)
+            entryList.append(b)
+
+            if (current_column >= max_columns):
+                current_column =0
+                current_row +=1
+            else:
+                current_column +=1 
         
 
     def check_password_criteria(password,username,email,fname,lname,old_password=None):

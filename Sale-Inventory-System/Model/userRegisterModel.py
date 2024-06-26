@@ -4,7 +4,7 @@ from hashlib import sha256
 
 
 
-class RegisterModel:
+class UserRegisterModel:
     def __init__(self,data:list):
         #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
         self.fname = data[0]
