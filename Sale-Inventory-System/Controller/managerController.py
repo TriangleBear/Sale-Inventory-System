@@ -28,25 +28,25 @@ class ManagerController:
     def reportController(self,master):
         Functions.destroy_page(master)
         from Controller import ReportController
-        report_page = ReportController(master)
+        report_page = ReportController(master,self)
         report_page.main()
 
     def inventoryController(self,master):
         Functions.destroy_page(master)
         from Controller import InventoryController
-        inventory_page = InventoryController(master)
+        inventory_page = InventoryController(master,self)
         inventory_page.main()
 
     def suppliesController(self,master):
         Functions.destroy_page(master)
         from Controller import SuppliesController
-        supplies_page = SuppliesController(master)
+        supplies_page = SuppliesController(master,self)
         supplies_page.main()
 
     def posController(self,master):
         Functions.destroy_page(master)
         from Controller import POSController
-        pos_page = POSController(master)
+        pos_page = POSController(master,self)
         pos_page.main()
     def itemRegisterController(self,master):
         Functions.destroy_page(master)
