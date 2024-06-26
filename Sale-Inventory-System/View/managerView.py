@@ -102,7 +102,7 @@ class ManagerDashboard(tk.Frame):
         if string == "Registration":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
-        if string == "Report":
+        if string == "Report": 
             self.managerController.reportController(self.bodyFrame)
             Functions.destroy_page(self.bodyFrame)
             self.register_page()

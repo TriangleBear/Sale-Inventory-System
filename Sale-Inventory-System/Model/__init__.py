@@ -8,9 +8,11 @@ from Model.inventoryModel import InventoryModel
 from Model.suppliesModel import SuppliesModel
 from Model.posModel import PosModel
 from Model.reportModel import ReportModel
+from Model.auditTrailModel import AuditLog
 
 __all__ = ["LoginModel",
-           "ManagerModel", 
+           "ManagerModel",
+           "UserRegisterModel", 
            "RegisterModel",
            "ForgotPasswordModel",
            "StaffModel",
@@ -18,4 +20,5 @@ __all__ = ["LoginModel",
            "SuppliesModel",
            "PosModel",
            "ReportModel",
-           "ItemRegisterModel"]
+           "ItemRegisterModel",
+           "AuditLog"]
