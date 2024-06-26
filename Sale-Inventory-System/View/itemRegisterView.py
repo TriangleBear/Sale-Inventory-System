@@ -26,7 +26,7 @@ class ItemRegisterView(tk.Frame):
         self.tree.heading("Item Description", text="Item Description")
         self.tree.heading("Item Price", text="Item Price")
         self.tree.heading("Item Quantity", text="Item Quantity")
-        self.tree.pack()        
+        # self.tree.pack()        
 
     def _back_button(self):
         back_btn = tk.Button(self.registerPage, text="Back", command=lambda: self.managerController.manager_body(self.master))

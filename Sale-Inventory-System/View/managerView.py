@@ -31,7 +31,7 @@ class ManagerDashboard(tk.Frame):
 
     def register_page(self):
         self._center_frame()
-        self.main_register_page()
+        self.main_register_page() # load buttons
 
         self._back_button("register_page")
 

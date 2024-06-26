@@ -9,6 +9,8 @@ class MainView(tk.Tk):
         self._main_window_attributes()  # set window attributes
         # self._start_button()
         self.managerController()
+        # self.loginController()
+        # self.registerController()
 
     def _main_window_attributes(self):
         # main window
@@ -26,11 +28,6 @@ class MainView(tk.Tk):
     def main(self):
         self.protocol("WM_DELETE_WINDOW", self.quit())
         self.mainloop()
-        
-    def _start_button(self):
-        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", 
-                              command=lambda: self.managerController())
-        start_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def loginController(self):
         self.mainController.loginController(self)
