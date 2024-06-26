@@ -8,7 +8,7 @@ class AuditLog:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 datetime_now = datetime.now()
-                sql = """INSERT INTO UserActivity (log_id, user_id, user_log, datetime) VALUES (%s, %s, %s, %s)"""
+                sql = """INSERT INTO UserActivity (log_id, user_id, user_log, created_on) VALUES (%s, %s, %s, %s)"""
                 cursor.execute(sql, (log_id, user_id, user_log, datetime_now))
             connection.commit()
             connection.close()
