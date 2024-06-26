@@ -22,7 +22,7 @@ class ItemRegisterModel:
         #register item to data base
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                sql = """INSERT INTO Item (item_name, quantity, price, supplier, expiry_date, flooring, ceiling, stock_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+                sql = """INSERT INTO Items (item_name, quantity, price, supplier, expiry_date, flooring, ceiling, stock_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
                 cursor.execute(sql, (self.item_name, self.quantity, self.price, self.supplier, self.expiry_date, self.flooring, self.ceiling, self.stock_level))
             connection.commit()
             connection.close()
