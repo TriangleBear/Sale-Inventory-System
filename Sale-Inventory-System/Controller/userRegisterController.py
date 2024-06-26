@@ -6,7 +6,7 @@ class UserRegisterController():
     def __init__(self,master,managerController):
         self.master = master
         self.managerController = managerController
-        self.view = UserRegisterView(self, self.master)
+        self.view = UserRegisterView(self,self.master)
 
     def main(self):
         self.view.main()
@@ -21,7 +21,7 @@ class UserRegisterController():
     
     def manager_body(self,master):
         Functions.destroy_page(master)
-        self.managerController.view.body()
+        self.managerController.view.register_page()
 
     
 
