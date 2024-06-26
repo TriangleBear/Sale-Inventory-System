@@ -21,11 +21,18 @@ class ManagerDashboard(tk.Frame):
     def main(self):
         self._header_frame()
         self._user_label()
+        self._body_frame()
         self.body()
 
     def body(self):
-        self._body_frame()
+        self._center_frame()
         self._body_buttons()
+
+    def register_page(self):
+        self._center_frame()
+        self.main_register_page()
+
+        self._back_button("register_page")
 
     def _main_window_attributes(self):
         # main window
@@ -52,35 +59,43 @@ class ManagerDashboard(tk.Frame):
         self.bodyFrame = tk.Frame(self, background=self.mainBg)
         self.bodyFrame.place(x=30,y=75,width=(self.w-60),height=self.h-120)
 
+    def _center_frame(self):
+        self.btn_frame = tk.Frame(self.bodyFrame,background=self.mainBg)
+        self.btn_frame.place(relx=0.5,rely=0.5,anchor=CENTER)
+
     def _body_buttons(self):
-        Functions.create_buttons_using_grid(self.bodyFrame,
+        Functions.create_buttons_using_grid(self.btn_frame,
                                             labels=self.btn_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
-                                            w=10,
-                                            h=5,
+                                            w=16,
+                                            h=1,
                                             xPadding=10,
                                             yPadding=10,
                                             cmd=self._check_buttons_command)
 
     def main_register_page(self):
-        Functions.destroy_page(self.bodyFrame)
         subset_lbls = [self.btn_lbls[7]]
-        print(subset_lbls)
-        Functions.create_buttons_using_grid(self.bodyFrame,
+        Functions.create_buttons_using_grid(self.btn_frame,
                                             labels=subset_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
                                             xPadding=5,
                                             cmd=self._check_buttons_command)
 
-    def _register_button(self):
-        self.register_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register User", background="Grey89",command=lambda:self.managerController.registerController(self.bodyFrame))
-        self.register_btn.grid(row=0,column=0)
+    def _back_button(self,state:str):
+        self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
+        self.back_btn.place(relx=0.5,rely=0.9,anchor='s')
+
+    def _check_back_command(self,string):
+        if string == "register_page":
+            Functions.destroy_page(self.bodyFrame)
+            self.body()
 
     def _check_buttons_command(self,string):
         if string == "Registration":
-            self.main_register_page()
+            Functions.destroy_page(self.bodyFrame)
+            self.register_page()
         if string == "Register User":
             self.managerController.registerController(self.bodyFrame)
         if string == "Report":

@@ -34,7 +34,7 @@ class Functions:
                           text=f"{string}", width=w,height=h,
                           command=lambda var=string:cmd(f"{var}"))
             current_column +=1
-            b.grid(row=current_row,column=current_column)
+            b.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
             entryList.append(b)
 
             if (current_column >= max_columns):
