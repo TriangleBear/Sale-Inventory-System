@@ -21,7 +21,7 @@ class UserRegisterController():
     
     def manager_body(self,master):
         Functions.destroy_page(master)
-        self.managerController.view.body()
+        self.managerController.view.register_page()
 
     
 
