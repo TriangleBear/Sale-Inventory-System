@@ -17,10 +17,16 @@ class ManagerController:
         login_page = LoginController(master)
         login_page.main()
 
-    def registerController(self,master):
+    def userRegisterController(self,master):
         Functions.destroy_page(master)
         from Controller import UserRegisterController
         user_register_page = UserRegisterController(master,self)
         user_register_page.main()
+
+    def itemRegisterController(self,master):
+        Functions.destroy_page(master)
+        from Controller import ItemRegisterController
+        item_register_page = ItemRegisterController(master,self)
+        item_register_page.main()
 
     
