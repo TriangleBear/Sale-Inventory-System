@@ -7,6 +7,7 @@ from Controller.staffController import StaffController
 from Controller.inventoryController import InventoryController
 from Controller.suppliesController import SuppliesController
 from Controller.posController import PosController
+from Controller.reportController import ReportController
 
 
-__all__ = ["MainController", "LoginController","RegisterController","ForgotPasswordController","ManagerController","StaffController","InventoryController","SuppliesController","PosController"]
+__all__ = ["MainController", "LoginController","RegisterController","ForgotPasswordController","ManagerController","StaffController","InventoryController","SuppliesController","PosController","ReportController"]

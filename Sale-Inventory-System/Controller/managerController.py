@@ -21,9 +21,15 @@ class ManagerController:
 
     def registerController(self,master):
         Functions.destroy_page(master)
-        from Controller import RegisterController
-        register_page = RegisterController(master)
-        register_page.main()
+        from Controller import UserRegisterController
+        user_register_page = UserRegisterController(master,self)
+        user_register_page.main()
+
+    def reportController(self,master):
+        Functions.destroy_page(master)
+        from Controller import ReportController
+        report_page = ReportController(master)
+        report_page.main()
 
     def inventoryController(self,master):
         Functions.destroy_page(master)

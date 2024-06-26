@@ -6,5 +6,6 @@ from Model.staffModel import StaffModel
 from Model.inventoryModel import InventoryModel
 from Model.suppliesModel import SuppliesModel
 from Model.posModel import PosModel
+from Model.reportModel import ReportModel
 
-__all__ = ["LoginModel","ManagerModel", "RegisterModel","ForgotPasswordModel","StaffModel","InventoryModel","SuppliesModel","PosModel"]
+__all__ = ["LoginModel","ManagerModel", "RegisterModel","ForgotPasswordModel","StaffModel","InventoryModel","SuppliesModel","PosModel","ReportModel"]

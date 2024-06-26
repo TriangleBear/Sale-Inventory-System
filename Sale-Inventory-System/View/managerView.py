@@ -83,5 +83,7 @@ class ManagerDashboard(tk.Frame):
             self.main_register_page()
         if string == "Register User":
             self.managerController.registerController(self.bodyFrame)
+        if string == "Report":
+            self.managerController.reportController(self.bodyFrame)
 
     
