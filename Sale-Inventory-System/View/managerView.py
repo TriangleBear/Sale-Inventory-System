@@ -97,9 +97,9 @@ class ManagerDashboard(tk.Frame):
 
     def _check_buttons_command(self,string):
         if string == "Registration":
-            self.main_register_page()
-        if string == "Register User":
             self.managerController.registerController(self.bodyFrame)
+        if string == "Register User":
+            self.managerController.userRegisterController(self.bodyFrame)
         if string == "Report":
             self.managerController.reportController(self.bodyFrame)
 
