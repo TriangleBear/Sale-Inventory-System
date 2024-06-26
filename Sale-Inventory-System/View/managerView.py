@@ -1,12 +1,15 @@
 from tkinter import font, CENTER
 import tkinter as tk
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,registerController,master,user_id):
+    def __init__(self,managerController,registerController,inventoryController,suppliesController,posController,master,username):
         self.master = master
         super().__init__(self.master)
         self.managerController = managerController
         self.registerController = registerController
-        self.user_id = user_id
+        self.inventoryController = inventoryController
+        self.suppliesController = suppliesController
+        self.posController = posController
+        self.username = username
         self.pack(fill=tk.BOTH,expand=True)
     
     def main(self):
@@ -36,9 +39,22 @@ class ManagerDashboard(tk.Frame):
         self.managerFrame.pack(fill=tk.BOTH,expand=True)
 
     def _temp_label(self):
-        temp_label = tk.Label(self.managerFrame,text=f"manager dasherboard | user ID: {self.user_id}")
+        temp_label = tk.Label(self.managerFrame,text=f"manager dasherboard | Hello! {self.username}")
         temp_label.place(relx=0.5,rely=0.5,anchor=CENTER)
 
     def _register_button(self):
         self.register_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Register", command=lambda:self.registerController.registerController(self.master))
         self.register_btn.pack()
+
+    def _inventory_button(self):
+        self.inventory_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Inventory", command=lambda:self.inventoryController.inventoryController(self.master))
+        self.inventory_btn.pack()
+
+    def _supplies_button(self):
+        self.supplies_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Supplies", command=lambda:self.suppliesController.suppliesController(self.master))
+        self.supplies_btn.pack()
+
+    def _pos_button(self):
+        self.pos_btn = tk.Button(self.managerFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="POS", command=lambda:self.posController.posController(self.master))
+        self.pos_btn.pack()
+

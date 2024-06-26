@@ -32,5 +32,5 @@ class StaffDashboard(tk.Tk):
         self.staffFrame.pack(fill=tk.BOTH,expand=True)
 
     def _temp_label(self):
-        temp_label = tk.Label(self.staffFrame,text=f"staff dasherboard | user ID: {self.user_id}")
+        temp_label = tk.Label(self.staffFrame,text=f"staff dasherboard | Hello! {self.username}")
         temp_label.place(relx=0.5,rely=0.5,anchor=CENTER)
