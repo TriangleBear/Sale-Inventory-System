@@ -77,6 +77,8 @@ class Functions:
                         letter = "S"
                     elif access_level == "Manager":
                         letter = "M"
+                    elif access_level == "Item"
+                        letter = "I"
                     unique_id = letter + digits
                     sql = 'SELECT user_id FROM User WHERE user_id = %s'
                     cursor.execute(sql, (unique_id,))
