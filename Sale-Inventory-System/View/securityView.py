@@ -4,7 +4,7 @@ class SecurityView(tk.Frame):
     def __init__(self, securityController, master):
         self.master = master
         self.securityController = securityController
-        super().__init__(master,background="GhostWhite")
+        super().__init__(master,background="Gray90")
         self.mainBg = 'Grey90'
         self.table = ['Log ID', 'User ID', 'Activiy Log', 'Date and Time Logged']
         self.pack(fill='both',expand=True)
