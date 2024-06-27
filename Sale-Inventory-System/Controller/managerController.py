@@ -58,4 +58,9 @@ class ManagerController:
         item_register_page = ItemRegisterController(self)
         item_register_page.main()
 
+    def mainController(self):
+        self.master.destroy()
+        from Controller import MainController
+        logout = MainController()
+        logout.main()
     

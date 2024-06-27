@@ -116,8 +116,9 @@ class ItemRegisterView(tk.Toplevel):
         check_input = self.itemRegisterController.checkInput(entryData)
         if check_input == 0:
             self.itemRegisterController.register(entryData)
+            self.itemRegisterController.logUserActivity()
             messagebox.showinfo('Item Registration', 'Item Registration Successful!')
-            self.itemRegisterController.managerController.close_toplevel()
+            self.destroy()
         else:
             messagebox.showerror('Item Registration Error', check_input)
     

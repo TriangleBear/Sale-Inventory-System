@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter as tk
-from tkinter import font
+from tkinter import font,messagebox
 from Utils import Functions
 class ManagerDashboard(tk.Frame):
     def __init__(self,managerController,master,user_id):
@@ -21,7 +21,6 @@ class ManagerDashboard(tk.Frame):
     
     def main(self):
         self._header_frame()
-        self._user_label()
         self._body_frame()
         self.body()
 
@@ -55,9 +54,24 @@ class ManagerDashboard(tk.Frame):
         self.headerFrame = tk.Frame(self,background=self.mainBg)
         self.headerFrame.place(x=0,y=0, width=900,height=45)
 
+        self._user_label()
+        self._home_button()
+        self._logout_button()
+
     def _user_label(self):
-        user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"manager dasherboard | user ID: {self.user_id}",background=self.mainBg)
+        user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
+                              text=f"manager dasherboard | user ID: {self.user_id}",background=self.mainBg)
         user_label.place(x=9,y=9)
+
+    def _home_button(self):
+        home_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
+                               text="Home", command=lambda:self._check_back_command("home page"))
+        home_btn.place(relx=0.88,rely=0.5,anchor='e')
+
+    def _logout_button(self):
+        logout_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
+                               text="Logout", command=lambda:self._check_back_command("logout"))
+        logout_btn.place(relx=0.95,rely=0.5,anchor='e')
 
     def _body_frame(self):
         self.bodyFrame = tk.Frame(self, background=self.mainBg)
@@ -74,8 +88,11 @@ class ManagerDashboard(tk.Frame):
                                             max_columns=2,
                                             w=16,
                                             h=1,
-                                            xPadding=10,
-                                            yPadding=10,
+                                            fontSize=13,
+                                            gridxPadding=15,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=10,
                                             cmd=self._check_buttons_command)
 
     def main_register_buttons(self):
@@ -85,18 +102,31 @@ class ManagerDashboard(tk.Frame):
                                             max_columns=2,
                                             w=21,
                                             h=1,
-                                            xPadding=10,
-                                            yPadding=10,
+                                            fontSize=12,
+                                            gridxPadding=10,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=5,
                                             cmd=self._check_buttons_command)
 
     def _back_button(self,state:str):
-        self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
+        self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
+                                  text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
         self.back_btn.place(relx=0.5,rely=0.9,anchor='s')
 
     def _check_back_command(self,string):
+        if string == "logout":
+            if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
+                self.managerController.mainController()
+        if string == "home page":
+            Functions.destroy_page(self.bodyFrame)
+            self.body()
         if string == "register_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
+
+    def labelframe(self):
+        tk.LabelFrame
 
     def _check_buttons_command(self,string):
         if string == "Registration":

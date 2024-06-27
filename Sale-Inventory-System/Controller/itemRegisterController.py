@@ -18,3 +18,6 @@ class ItemRegisterController:
         from Model import ItemRegisterModel
         item = ItemRegisterModel(data,self.user_id)
         item.registerItemData()
+
+    def logUserActivity(self):
+        Functions.logUserActivity([self.user_id,"Item Registered",Functions.get_current_date("datetime")])
