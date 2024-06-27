@@ -16,29 +16,32 @@ class Functions:
             return datetime.now().date()
         if data=="datetime":
             return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    def create_buttons_using_grid(frame,
-                                  labels:list,
-                                  entryList:list,
-                                  max_columns:int,
-                                  max_rows:int=None,
-                                  current_r=0,
-                                  current_c=0,
-                                  bgColor:str=None,
-                                  borderW:int=1,
-                                  w=None,
-                                  h=None,
-                                  xPadding=10,
-                                  yPadding=5,
-                                  cmd=None):
+        
+    def create_buttons_using_grid(
+            frame,
+            labels:list,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            current_r=0,
+            current_c=0,
+            bgColor:str=None,
+            borderW:int=1,
+            w=None,
+            h=None,
+            xPadding=10,
+            yPadding=5,
+            cmd=None
+    ):
         current_row = current_r
         current_column = current_c
         for string in labels:
             b = tk.Button(frame,
-                          font=font.Font(family='Courier New',size=9,weight='bold'),
-                          borderwidth=borderW,
-                          background=bgColor,
-                          text=f"{string}", width=w,height=h,
-                          command=lambda var=string:cmd(f"{var}"))
+                        font=font.Font(family='Courier New',size=9,weight='bold'),
+                        borderwidth=borderW,
+                        background=bgColor,
+                        text=f"{string}", width=w,height=h,
+                        command=lambda var=string:cmd(f"{var}"))
             current_column +=1
             b.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
             entryList.append(b)

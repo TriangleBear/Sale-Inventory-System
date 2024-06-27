@@ -31,7 +31,7 @@ class ManagerDashboard(tk.Frame):
         self._center_frame()
         self._body_buttons()
 
-
+ 
 
     def register_page(self):
         self._center_frame()
@@ -110,5 +110,7 @@ class ManagerDashboard(tk.Frame):
             self.managerController.itemRegisterController()
         if string == "User Activity":
             self.managerController.securityController(self.bodyFrame)
+        if string == "Inventory":
+            self.managerController.inventoryController(self.bodyFrame)
         
 

@@ -10,7 +10,16 @@ class InventoryModel:
         self.cost = data[6]
         self.category = data[7]
     
-    def get_products_on_database(self):
+    def get_recipe_on_database(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM Recipes"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+            connection.close()
+        return result
+
+    def get_product_on_database(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """SELECT * FROM Product"""
