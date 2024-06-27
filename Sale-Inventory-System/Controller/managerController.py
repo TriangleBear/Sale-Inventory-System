@@ -24,12 +24,12 @@ class ManagerController:
         user_register_page = UserRegisterController(self)
         user_register_page.main()
 
-    def reportController(self,master):
+    def securityController(self,master):
         Functions.destroy_page(master)
-        from Controller import ReportController
-        report_page = ReportController(master,self)
-        report_page.main()
-
+        from Controller import SecurityController
+        security_page = SecurityController(master,self)
+        security_page.main()
+        
     def inventoryController(self,master):
         Functions.destroy_page(master)
         from Controller import InventoryController

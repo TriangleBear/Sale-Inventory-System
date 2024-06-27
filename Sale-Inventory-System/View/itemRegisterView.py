@@ -27,6 +27,8 @@ class ItemRegisterView(tk.Toplevel):
 
         self.item_entry_boxes = []
 
+        self.action_order = []
+
         self.categories = ["Vegetable","Meat","Spice"]
 
 
