@@ -12,6 +12,7 @@ from Controller.posController import PosController
 from Controller.reportController import ReportController
 from Controller.auditTrialController import AuditController
 from Controller.recipeRegisterController import RecipeRegisterController
+from Controller.productRegistrationController import ProductRegistrationController
 
 
 __all__ = ["MainController", 
@@ -27,4 +28,5 @@ __all__ = ["MainController",
            "PosController",
            "ReportController",
            "AuditController",
-           "RecipeRegisterController"]
+           "RecipeRegisterController",
+           "ProductRegistrationController"]

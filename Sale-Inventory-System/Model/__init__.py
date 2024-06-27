@@ -11,6 +11,7 @@ from Model.posModel import PosModel
 from Model.reportModel import ReportModel
 from Model.auditTrailModel import AuditLog
 from Model.recipeRegisterModel import RecipeRegisterModel
+from Model.productRegistrationModel import ProductRegistrationModel
 
 __all__ = ["LoginModel",
            "ManagerModel",
@@ -25,4 +26,5 @@ __all__ = ["LoginModel",
            "PosModel",
            "ReportModel",
            "AuditLog",
-           "RecipeRegisterModel"]
+           "RecipeRegisterModel",
+           "ProductRegistrationModel"]
