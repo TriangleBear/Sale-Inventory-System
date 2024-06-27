@@ -3,10 +3,9 @@ from Model import UserRegisterModel
 from Utils import Functions
 
 class UserRegisterController():
-    def __init__(self,master,managerController):
-        self.master = master
+    def __init__(self,managerController):
         self.managerController = managerController
-        self.view = UserRegisterView(self,self.master)
+        self.view = UserRegisterView(self)
 
     def main(self):
         self.view.main()
@@ -18,11 +17,6 @@ class UserRegisterController():
     def check_password_criteria(self, data:list):
         pass_model = UserRegisterModel(data)
         return pass_model.check_password_criteria()
-    
-    def manager_body(self,master):
-        Functions.destroy_page(master)
-        self.managerController.view.register_page()
-
     
 
     

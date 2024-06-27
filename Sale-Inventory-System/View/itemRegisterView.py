@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk,font,messagebox
+from tkcalendar import DateEntry
 from Utils import Functions
 
 
@@ -52,12 +53,12 @@ class ItemRegisterView(tk.Toplevel):
         self.protocol("WM_DELETE_WINDOW", self.quit())
 
     def _item_register_frame(self):
-        self.registerFrame = tk.Frame(self,background=self.mainBg)
+        self.registerFrame = tk.Frame(self,background=self.mainBg,padx=40,pady=80)
         self.registerFrame.place(relx=0.5,rely=0.5,anchor=CENTER)
     
     def _item_register_widgets(self):
         entrywidth = 23
-        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity","Price","Supplier","Expiry Date"] if key in self.item_lbls_with_colspan}
+        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity","Price","Supplier"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.registerFrame,
             labels=subset_one,
@@ -65,8 +66,10 @@ class ItemRegisterView(tk.Toplevel):
             entryList=self.item_entry_boxes,
             borderW=1,
             max_columns=2,
-            entryWidth=entrywidth
+            shortEntryWidth=entrywidth,
+            side='e'
         )
+        self._expiry_date_entry()
         self._category_dropdown() #row=2 column=(2-3)
         subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
@@ -78,12 +81,24 @@ class ItemRegisterView(tk.Toplevel):
             max_columns=2,
             current_c=0,
             current_r=3,
-            entryWidth=entrywidth
+            shortEntryWidth=entrywidth,
+            side='e'
         )
 
+    def _expiry_date_entry(self):
+        self.expiry_date_lbl = tk.Label(self.registerFrame,text="Expiry Date:",background=self.mainBg)
+        self.expiry_date_lbl.grid(row=2,column=0,padx=2,pady=2,sticky='e')
+
+        self.expiry_date = DateEntry(self.registerFrame,width=20,borderwidth=0,year=2000,date_pattern='YYYY-MM-DD')
+        self.expiry_date.set_date(Functions.get_current_date())
+        self.expiry_date.grid(row=2,column=1,padx=2,pady=2)
+
+        self.item_entry_boxes.append(self.expiry_date)
+
     def _category_dropdown(self):
-        category_lbl = tk.Label(self.registerFrame,text="Category: ",background=self.mainBg,width=20)
-        category_lbl.grid(row=2,column=2,padx=5,pady=5)
+        category_lbl = tk.Label(self.registerFrame,text="Category: ",background=self.mainBg,anchor='e')
+        category_lbl.grid(row=2,column=2,padx=1,pady=5,sticky='e')
+        category_lbl.columnconfigure(2,weight=1)
         category = ttk.Combobox(self.registerFrame,values=self.categories)
         category.grid(row=2,column=3,padx=5,pady=5)
         self.item_entry_boxes.append(category)

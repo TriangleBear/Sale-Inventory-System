@@ -13,19 +13,15 @@ class ManagerController:
     def main(self):
         self.view.main()
 
-    def close_toplevel(self):
-        self.view.quit()
-
     def loginController(self,master):
         Functions.destroy_page(master)
         from Controller import LoginController
         login_page = LoginController(master)
         login_page.main()
 
-    def userRegisterController(self,master):
-        Functions.destroy_page(master)
+    def userRegisterController(self):
         from Controller import UserRegisterController
-        user_register_page = UserRegisterController(master,self)
+        user_register_page = UserRegisterController(self)
         user_register_page.main()
 
     def reportController(self,master):

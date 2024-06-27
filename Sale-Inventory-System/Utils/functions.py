@@ -6,10 +6,13 @@ from email.message import EmailMessage
 import smtplib
 import tkinter as tk
 import random, string
+from datetime import datetime
 from hashlib import sha256
 
 
 class Functions:
+    def get_current_date():
+        return datetime.now().date()
     def create_buttons_using_grid(frame,
                                   labels:list,
                                   entryList:list,
@@ -119,25 +122,29 @@ class Functions:
                                     current_r=0,
                                     current_c=0,
                                     bgColor:str="Grey82",
-                                    borderW:int=0,xPadding=5,
+                                    borderW:int=0,
+                                    xPadding=5,
                                     yPadding=5,
-                                    entryWidth=None):
+                                    longEntryWidth=None,
+                                    shortEntryWidth=None,
+                                    labelWidth=None,
+                                    side=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]
         # print(refName)
         for string in refName:
-            l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:")
-            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
+            l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:",width=labelWidth)
+            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding,sticky=side)
 
             current_column += 1
 
-            entry = tk.Entry(frame,borderwidth=borderW,width=entryWidth)
+            entry = tk.Entry(frame,borderwidth=borderW,width=shortEntryWidth)
             entry.grid(row=current_row,column=current_column,columnspan=labels.get(f"{string}"),padx=xPadding,pady=yPadding)
             entryList.append(entry)
 
             if labels.get(f"{string}") > 1:
-                entry.config(width=entryWidth)
+                entry.config(width=longEntryWidth)
                 current_column += (labels.get(f"{string}"))
             
             if (current_column >= max_columns):

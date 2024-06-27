@@ -1,7 +1,7 @@
 #database.py
 import pymysql
 import pymysql.cursors
-from Utils.credentials import Credentials
+from Utils import Credentials
 from contextlib import contextmanager
 
 

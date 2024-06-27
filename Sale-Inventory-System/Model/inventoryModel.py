@@ -1,4 +1,4 @@
-from Utils.database import Database
+from Utils import Database
 class InventoryModel:
     def __init__(self,data:list):
         self.product_id = data[0]
