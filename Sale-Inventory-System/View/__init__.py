@@ -11,6 +11,7 @@ from View.suppliesView import SuppliesView
 from View.posView import PosView
 from View.reportView import ReportView
 from View.auditTrailView import AuditView
+from View.recipeRegisterView import RecipeRegisterView
 
 __all__ = ["MainView",
            "LoginView",
@@ -25,4 +26,5 @@ __all__ = ["MainView",
            "PosView",
            "ReportView",
            "ForgotPasswordView",
-           "AuditView"]
+           "AuditView",
+           "RecipeRegisterView"]

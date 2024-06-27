@@ -10,6 +10,7 @@ from Model.suppliesModel import SuppliesModel
 from Model.posModel import PosModel
 from Model.reportModel import ReportModel
 from Model.auditTrailModel import AuditLog
+from Model.recipeRegisterModel import RecipeRegisterModel
 
 __all__ = ["LoginModel",
            "ManagerModel",
@@ -23,4 +24,5 @@ __all__ = ["LoginModel",
            "SuppliesModel",
            "PosModel",
            "ReportModel",
-           "AuditLog"]
+           "AuditLog",
+           "RecipeRegisterModel"]

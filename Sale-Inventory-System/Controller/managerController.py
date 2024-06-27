@@ -24,6 +24,11 @@ class ManagerController:
         user_register_page = UserRegisterController(self)
         user_register_page.main()
 
+    def recipeRegisterController(self):
+        from Controller import RecipeRegisterController
+        recipe_register_page = RecipeRegisterController(self)
+        recipe_register_page.main()
+
     def securityController(self,master):
         Functions.destroy_page(master)
         from Controller import SecurityController

@@ -112,5 +112,7 @@ class ManagerDashboard(tk.Frame):
             self.managerController.securityController(self.bodyFrame)
         if string == "Inventory":
             self.managerController.inventoryController(self.bodyFrame)
+        if string == "Recipe Register":
+            self.managerController.recipeRegisterController(self.bodyFrame)
         
 
