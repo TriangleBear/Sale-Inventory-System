@@ -102,6 +102,7 @@ class ItemRegisterView(tk.Toplevel):
         category_lbl.grid(row=2,column=2,padx=1,pady=5,sticky='e')
         category_lbl.columnconfigure(2,weight=1)
         category = ttk.Combobox(self.registerFrame,values=self.categories)
+        category.set("Select Category")
         category.grid(row=2,column=3,padx=5,pady=5)
         self.item_entry_boxes.append(category)
 

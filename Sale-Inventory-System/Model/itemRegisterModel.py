@@ -29,6 +29,8 @@ class ItemRegisterModel:
             return ValueError("Supplier cannot be empty")
         if not self.expiry_date:
             return ValueError("Expiry date cannot be empty")
+        if self.category == "Select Category":
+            return ValueError("Category cannot be empty")
         if not self.flooring:
             return ValueError("Flooring cannot be empty")
         if not self.ceiling:

@@ -16,7 +16,7 @@ class ManagerDashboard(tk.Frame):
 
         #buttons
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance"]
-        self.registration_btn = ["User Registration","Item Registration","product Registration","recipe Registration"]
+        self.registration_btn = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
         self.btns = []
     
     def main(self):
@@ -24,13 +24,9 @@ class ManagerDashboard(tk.Frame):
         self._body_frame()
         self.body()
 
-
-
     def body(self):
         self._center_frame()
         self._body_buttons()
-
- 
 
     def register_page(self):
         self._center_frame()
@@ -134,15 +130,15 @@ class ManagerDashboard(tk.Frame):
             self.register_page()
         if string == "Security": 
             self.managerController.securityController(self.bodyFrame)
+        if string == "User Activity":
+            self.managerController.securityController(self.bodyFrame)
         if string == "User Registration":
             self.managerController.userRegisterController()
         if string == "Item Registration":
             self.managerController.itemRegisterController()
-        if string == "User Activity":
-            self.managerController.securityController(self.bodyFrame)
+        if string == "Recipe Registration":
+            self.managerController.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":
             self.managerController.inventoryController(self.bodyFrame)
-        if string == "Recipe Register":
-            self.managerController.recipeRegisterController(self.bodyFrame)
         
 

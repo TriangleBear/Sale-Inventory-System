@@ -1,10 +1,9 @@
-from Utils import Database
+from Utils import Database, Functions
 class RecipeRegisterModel:
-    def __init__(self,data:list):
-        self.recipe_name = data[0]
-        self.category = data[1]
-        self.ingredients = data[2]
-        self.details = data[3]
+    def __init__(self,recipe_name=None,user_id=None):
+        self.recipe_id = Functions.generate_unique_id("Recipe")
+        self.recipe_name = recipe_name
+        self.user_id = user_id
 
     def create_recipe(self, user_id):
         with Database.get_db_connection() as connection:
