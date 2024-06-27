@@ -11,8 +11,11 @@ from hashlib import sha256
 
 
 class Functions:
-    def get_current_date():
-        return datetime.now().date()
+    def get_current_date(data:str=None):
+        if data=="date":
+            return datetime.now().date()
+        if data=="datetime":
+            return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     def create_buttons_using_grid(frame,
                                   labels:list,
                                   entryList:list,

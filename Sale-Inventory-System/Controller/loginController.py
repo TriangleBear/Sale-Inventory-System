@@ -27,6 +27,13 @@ class LoginController:
         forgot_password = ForgotPasswordController(master)
         forgot_password.main()
 
+    def logUserActivity(self,userActivityData:list):
+        userActivityData.append("Logged In")
+        userActivityData.append(Functions.get_current_date("datetime"))
+        #[userID,activity,logDate]
+        from Model import SecurityModel
+        model = SecurityModel(activityData=userActivityData)
+        model.log_user_activity()
 
     def checkInput(self, data:list):
         print(f"from checkInput;loginController|data:{data}")

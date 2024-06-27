@@ -10,7 +10,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "/Sale-Inventory-System/main.py",
+            "program": "./Sale-Inventory-System/main.py",
             "console": "integratedTerminal"
         }
     ]

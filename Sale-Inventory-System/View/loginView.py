@@ -33,6 +33,7 @@ class LoginView(tk.Frame):
         if str(provided_otp) == str(verifiedUserData[3]):
             messagebox.showinfo('Login Status', 'Login Successful!')
             if verifiedUserData[1] == "Manager":
+                self.loginController.logUserActivity([verifiedUserData[0]])
                 self.loginController.managerController(self.master,verifiedUserData[0])
             if verifiedUserData[1] == "Staff":
                 self.loginController.staffController(self.master,verifiedUserData[0])
