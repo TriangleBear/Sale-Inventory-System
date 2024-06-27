@@ -9,7 +9,7 @@ class MainView(tk.Tk):
         self._main_window_attributes()  # set window attributes
         # self._start_button()
         self.managerController()
-        # self.loginController()
+        #self.loginController()
         # self.registerController()
 
     def _main_window_attributes(self):

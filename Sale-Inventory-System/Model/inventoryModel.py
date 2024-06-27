@@ -9,21 +9,20 @@ class InventoryModel:
         self.menu = data[5]
         self.cost = data[6]
         self.category = data[7]
-
-    def create_product(self):
-        with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                sql = """INSERT INTO Product (product_id, product_name, quantity, supplier, expiration_date, menu, cost, category) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-                cursor.execute(sql, (self.product_id, self.product_name, self.quantity, self.supplier, self.expiration_date, self.menu, self.cost, self.category))
-                connection.commit()
-            connection.close()
-        return 0
     
     def get_products_on_database(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """SELECT * FROM Product"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+            connection.close()
+        return result
+    
+    def get_items_on_database(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM Items"""
                 cursor.execute(sql)
                 result = cursor.fetchall()
             connection.close()

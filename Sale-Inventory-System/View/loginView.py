@@ -56,7 +56,8 @@ class LoginView(tk.Frame):
         self.entryFrame.place(relx =0.5,rely=0.5,anchor=CENTER)
 
     def _login_widgets(self):
-        Functions.create_entry_box_using_grid(frame=self.entryFrame,labels=self.login_labels_with_colspan,entryList=self.login_entry_boxes,max_columns=1)
+        Functions.create_entry_box_using_grid(frame=self.entryFrame, labels=self.login_labels_with_colspan, entryList=self.login_entry_boxes, max_columns=1)
+        self.login_entry_boxes[1].config(show="*")
         
     def _forgot_password_button(self):
         forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),text="Forgot Password",borderwidth=0,background="Gray82", command=lambda:self.loginController.forgotPasswordController(self.master))
