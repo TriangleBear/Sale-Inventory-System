@@ -1,22 +1,22 @@
-from Model.loginModel import LoginModel
-from Model.forgotPasswordModel import ForgotPasswordModel
-from Model.managerModel import ManagerModel
-from Model.securityModel import SecurityModel
-from Model.userRegisterModel import UserRegisterModel
-from Model.itemRegisterModel import ItemRegisterModel
-from Model.recipeRegisterModel import RecipeRegisterModel
-from Model.ingredientRegisterModel import IngredientRegisterModel
-from Model.staffModel import StaffModel
-from Model.inventoryModel import InventoryModel
-from Model.suppliesModel import SuppliesModel
-from Model.posModel import PosModel
-from Model.reportModel import ReportModel
-from Model.auditTrailModel import AuditLog
-from Model.productRegistrationModel import ProductRegistrationModel
+from Model.Login.loginModel import LoginModel
+from Model.Login.forgotPasswordModel import ForgotPasswordModel
+from Model.Dashboard.managerModel import ManagerModel
+from Model.Security.securityModel import SecurityModel
+from Model.Register.userRegisterModel import UserRegisterModel
+from Model.Register.itemRegisterModel import ItemRegisterModel
+from Model.Register.ingredientRegisterModel import IngredientRegisterModel
+from Model.Register.recipeRegisterModel import RecipeRegisterModel
+from Model.Register.productRegistrationModel import ProductRegistrationModel
+from Model.Dashboard.staffModel import StaffModel
+from Model.Inventory.inventoryModel import InventoryModel
+from Model.Supply.suppliesModel import SuppliesModel
+from Model.POS.posModel import PosModel
+from Model.Report.reportModel import ReportModel
+from Model.Security.auditTrailModel import AuditLog
 
 __all__ = ["LoginModel",
            "ManagerModel",
-           "SecurityModel"
+           "SecurityModel",
            "UserRegisterModel", 
            "ItemRegisterModel",
            "RecipeRegisterModel",

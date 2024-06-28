@@ -1,4 +1,4 @@
-from View.suppliesView import SuppliesView
+from View import SuppliesView
 class SuppliesController:
     def __init__(self,master,user_id):
         self.master = master
@@ -9,12 +9,12 @@ class SuppliesController:
         self.view.main()
 
     def managerController(self):
-        from Controller.managerController import ManagerController
+        from Controller import ManagerController
         manager_page = ManagerController()
         manager_page.main()
 
     def suppliesController(self):
-        from Controller.suppliesController import SuppliesController
+        from Controller import SuppliesController
         supplies_page = SuppliesController()
         supplies_page.main()
     

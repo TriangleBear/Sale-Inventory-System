@@ -1,8 +1,6 @@
 from View import ManagerDashboard
 #from Model import ManagerModel
 from Utils import Functions
-from Controller.suppliesController import SuppliesController
-from Controller.posController import PosController
 
 class ManagerController:
     def __init__(self, master,user_id=None):

@@ -1,5 +1,5 @@
-from Model.inventoryModel import InventoryModel
-from View.inventoryView import InventoryView
+from Model import InventoryModel
+from View import InventoryView
 class InventoryController:
     def __init__(self,master,managerController):
         self.master = master
@@ -10,7 +10,7 @@ class InventoryController:
         self.view.main()
 
     def inventoryController(self):
-        from Controller.inventoryController import InventoryController
+        from Controller import InventoryController
         inventory_page = InventoryController(self.master)
         inventory_page.main()
 

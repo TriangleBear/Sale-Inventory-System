@@ -1,4 +1,4 @@
-from Utils.database import Database
+from Utils import Database
 class ManagerModel:
     def __init__(self,data:list):
         self.username = data[0]

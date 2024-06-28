@@ -1,4 +1,4 @@
-from View.posView import PosView
+from View import PosView
 class PosController:
     def __init__(self,master,user_id):
         self.master = master

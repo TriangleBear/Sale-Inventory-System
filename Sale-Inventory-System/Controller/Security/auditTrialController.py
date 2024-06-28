@@ -1,6 +1,6 @@
 import tkinter as tk
-from View.auditTrailView import AuditView
-from Model.auditTrailModel import AuditLog
+from View import AuditView
+from Model import AuditLog
 
 class AuditController:
     def __init__(self):

@@ -1,5 +1,5 @@
 import datetime
-from Utils.database import Database
+from Utils import Database
 class AuditLog:
     def __init__(self):
         self.entries = []
