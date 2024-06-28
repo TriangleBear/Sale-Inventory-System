@@ -46,13 +46,15 @@ class RecipeRegisterView(tk.Frame):
         return
 
     def _commit_recipe_name(self,recipe_name):
-        if messagebox.askyesno("Recipe Registration","Are you sure you want to register this recipe?"):
-            recipeDetails = self.recipeRegisterController.register_recipe(recipe_name)
-            #recipeDetails = [recipe_id,recipe_name, user_id]
-            if recipeDetails:
+        recipeDetails = self.recipeRegisterController.register_recipe(recipe_name)
+        #recipeDetails = [recipe_id,recipe_name, user_id]
+        if type(recipeDetails) == list:
+            if messagebox.askyesno("Recipe Registration","Are you sure you want to register this recipe?"):
                 self.recipeRegisterController.logUserActivity()
                 messagebox.showinfo("Recipe Registration","Recipe Registered Successfully!")
                 self._register_recipe_ingredients(recipeDetails)
+        else:
+            messagebox.showerror("Recipe Registration",recipeDetails)
         return
 
     def _confirm_button(self):

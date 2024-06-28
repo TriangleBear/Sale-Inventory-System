@@ -6,7 +6,7 @@ class IngredientRegisterController:
     def __init__(self, managerController,recipe_id=None):
         self.mC = managerController
         self.recipe_id = recipe_id
-        self.view = IngredientRegisterView(self)
+        self.view = IngredientRegisterView(self,self.recipe_id)
 
     def main(self):
         self.view.main()
@@ -26,4 +26,8 @@ class IngredientRegisterController:
             Functions.get_current_date("datetime")
             ]
         )
+
+    def save_transaction(self, data: list):
+        item = IngredientRegisterModel(data)
+        item.save_transaction()
     

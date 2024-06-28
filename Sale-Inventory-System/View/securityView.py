@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk,font
+from Utils import Functions
 class SecurityView(tk.Frame):
     def __init__(self, securityController, master):
         self.master = master
@@ -26,26 +27,15 @@ class SecurityView(tk.Frame):
     def display_table(self):
         self.tree = ttk.Treeview(self.tableFrame, columns=self.table, show='headings')
         for col in self.table:
-            self.tree.heading(col, text=col)
+            self.tree.heading(col, text=col)    
             self.tree.column(col, anchor='center')
         self.tree.pack(fill='both', expand=True)
         
     def insert_data(self,data):
         self.tree.delete(*self.tree.get_children())
-        if data is None:
-            data = []
-        for row in data:
-            # Convert dictionary row to a list in the order of self.table columns
-            if isinstance(row, dict):
-                try:
-                    row = [row['log_id'], row['user_id'], row['user_log'], row['log_date']]
-                except KeyError as e:
-                    print(f"Missing key in row data: {e}")
-                    continue
-            elif not isinstance(row, (list, tuple)) or len(row) != len(self.table):
-                print(f"Row format error: {row}")
-                continue
-            self.tree.insert('', 'end', values=row)
+        converted_data = Functions.convert_dicc_data(data)
+        for item in converted_data:
+            self.tree.insert('', 'end', values=item)
 
     def search_data(self, search_query):
         search_results = self.securityController.search_data(search_query)

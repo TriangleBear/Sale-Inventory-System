@@ -17,6 +17,8 @@ class RecipeRegisterModel:
         return 0
     
     def register_recipe_name(self):
+        if self.recipe_name == '':
+            return ValueError("Recipe Name cannot be empty")
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 # user_id should be inside the database for tracking

@@ -105,6 +105,8 @@ class Functions:
                         letter = "I"
                     elif access_level == "Recipe":
                         letter = "R"
+                    elif access_level == "Ingredient":
+                        letter = "C"
                     unique_id = letter + digits
                     sql = 'SELECT user_id FROM User WHERE user_id = %s'
                     cursor.execute(sql, (unique_id,))
@@ -175,6 +177,43 @@ class Functions:
                 current_row +=1
             else:
                 current_column +=1 
+
+    def create_table_():
+        pass
+
+    #Convert dictionary row to a list in the order of self.table columns
+    def convert_dicc_data(data=None):
+        current_index = 0
+        if data is None:
+            data = []
+        for row in data:
+            if isinstance(row, dict):
+                try:
+                    temp_row = []
+                    for value in row.values():
+                        temp_row.append(value)
+                except KeyError as e:
+                    print(f"Missing key in row data: {e}")
+                    continue
+            elif not isinstance(row, (list, tuple)):
+                print(f"Row format error: {row}")
+                continue
+            row = temp_row
+            data[current_index] = row
+            current_index += 1
+        return data
+    
+    
+    def adjust_column_widths(_):
+        tree_width = _.width  # Get the current width of the Treeview
+        num_columns = len(_.widget['columns'])
+        # Subtract vertical scrollbar width if present, assuming a width of about 20 pixels
+        scrollbar_width = 20
+        usable_width = tree_width - scrollbar_width
+        column_width = usable_width // num_columns  # Divide the usable width by the number of columns
+        for col in _.widget['columns']:
+            _.widget.column(col, width=column_width)  # Set each column to the calculated width
+    
 
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():

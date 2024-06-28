@@ -26,7 +26,10 @@ class MainController:
         manager_dashboard = ManagerController(master,user_id)
         manager_dashboard.main()
     
-
+    def ingredientRegisterController(self,recipe_id):
+        from Controller import IngredientRegisterController
+        ingredientRegister = IngredientRegisterController(self,recipe_id)
+        ingredientRegister.main()
 
 
     
