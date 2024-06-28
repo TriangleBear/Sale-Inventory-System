@@ -10,12 +10,12 @@ class PosController:
         self.view.main()
 
     def managerController(self):
-        from Controller.managerController import ManagerController
+        from Controller import ManagerController
         manager_page = ManagerController()
         manager_page.main()
 
     def posController(self):
-        from Controller.posController import PosController
+        from Controller import PosController
         pos_page = PosController()
         pos_page.main()
 
