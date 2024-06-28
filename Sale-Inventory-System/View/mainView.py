@@ -7,8 +7,10 @@ class MainView(tk.Tk):
         super().__init__()
         self.mainController = mainController
         self._main_window_attributes()  # set window attributes
-        # self._start_button()
-        self.managerController()
+        self._start_button()
+        # self.managerController()
+        # self.loginController()
+        # self.registerController()
 
     def _main_window_attributes(self):
         # main window
@@ -23,14 +25,14 @@ class MainView(tk.Tk):
         self.geometry(f"{w}x{h}+{x}+{y}")
         self.resizable(False, False)
 
+    def _start_button(self):
+        self.start_btn = tk.Button(self, text="Start", font=font.Font(family='Courier New', size=12, weight='bold'), 
+                                   command=lambda: self.temp_access_ingredientRegister())## remove start
+        self.start_btn.place(relx=0.5,rely=0.5,anchor='center')
+
     def main(self):
         self.protocol("WM_DELETE_WINDOW", self.quit())
         self.mainloop()
-        
-    def _start_button(self):
-        start_btn = tk.Button(self, font=font.Font(family='Poppins', weight='bold'), text="Start", borderwidth=0, background="Gray82", 
-                              command=lambda: self.managerController())
-        start_btn.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
     def loginController(self):
         self.mainController.loginController(self)
@@ -39,4 +41,7 @@ class MainView(tk.Tk):
         self.mainController.registerController(self)
     
     def managerController(self):
-        self.mainController.managerController(self,'M0966')
+        self.mainController.managerController(self,'M1203') #test user id
+    
+    def temp_access_ingredientRegister(self):
+        self.mainController.ingredientRegisterController('R4713')

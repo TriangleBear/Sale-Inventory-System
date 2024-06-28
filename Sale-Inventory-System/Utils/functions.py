@@ -6,36 +6,60 @@ from email.message import EmailMessage
 import smtplib
 import tkinter as tk
 import random, string
+from datetime import datetime
 from hashlib import sha256
 
 
 class Functions:
-    def create_buttons_using_grid(frame,
-                                  labels:list,
-                                  entryList:list,
-                                  max_columns:int,
-                                  max_rows:int=None,
-                                  current_r=0,
-                                  current_c=0,
-                                  bgColor:str=None,
-                                  borderW:int=1,
-                                  w=None,
-                                  h=None,
-                                  xPadding=10,
-                                  yPadding=5,
-                                  cmd=None):
+
+    def logUserActivity(userActivityData:list):
+        #[userID,activity,logDate]
+        from Model import SecurityModel
+        model = SecurityModel(activityData=userActivityData)
+        model.log_user_activity()
+
+    def get_current_date(data:str=None):
+        if data=="date":
+            return datetime.now().date()
+        if data=="datetime":
+            return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+    def create_buttons_using_grid(
+            frame,
+            labels:list,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            fontSize=9,
+            current_r=0,
+            current_c=0,
+            bgColor:str=None,
+            borderW:int=1,
+            w=None,
+            h=None,
+            columnSpan=None,
+            gridxPadding=10,
+            gridyPadding=5,
+            btnxPadding=None,
+            btnyPadding=None,
+            side=None,
+            cmd=None
+    ):
         current_row = current_r
         current_column = current_c
         for string in labels:
             b = tk.Button(frame,
-                          font=font.Font(family='Courier New',size=9,weight='bold'),
-                          borderwidth=borderW,
-                          background=bgColor,
-                          text=f"{string}", width=w,height=h,
-                          command=lambda var=string:cmd(f"{var}"))
+                        font=font.Font(family='Courier New',size=fontSize,weight='bold'),
+                        borderwidth=borderW,
+                        background=bgColor,
+                        text=f"{string}", width=w,height=h,
+                        padx=btnxPadding,pady=btnyPadding,
+                        command=lambda var=string:cmd(f"{var}"))
             current_column +=1
-            b.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
+            b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
             entryList.append(b)
+
+
 
             if (current_column >= max_columns):
                 current_column =0
@@ -77,6 +101,12 @@ class Functions:
                         letter = "S"
                     elif access_level == "Manager":
                         letter = "M"
+                    elif access_level == "Item":
+                        letter = "I"
+                    elif access_level == "Recipe":
+                        letter = "R"
+                    elif access_level == "Ingredient":
+                        letter = "C"
                     unique_id = letter + digits
                     sql = 'SELECT user_id FROM User WHERE user_id = %s'
                     cursor.execute(sql, (unique_id,))
@@ -117,25 +147,29 @@ class Functions:
                                     current_r=0,
                                     current_c=0,
                                     bgColor:str="Grey82",
-                                    borderW:int=0,xPadding=5,
+                                    borderW:int=0,
+                                    xPadding=5,
                                     yPadding=5,
-                                    entryWidth=None):
+                                    longEntryWidth=None,
+                                    shortEntryWidth=None,
+                                    labelWidth=None,
+                                    side=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]
         # print(refName)
         for string in refName:
-            l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:")
-            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding)
+            l = tk.Label(frame,borderwidth=borderW,background=bgColor,text=f"{string}:",width=labelWidth)
+            l.grid(row=current_row,column=current_column,padx=xPadding,pady=yPadding,sticky=side)
 
             current_column += 1
 
-            entry = tk.Entry(frame,borderwidth=borderW)
+            entry = tk.Entry(frame,borderwidth=borderW,width=shortEntryWidth)
             entry.grid(row=current_row,column=current_column,columnspan=labels.get(f"{string}"),padx=xPadding,pady=yPadding)
             entryList.append(entry)
 
             if labels.get(f"{string}") > 1:
-                entry.config(width=entryWidth)
+                entry.config(width=longEntryWidth)
                 current_column += (labels.get(f"{string}"))
             
             if (current_column >= max_columns):
@@ -143,6 +177,43 @@ class Functions:
                 current_row +=1
             else:
                 current_column +=1 
+
+    def create_table_():
+        pass
+
+    #Convert dictionary row to a list in the order of self.table columns
+    def convert_dicc_data(data=None):
+        current_index = 0
+        if data is None:
+            data = []
+        for row in data:
+            if isinstance(row, dict):
+                try:
+                    temp_row = []
+                    for value in row.values():
+                        temp_row.append(value)
+                except KeyError as e:
+                    print(f"Missing key in row data: {e}")
+                    continue
+            elif not isinstance(row, (list, tuple)):
+                print(f"Row format error: {row}")
+                continue
+            row = temp_row
+            data[current_index] = row
+            current_index += 1
+        return data
+    
+    
+    def adjust_column_widths(_):
+        tree_width = _.width  # Get the current width of the Treeview
+        num_columns = len(_.widget['columns'])
+        # Subtract vertical scrollbar width if present, assuming a width of about 20 pixels
+        scrollbar_width = 20
+        usable_width = tree_width - scrollbar_width
+        column_width = usable_width // num_columns  # Divide the usable width by the number of columns
+        for col in _.widget['columns']:
+            _.widget.column(col, width=column_width)  # Set each column to the calculated width
+    
 
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():

@@ -6,6 +6,7 @@ import smtplib
 
 class LoginModel:
     def __init__(self,provided_credentials:list):
+        #
         self.username = provided_credentials[0]
         self.password = provided_credentials[1]
         self.user_id = None
@@ -22,7 +23,6 @@ class LoginModel:
             return ValueError('Incorrect password')
         return 0
 
-    
     def get_login_otp(self):
         return self.otp
 

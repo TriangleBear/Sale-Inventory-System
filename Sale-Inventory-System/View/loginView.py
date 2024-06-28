@@ -33,6 +33,7 @@ class LoginView(tk.Frame):
         if str(provided_otp) == str(verifiedUserData[3]):
             messagebox.showinfo('Login Status', 'Login Successful!')
             if verifiedUserData[1] == "Manager":
+                self.loginController.logUserActivity([verifiedUserData[0]])
                 self.loginController.managerController(self.master,verifiedUserData[0])
             if verifiedUserData[1] == "Staff":
                 self.loginController.staffController(self.master,verifiedUserData[0])
@@ -56,14 +57,19 @@ class LoginView(tk.Frame):
         self.entryFrame.place(relx =0.5,rely=0.5,anchor=CENTER)
 
     def _login_widgets(self):
-        Functions.create_entry_box_using_grid(frame=self.entryFrame,labels=self.login_labels_with_colspan,entryList=self.login_entry_boxes,max_columns=1)
+        Functions.create_entry_box_using_grid(frame=self.entryFrame, labels=self.login_labels_with_colspan, 
+                                              entryList=self.login_entry_boxes, max_columns=1)
+        self.login_entry_boxes[1].config(show="*")
         
     def _forgot_password_button(self):
-        forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),text="Forgot Password",borderwidth=0,background="Gray82", command=lambda:self.loginController.forgotPasswordController(self.master))
+        forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
+                                        text="Forgot Password",borderwidth=0,background="Gray82",
+                                        command=lambda:self.loginController.forgotPasswordController(self.master))
         forgot_password_btn.grid(row=2,columnspan=2,sticky='e',padx=5,pady=5)        
         
     def _login_button(self):
-        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1", command=lambda:self._checkLoginInput(self.login_entry_boxes))
+        login_btn = tk.Button(self.entryFrame, text="Login",borderwidth=1,background="AntiqueWhite1",
+                              command=lambda:self._checkLoginInput(self.login_entry_boxes))
         login_btn.grid(row=3,columnspan=2,sticky='e',padx=5,pady=5)
 
     

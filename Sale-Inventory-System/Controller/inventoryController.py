@@ -1,8 +1,9 @@
 from Model.inventoryModel import InventoryModel
 from View.inventoryView import InventoryView
 class InventoryController:
-    def __init__(self,master):
+    def __init__(self,master,managerController):
         self.master = master
+        self.mC = managerController
         self.view = InventoryView(self, master)
 
     def main(self):
@@ -17,6 +18,6 @@ class InventoryController:
         model = InventoryModel(data)
         return model.create_product()
     
-    def _get_products_on_database(self):
+    def _get_inventory_on_database(self):
         model = InventoryModel([])
-        return model.get_products_on_database()
+        return model.get_inventory_on_database()
