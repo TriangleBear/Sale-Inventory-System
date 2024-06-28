@@ -5,13 +5,14 @@ from View.managerView import ManagerDashboard
 from View.securityView import SecurityView
 from View.userRegisterView import UserRegisterView
 from View.itemRegisterView import ItemRegisterView
+from View.recipeRegisterView import RecipeRegisterView
+from View.ingredientRegisterVIew import IngredientRegisterView
 from View.staffView import StaffDashboard
 from View.inventoryView import InventoryView
 from View.suppliesView import SuppliesView
 from View.posView import PosView
 from View.reportView import ReportView
 from View.auditTrailView import AuditView
-from View.recipeRegisterView import RecipeRegisterView
 from View.productRegistrationView import ProductRegistrationView
 
 __all__ = ["MainView",
@@ -21,6 +22,8 @@ __all__ = ["MainView",
            "SecurityView",
            "UserRegisterView",
            "ItemRegisterView",
+           "RecipeRegisterView",
+           "IngredientRegisterView",
            "StaffDashboard",
            "InventoryView",
            "SuppliesView",
@@ -28,5 +31,4 @@ __all__ = ["MainView",
            "ReportView",
            "ForgotPasswordView",
            "AuditView",
-           "RecipeRegisterView",
            "ProductRegistrationView"]

@@ -65,3 +65,8 @@ class ManagerController:
         logout = MainController()
         logout.main()
     
+    def ingredientRegisterController(self,recipeDetails):
+        #recipeDetails = [recipe_id,recipe_name, user_id]
+        from Controller import IngredientRegisterController
+        ingredient_register_page = IngredientRegisterController(self,recipeDetails[0])
+        ingredient_register_page.main()

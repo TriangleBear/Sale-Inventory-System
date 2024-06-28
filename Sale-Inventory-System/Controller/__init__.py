@@ -5,6 +5,7 @@ from Controller.managerController import ManagerController
 from Controller.securityController import SecurityController
 from Controller.userRegisterController import UserRegisterController
 from Controller.itemRegisterController import ItemRegisterController
+from Controller.ingredientRegisterController import IngredientRegisterController
 from Controller.staffController import StaffController
 from Controller.inventoryController import InventoryController
 from Controller.suppliesController import SuppliesController
@@ -22,11 +23,12 @@ __all__ = ["MainController",
            "SecurityController"
            "UserRegisterController",
            "ItemRegisterController",
+           "RecipeRegisterController",
+           "ingredientRegiserController",
            "StaffController",
            "InventoryController",
            "SuppliesController",
            "PosController",
            "ReportController",
            "AuditController",
-           "RecipeRegisterController",
            "ProductRegistrationController"]

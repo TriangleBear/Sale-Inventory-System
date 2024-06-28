@@ -3,7 +3,7 @@ from View.inventoryView import InventoryView
 class InventoryController:
     def __init__(self,master,managerController):
         self.master = master
-        self.managerController = managerController
+        self.mC = managerController
         self.view = InventoryView(self, master)
 
     def main(self):

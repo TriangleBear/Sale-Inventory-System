@@ -4,7 +4,7 @@ from Utils import Functions
 class SecurityController():
     def __init__(self,master,managerController):
         self.master = master
-        self.managerController = managerController
+        self.mC = managerController
         self.view = SecurityView(self, master)
 
     def main(self):
@@ -20,7 +20,7 @@ class SecurityController():
     
     def manager_view(self):
         Functions.destroy_page(self.master)
-        self.managerController.view.body()
+        self.mC.view.body()
     
 
     

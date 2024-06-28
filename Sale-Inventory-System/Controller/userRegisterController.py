@@ -4,7 +4,7 @@ from Utils import Functions
 
 class UserRegisterController():
     def __init__(self,managerController):
-        self.managerController = managerController
+        self.mC = managerController
         self.view = UserRegisterView(self)
 
     def main(self):

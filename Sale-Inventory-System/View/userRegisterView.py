@@ -109,6 +109,6 @@ class UserRegisterView(tk.Toplevel):
         if check_pass == 0:
             self.userRegisterController.register(entryData)
             messagebox.showinfo('Registration', 'Registration Successful!')
-            self.userRegisterController.managerController(self.master)
+            self.userRegisterController.mC(self.master)
         else:
             messagebox.showerror('Registration Error', check_pass)
