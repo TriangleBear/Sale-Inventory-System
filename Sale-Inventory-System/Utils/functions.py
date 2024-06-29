@@ -178,9 +178,30 @@ class Functions:
             else:
                 current_column +=1 
 
-    def create_table_():
-        pass
+    def remove_whitespace(data):
+        temp = []
+        for _ in data:
+            temp.append(str(_).strip())
+        return temp
 
+    def format_ingredient_data(data:list):
+        return [str(data[0]).lower().capitalize(),
+                float(data[1]),
+                str(data[2]).lower().capitalize()]
+
+    def check_existing_data(insertData,insertedData):
+        name,quantity,unit = insertData
+        exisiting_name,exisiting_quantity,exisiting_unit = insertedData
+        print
+        if name == exisiting_name and unit == exisiting_unit:
+            updated_quantity = exisiting_quantity + quantity
+            return [name,updated_quantity,unit]
+        elif name == exisiting_name and unit != exisiting_unit:
+            return ValueError("Quantity unit must be the same to update the item.")
+        else:
+            return
+    
+        
     #Convert dictionary row to a list in the order of self.table columns
     def convert_dicc_data(data=None):
         current_index = 0

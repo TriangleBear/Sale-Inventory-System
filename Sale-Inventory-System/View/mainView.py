@@ -32,7 +32,7 @@ class MainView(tk.Tk):
 
     def main(self):
         self.protocol("WM_DELETE_WINDOW", self.quit())
-        self.mainloop()
+        self.mainloop() 
 
     def loginController(self):
         self.mainController.loginController(self)

@@ -61,7 +61,7 @@ class IngredientRegisterView(tk.Toplevel):
         
     def _entry_frame(self):
         self.entryFrame = tk.Frame(self.baseFrame, background=self.mainBg,width=50,height=50)
-        self.entryFrame.place(relx=0.05, rely=0.5, anchor='w')
+        self.entryFrame.place(relx=0.05, rely=0.42, anchor='w')
 
     def _ingredient_entry_widgets(self):
         Functions.create_entry_box_using_grid(
@@ -88,12 +88,12 @@ class IngredientRegisterView(tk.Toplevel):
     def _add_ing_btn(self):
         add_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                             text="Add Ingredient", command=lambda: self._checkInput())
-        add_btn.place(relx=0.13, rely=0.69, anchor='center')
+        add_btn.place(relx=0.13, rely=0.67, anchor='center')
 
     def _remove_ing_btn(self):
         remove_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                                text="Remove Ingredient", command=lambda: self.remove_ingredient())
-        remove_btn.place(relx=0.33, rely=0.69, anchor='center')
+        remove_btn.place(relx=0.33, rely=0.67, anchor='center')
     
     def _cancel_btn(self):
         cancel_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
@@ -104,46 +104,40 @@ class IngredientRegisterView(tk.Toplevel):
         save_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                              text="Save", command=lambda: self.save_transaction())
         save_btn.place(relx=0.9, rely=0.92, anchor='center')
-        
-        
 
-    def _insert_data(self, data): # Insert data to the treeview, checks if the item already exists and updates the quantity if it does
-        # Assuming data[0] is the name, data[1] is the quantity as a string, and data[2] is the unit
-        name, quantity_str, unit = data
-        quantity = float(quantity_str)  # Convert the input quantity to float
+    def _insert_data(self, data):
+        formattedData = Functions.format_ingredient_data(data)
         for iid in self.tree.get_children():
-            item = self.tree.item(iid)
-            existing_name, existing_quantity_str, existing_unit = item['values']
-            existing_quantity = float(existing_quantity_str)  # Convert the existing quantity to float
-            # Check if the item already exists and has the same unit
-            if name == existing_name:
-                if unit != existing_unit:
-                    messagebox.showerror("Error", "Quantity unit must be the same to update the item.")
-                    return
-                else:
-                    # Update the quantity and replace the item in the tree
-                    updated_quantity = existing_quantity + quantity
-                    # Convert updated_quantity back to string if necessary for the tree display
-                    self.tree.item(iid, values=(name, str(updated_quantity), unit))
-                    return
-        # If the item does not exist, insert it as a new item
-        self.tree.insert('', 0, values=(name, str(quantity), unit))  # Convert quantity to string if necessary for the tree
-
+            existingItem = Functions.check_existing_data(formattedData,Functions.format_ingredient_data(self.tree.item(iid)['values']))
+            if existingItem == None:
+                continue
+            if type(existingItem) == list:
+                self.tree.item(iid,values=existingItem)
+                return
+            else:
+                messagebox.showerror("Error", existingItem)
+                return
+        self.tree.insert('',0,values=formattedData)
+        
     def _checkInput(self): # Check if all fields are filled in before inserting data
-        ingredients = [entry.get() for entry in self.ingredient_entry_boxes]
+        ingredients = Functions.remove_whitespace([entry.get() for entry in self.ingredient_entry_boxes])
         for item in ingredients:
-            if item == '':
-                messagebox.showerror("Error", "Please fill in all fields.")
-                return False
+            if item != '':
+                continue
+            else:
+                messagebox.showerror("Error", "Please fill in all fields")
+                return
         self._insert_data(ingredients)
-        return True
+        for entry in self.ingredient_entry_boxes:
+            entry.delete(0,'end')
+        return 
 
     def remove_ingredient(self): # Remove ingredient from the treeview, indicates how many to remove in a certain selected item
         selected_item = self.tree.selection()
         if selected_item:
             for i in selected_item:
-                item = self.tree.item(i)
-                current_quantity = float(item['values'][1])  # Assuming the quantity is the second value
+                item = self.tree.item(i)['values']
+                current_quantity = float(item[1])  # Assuming the quantity is the second value
                 quantity_to_remove = simpledialog.askfloat("Remove Quantity", "How much to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
 
                 if quantity_to_remove is not None:
@@ -161,7 +155,6 @@ class IngredientRegisterView(tk.Toplevel):
         ingList = [self.recipe_id]
         for child in self.tree.get_children():
             ingList.append(self.tree.item(child)['values'])
-        print(ingList)
         self.ingredientRegisterController.save_transaction(ingList)
         messagebox.showinfo("Success", "Transaction Saved")
         if not messagebox.askyesno("Continue?", "Add more Ingredients?"):
