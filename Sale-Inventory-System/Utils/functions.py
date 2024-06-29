@@ -98,17 +98,21 @@ class Functions:
                 while TRUE:
                     digits = ''.join(random.choices(string.digits, k=4))
                     if access_level == "Staff":
+                        sql = 'SELECT user_id FROM User WHERE user_id = %s'
                         letter = "S"
                     elif access_level == "Manager":
+                        sql = 'SELECT user_id FROM User WHERE user_id = %s'
                         letter = "M"
                     elif access_level == "Item":
+                        sql = 'SELECT item_id FROM Items WHERE item_id = %s'
                         letter = "I"
                     elif access_level == "Recipe":
+                        sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = %s'
                         letter = "R"
                     elif access_level == "Ingredient":
+                        sql = 'SELECT indg_id FROM Ingredients WHERE indg_id = %s'
                         letter = "C"
                     unique_id = letter + digits
-                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
                         vivdb.close()

@@ -75,6 +75,7 @@ class IngredientRegisterView(tk.Toplevel):
             max_columns=1,
             yPadding=15
         )
+    
 
     def display_table(self):
         self.tree = ttk.Treeview(self.baseFrame, columns=self.table, show='headings')
@@ -83,7 +84,17 @@ class IngredientRegisterView(tk.Toplevel):
             self.tree.column(col, anchor='e')
         # Assuming `self.tree` is your Treeview widget
         self.tree.bind("<Configure>", Functions.adjust_column_widths)
+        self.tree.bind("<ButtonRelease-1>", self.on_select)
         self.tree.place(relx=0.975, rely=0.032,anchor='ne',width=330,height=380)
+    
+    def on_select(self,_):
+        selected_item = self.tree.focus()
+        current_selection = self.tree.selection()
+
+        if current_selection == selected_item  :
+            self.tree.selection_remove(current_selection)
+        else:
+            self.tree.selection_set(selected_item)
 
     def _add_ing_btn(self):
         add_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
@@ -132,25 +143,21 @@ class IngredientRegisterView(tk.Toplevel):
             entry.delete(0,'end')
         return 
 
-    def remove_ingredient(self): # Remove ingredient from the treeview, indicates how many to remove in a certain selected item
+    def remove_ingredient(self):
         selected_item = self.tree.selection()
-        if selected_item:
-            for i in selected_item:
-                item = self.tree.item(i)['values']
-                current_quantity = float(item[1])  # Assuming the quantity is the second value
-                quantity_to_remove = simpledialog.askfloat("Remove Quantity", "How much to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
+        if not selected_item:
+            return messagebox.showerror("Error", "Please select an item to remove")
+        for i in selected_item:
+            item = self.tree.item(i)['values']
+            current_quantity = float(item[1])
+            quantity_to_remove = simpledialog.askfloat("Remove Quantity", f"How much of {item[0]} to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
 
-                if quantity_to_remove is not None:
-                    if quantity_to_remove >= current_quantity:
-                        # Remove the item if the quantity to remove is equal to or greater than the current quantity
-                        self.tree.delete(i)
-                    else:
-                        # Update the item's quantity
-                        new_quantity = current_quantity - quantity_to_remove
-                        self.tree.item(i, values=(item['values'][0], new_quantity, item['values'][2]))  # Update with new quantity
-        else:
-            messagebox.showerror("Error", "Please select an item to remove")
-
+            if quantity_to_remove is not None and quantity_to_remove < current_quantity:
+                new_quantity = current_quantity - quantity_to_remove
+                self.tree.item(i, values=(item[0], new_quantity, item[2]))
+            else:
+                self.tree.delete(i)
+    
     def save_transaction(self):
         ingList = [self.recipe_id]
         for child in self.tree.get_children():
