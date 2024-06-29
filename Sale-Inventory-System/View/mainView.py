@@ -7,9 +7,9 @@ class MainView(tk.Tk):
         super().__init__()
         self.mainController = mainController
         self._main_window_attributes()  # set window attributes
-        # self._start_button()
+        self._start_button()
         # self.managerController()
-        self.loginController()
+        # self.loginController()
         # self.registerController()
 
     def _main_window_attributes(self):
@@ -44,4 +44,4 @@ class MainView(tk.Tk):
         self.mainController.managerController(self,'M1203') #test user id
     
     def temp_access_ingredientRegister(self):
-        self.mainController.ingredientRegisterController('R4713')
+        self.mainController.ingredientRegisterController('R4461')

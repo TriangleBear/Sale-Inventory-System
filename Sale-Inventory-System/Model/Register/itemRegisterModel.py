@@ -1,5 +1,5 @@
 from Utils import Functions
-from Controller import managerController
+from Controller.Dashboard import managerController
 from Utils import Database
 class ItemRegisterModel:
     def __init__(self,data:list,user_id=None):

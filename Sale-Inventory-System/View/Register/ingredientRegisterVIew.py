@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk, font, messagebox
+from tkinter import ttk, font, messagebox, simpledialog
 from Utils import Functions
 class IngredientRegisterView(tk.Toplevel):
     def __init__(self,ingredientRegisterController,recipe_id):
@@ -107,22 +107,53 @@ class IngredientRegisterView(tk.Toplevel):
         
         
 
-    def _insert_data(self, data):
-        self.tree.insert('', 0, values=data)
+    def _insert_data(self, data): # Insert data to the treeview, checks if the item already exists and updates the quantity if it does
+        # Assuming data[0] is the name, data[1] is the quantity as a string, and data[2] is the unit
+        name, quantity_str, unit = data
+        quantity = float(quantity_str)  # Convert the input quantity to float
+        for iid in self.tree.get_children():
+            item = self.tree.item(iid)
+            existing_name, existing_quantity_str, existing_unit = item['values']
+            existing_quantity = float(existing_quantity_str)  # Convert the existing quantity to float
+            # Check if the item already exists and has the same unit
+            if name == existing_name:
+                if unit != existing_unit:
+                    messagebox.showerror("Error", "Quantity unit must be the same to update the item.")
+                    return
+                else:
+                    # Update the quantity and replace the item in the tree
+                    updated_quantity = existing_quantity + quantity
+                    # Convert updated_quantity back to string if necessary for the tree display
+                    self.tree.item(iid, values=(name, str(updated_quantity), unit))
+                    return
+        # If the item does not exist, insert it as a new item
+        self.tree.insert('', 0, values=(name, str(quantity), unit))  # Convert quantity to string if necessary for the tree
 
-    def _checkInput(self):
+    def _checkInput(self): # Check if all fields are filled in before inserting data
         ingredients = [entry.get() for entry in self.ingredient_entry_boxes]
         for item in ingredients:
             if item == '':
-                messagebox.showerror("Error", f"Please fill in {item}")
-                return 
+                messagebox.showerror("Error", "Please fill in all fields.")
+                return False
         self._insert_data(ingredients)
+        return True
 
-    def remove_ingredient(self):
+    def remove_ingredient(self): # Remove ingredient from the treeview, indicates how many to remove in a certain selected item
         selected_item = self.tree.selection()
         if selected_item:
             for i in selected_item:
-                self.tree.delete(i)
+                item = self.tree.item(i)
+                current_quantity = float(item['values'][1])  # Assuming the quantity is the second value
+                quantity_to_remove = simpledialog.askfloat("Remove Quantity", "How much to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
+
+                if quantity_to_remove is not None:
+                    if quantity_to_remove >= current_quantity:
+                        # Remove the item if the quantity to remove is equal to or greater than the current quantity
+                        self.tree.delete(i)
+                    else:
+                        # Update the item's quantity
+                        new_quantity = current_quantity - quantity_to_remove
+                        self.tree.item(i, values=(item['values'][0], new_quantity, item['values'][2]))  # Update with new quantity
         else:
             messagebox.showerror("Error", "Please select an item to remove")
 
