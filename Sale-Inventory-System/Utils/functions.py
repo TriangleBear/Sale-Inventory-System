@@ -243,3 +243,104 @@ class Functions:
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
+
+class CustomDialog(tk.Toplevel):
+    def __init__(self, parent, title=None, buttons=None):
+        super().__init__(parent)
+        self.result = None
+
+        if title:
+            self.title(title)
+
+        self.update_idletasks()  # Update the dialog to set its dimensions
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        window_width = self.winfo_reqwidth()
+        window_height = self.winfo_reqheight()
+        center_x = int(screen_width/2 - window_width/2)
+        center_y = int(screen_height/2 - window_height/2)
+        # Set the window's position to the center of the screen
+        self.geometry(f'+{center_x}+{center_y}')
+        self.grab_set()
+        self.button_frame = tk.Frame(self)
+        self.button_frame.pack(pady=10)
+
+        if buttons:
+            for button_name in buttons:
+                button = tk.Button(self.button_frame, text=button_name, command=lambda name=button_name: self.set_result(name))
+                button.pack(side=tk.LEFT, padx=5)
+
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.transient(parent)
+        self.grab_set()
+        self.wait_window(parent)
+        
+
+    def set_result(self, result):
+        self.result = result
+        self.destroy()
+
+    def on_close(self):
+        self.result = None
+        self.destroy()
+
+class CustomComboboxDialog(tk.Toplevel):
+    def __init__(self, parent, title=None, prompt=None, values=[]):
+        super().__init__(parent)
+        self.transient(parent)
+        self.title(title)
+        self.parent = parent
+        self.result = None
+        self.prompt = prompt
+        self.values = values
+        self.initialize()
+        self.populate_combobox()
+
+    def initialize(self):
+        self.grid()
+
+        self.update_idletasks()  # Update the dialog to set its dimensions
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        window_width = self.winfo_reqwidth()
+        window_height = self.winfo_reqheight()
+        center_x = int(screen_width/2 - window_width/2)
+        center_y = int(screen_height/2 - window_height/2)
+        # Set the window's position to the center of the screen
+        self.geometry(f'+{center_x}+{center_y}')
+        self.grab_set()
+
+        if self.prompt:
+            tk.Label(self, text=self.prompt).pack(padx=5, pady=5)
+
+        self.combobox = ttk.Combobox(self, values=self.values)
+        self.combobox.pack(padx=5, pady=5)
+
+        btn_frame = tk.Frame(self)
+        btn_frame.pack(padx=5, pady=5)
+        tk.Button(btn_frame, text="OK", command=self.on_ok).pack(side=tk.LEFT)
+        tk.Button(btn_frame, text="Cancel", command=self.cancel).pack(side=tk.LEFT)
+
+        self.bind("<Return>", self.on_ok)
+        self.bind("<Escape>", self.cancel)
+
+        self.grab_set()
+
+        self.combobox.focus_set()
+
+        self.populate_combobox()  # Populate the combobox with items
+
+        self.wait_window(self)
+
+    def populate_combobox(self):
+        # Example method to populate the combobox with items
+        # This is a placeholder; actual implementation will depend on how your dialog is structured
+        for item in self.items:
+            self.combobox.add(item)
+
+    def on_ok(self, event=None):
+        self.result = self.combobox.get()
+        self.destroy()
+
+    def cancel(self, event=None):
+        self.destroy()

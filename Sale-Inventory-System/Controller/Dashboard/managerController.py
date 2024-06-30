@@ -69,7 +69,11 @@ class ManagerController:
         ingredient_register_page = IngredientRegisterController(self,recipeDetails[0])
         ingredient_register_page.main()
 
-    def productRegisterController(self):
+    def productRegisterController(self,recipe_id):
         from Controller import ProductRegistrationController
-        product_register_page = ProductRegistrationController(self)
+        product_register_page = ProductRegistrationController(self,recipe_id)
         product_register_page.main()
+
+    def get_rid_rname(self):
+        from Model import ManagerModel
+        return ManagerModel.get_recipe_name_and_recipe_id(self)

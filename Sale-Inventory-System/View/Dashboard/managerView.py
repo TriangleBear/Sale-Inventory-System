@@ -1,14 +1,15 @@
 from tkinter import *
 import tkinter as tk
-from tkinter import font,messagebox
-from Utils import Functions
+from tkinter import font,messagebox, simpledialog
+from Utils import Functions, CustomDialog, CustomComboboxDialog
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,master,user_id):
+    def __init__(self,managerController,master,user_id,recipe_id=None):
         self.master = master
         self._main_window_attributes()
         super().__init__(self.master, background="GhostWhite")
         self.managerController = managerController
         self.user_id = user_id
+        self.recipe_id = recipe_id
         self.pack(fill=tk.BOTH,expand=True)
 
         #frames attributes
@@ -165,6 +166,18 @@ class ManagerDashboard(tk.Frame):
         if string == "Inventory":
             self.managerController.inventoryController(self.bodyFrame)
         if string == "Product Registration":
-            self.managerController.productRegisterController()
-        
+            self.show_hm_or_pm()
 
+    def show_hm_or_pm(self):
+        dialog = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"])
+        user_choice = dialog.result
+        if user_choice == "Home Made":
+            recipe_id = simpledialog.askstring("Recipe ID", "Enter Recipe ID")
+            if recipe_id:
+                self.managerController.productRegisterController(recipe_id)  # Pass recipe_id to the controller
+        if user_choice == "Pre Made":
+            recipe_id = simpledialog.askstring("Recipe ID", "Enter Recipe ID")
+            if recipe_id:
+                self.managerController.productRegisterController()
+
+            

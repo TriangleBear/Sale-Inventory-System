@@ -3,8 +3,11 @@ from tkinter import ttk
 from Utils import Functions
 from tkcalendar import DateEntry
 class ProductRegistrationView(tk.Toplevel):
-    def __init__(self, productRegistrationController):
+    def __init__(self, productRegistrationController, recipe_id=None):
         super().__init__(background="GhostWhite")
+        self.recipe_id = recipe_id
+        if recipe_id is not None:
+            self.recipe_name = self.get_recipe_name_by_id(recipe_id)
         self.productRegistrationController = productRegistrationController
         self._windows_attributes()
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
@@ -15,9 +18,9 @@ class ProductRegistrationView(tk.Toplevel):
             "Price": 1,
             "Expiry Date": 1,
             "Category": 1,
-            "Stock Level": 1,
             "Flooring": 1,
-            "Ceiling": 1
+            "Ceiling": 1,
+            "Stock Level": 1
         }
         self.product_entry_boxes = []
         self.product_inputs = []
@@ -40,7 +43,13 @@ class ProductRegistrationView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
-        self.title('Product Registration')
+        # Set's the title to a specific recipe_id if recipe_id is not None
+        if self.recipe_id is not None:
+            self.title(f'Product Registration | Recipe ID: {self.recipe_id}')
+        else:
+            self.title('Product Registration')
+
+
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()
@@ -64,20 +73,20 @@ class ProductRegistrationView(tk.Toplevel):
         )
         self._prodcut_expiry_date()
         self._product_category_dropdown()
-        # subset_two = {key:self.product_labels_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.product_labels_with_colspan}
-        # Functions.create_entry_box_using_grid(
-        #     frame=self.entryFrame,
-        #     labels=subset_two,
-        #     entryList=self.product_entry_boxes,
-        #     shortEntryWidth=23,
-        #     side='e',
-        #     borderW=1,
-        #     bgColor=self.mainBg,
-        #     max_columns=2,
-        #     current_r=4,
-        #     current_c=0,
-        #     #yPadding=15
-        # )
+        subset_two = {key:self.product_labels_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.product_labels_with_colspan}
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame,
+            labels=subset_two,
+            entryList=self.product_entry_boxes,
+            shortEntryWidth=23,
+            side='e',
+            borderW=1,
+            bgColor=self.mainBg,
+            max_columns=2,
+            current_r=4,
+            current_c=0,
+            #yPadding=15
+        )
 
 
     def _prodcut_expiry_date(self):
@@ -109,6 +118,24 @@ class ProductRegistrationView(tk.Toplevel):
             product_inputs.append(entry.get())
         self.productRegistrationController.register_product(product_inputs)
 
+
     def _back_button(self):
         back_btn = tk.Button(self.entryFrame, text="Back", command=self.quit)
         back_btn.grid(row=6, column=3, sticky='w', padx=5, pady=5) 
+
+"""
+HM or PM
+if HM then
+	recipe_id = recipe_name when creating
+if recipe_name not equal in the database then
+	return
+else then
+	popup register product
+	pop title supposed to be HM or PM
+
+on top of the pop is supposed to be the recipe ID
+
+register button clicked:
+	quantity * recipe ingredient > items in the database return to back to product registration
+	then minus that to items on what are the items made
+"""
