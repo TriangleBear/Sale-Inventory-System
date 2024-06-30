@@ -117,9 +117,11 @@ class ProductRegisterView(tk.Toplevel):
         product_inputs = [entry.get() for entry in data]
         print(f'Product Inputs: {product_inputs}')
         if product_inputs is not None:
-            messagebox.showinfo("Product Registration", "Product Registered Successfully!")
             self.recipeRegisterController.logUserActivity()
-        self.productRegisterController.register_product(product_inputs)
+            print(f'User Logged Activity: {self.recipeRegisterController.logUserActivity()}')
+            self.productRegisterController.register_product(product_inputs)
+            messagebox.showinfo("Product Registration", "Product Registered Successfully!")
+        return
 
 
     def _back_button(self):
