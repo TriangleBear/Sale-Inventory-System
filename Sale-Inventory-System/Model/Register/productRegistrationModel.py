@@ -9,9 +9,9 @@ class ProductRegistrationModel:
         self.product_quantity = data[4]
         self.expiry_date = data[5]
         self.category = data[6]
-        self.stock_level = data[7]
-        self.flooring = data[8]
-        self.ceiling = data[9]
+        self.stock_level = self.checkStockLevel()
+        self.flooring = data[7]
+        self.ceiling = data[8]
 
     def get_product_name(self):
         with Database.get_db_connection() as connection:
@@ -22,7 +22,7 @@ class ProductRegistrationModel:
             connection.close()
         return product_name
     
-    def create_product(self):
+    def register_product(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """INSERT INTO Product (product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling) 
@@ -32,3 +32,13 @@ class ProductRegistrationModel:
                 connection.commit()
             connection.close()
         return 0
+    
+    def checkStockLevel(self):
+        if self.quantity > self.flooring and self.quantity < self.ceiling:
+            return "Average"
+        if self.quantity < self.flooring:
+            return "Danger"
+        if self.quantity >= self.ceiling:
+            return "Maximum"
+    
+    # Stock level is

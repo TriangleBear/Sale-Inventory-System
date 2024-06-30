@@ -150,7 +150,7 @@ class Functions:
                                     max_rows:int=None,
                                     current_r=0,
                                     current_c=0,
-                                    bgColor:str="Grey82",
+                                    bgColor:str="Grey89",
                                     borderW:int=0,
                                     xPadding=5,
                                     yPadding=5,

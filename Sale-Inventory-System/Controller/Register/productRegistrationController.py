@@ -1,18 +1,15 @@
+from View import ProductRegistrationView
 class ProductRegistrationController:
-    def __init__(self,ProductRegistrationService):
-        self.productRegistrationService = ProductRegistrationService()
+    def __init__(self, managerController):
+        self.mC = managerController
+        self.user_id = self.mC.user_id  # Extracting user_id from managerController
+        self.view = ProductRegistrationView(self)
 
-    def registerProduct(self, product):
-        return self.productRegistrationService.registerProduct(product)
+    def main(self):
+        self.view.main()
 
-    def updateProduct(self, product):
-        return self.productRegistrationService.updateProduct(product)
+    def register_Product(self):
+        return self.productRegistrationController.register_product()
 
-    def deleteProduct(self, product):
-        return self.productRegistrationService.deleteProduct(product)
-
-    def getAllProducts(self):
-        return self.productRegistrationService.getAllProducts()
-
-    def getProduct(self, product):
-        return self.productRegistrationService.getProduct(product)
+    
+    

@@ -68,3 +68,8 @@ class ManagerController:
         from Controller import IngredientRegisterController
         ingredient_register_page = IngredientRegisterController(self,recipeDetails[0])
         ingredient_register_page.main()
+
+    def productRegisterController(self):
+        from Controller import ProductRegistrationController
+        product_register_page = ProductRegistrationController(self)
+        product_register_page.main()

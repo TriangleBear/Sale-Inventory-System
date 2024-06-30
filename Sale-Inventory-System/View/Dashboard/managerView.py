@@ -164,5 +164,7 @@ class ManagerDashboard(tk.Frame):
             self.managerController.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":
             self.managerController.inventoryController(self.bodyFrame)
+        if string == "Product Registration":
+            self.managerController.productRegisterController()
         
 
