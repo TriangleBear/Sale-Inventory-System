@@ -6,7 +6,7 @@ from Model.Register.userRegisterModel import UserRegisterModel
 from Model.Register.itemRegisterModel import ItemRegisterModel
 from Model.Register.ingredientRegisterModel import IngredientRegisterModel
 from Model.Register.recipeRegisterModel import RecipeRegisterModel
-from Model.Register.productRegistrationModel import ProductRegistrationModel
+from Model.Register.productRegisterModel import ProductRegisterModel
 from Model.Dashboard.staffModel import StaffModel
 from Model.Inventory.inventoryModel import InventoryModel
 from Model.Supply.suppliesModel import SuppliesModel
@@ -27,5 +27,5 @@ __all__ = ["LoginModel",
            "SuppliesModel",
            "PosModel",
            "ReportModel",
-           "ProductRegistrationModel"
+           "ProductRegisterModel"
            ]
