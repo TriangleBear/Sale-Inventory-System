@@ -1,5 +1,6 @@
 from Model import InventoryModel
 from View import InventoryView
+from Utils import Functions
 class InventoryController:
     def __init__(self,master,managerController):
         self.master = master
@@ -21,3 +22,7 @@ class InventoryController:
     def _get_inventory_on_database(self):
         model = InventoryModel([])
         return model.get_inventory_on_database()
+    
+    def manager_view(self):
+        Functions.destroy_page(self.master)
+        self.mC.view.body()
