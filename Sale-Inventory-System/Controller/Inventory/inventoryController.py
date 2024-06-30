@@ -14,14 +14,30 @@ class InventoryController:
         from Controller import InventoryController
         inventory_page = InventoryController(self.master)
         inventory_page.main()
-
-    def create_product(self,data):
-        model = InventoryModel(data)
-        return model.create_product()
     
-    def _get_inventory_on_database(self):
+    def _get_recipe_on_database(self):
         model = InventoryModel([])
-        return model.get_inventory_on_database()
+        return model.get_recipe_on_database()
+    
+    def _get_recipe_column_names(self):
+        model = InventoryModel([])
+        return model.get_recipe_column_names()
+
+    def _get_product_on_database(self):
+        model = InventoryModel([])
+        return model.get_product_on_database()
+    
+    def _get_product_column_names(self):
+        model = InventoryModel([])
+        return model.get_product_column_names()
+    
+    def _get_items_on_database(self):
+        model = InventoryModel([])
+        return model.get_items_on_database()
+    
+    def _get_items_column_names(self):
+        model = InventoryModel([])
+        return model.get_items_column_names()
     
     def manager_view(self):
         Functions.destroy_page(self.master)
