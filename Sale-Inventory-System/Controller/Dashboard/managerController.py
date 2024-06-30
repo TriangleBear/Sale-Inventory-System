@@ -76,4 +76,5 @@ class ManagerController:
 
     def get_rid_rname(self):
         from Model import ManagerModel
-        return ManagerModel.get_recipe_name_and_recipe_id(self)
+        model = ManagerModel()
+        return model.get_recipe_name_and_recipe_id()

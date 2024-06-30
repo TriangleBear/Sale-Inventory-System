@@ -20,6 +20,7 @@ class LoginView(tk.Frame):
         #login  
         self.login_labels_with_colspan = {"Username":1, "Password":1}
         self.login_entry_boxes = []
+        self.mainBg = "Gray89"
         self.pack(fill=tk.BOTH,expand=True)
 
     def main(self):
@@ -53,7 +54,7 @@ class LoginView(tk.Frame):
             messagebox.showerror('Invalid Input',userData)
 
     def _center_frame(self):
-        self.entryFrame = tk.Frame(self,background="Gray82")
+        self.entryFrame = tk.Frame(self,background=self.mainBg)
         self.entryFrame.place(relx =0.5,rely=0.5,anchor=CENTER)
 
     def _login_widgets(self):
@@ -63,7 +64,7 @@ class LoginView(tk.Frame):
         
     def _forgot_password_button(self):
         forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
-                                        text="Forgot Password",borderwidth=0,background="Gray82",
+                                        text="Forgot Password",borderwidth=0,background=self.mainBg,
                                         command=lambda:self.loginController.forgotPasswordController(self.master))
         forgot_password_btn.grid(row=2,columnspan=2,sticky='e',padx=5,pady=5)        
         

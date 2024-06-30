@@ -59,8 +59,6 @@ class Functions:
             b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
             entryList.append(b)
 
-
-
             if (current_column >= max_columns):
                 current_column =0
                 current_row +=1
@@ -245,8 +243,8 @@ class Functions:
             child.destroy()
 
 class CustomDialog(tk.Toplevel):
-    def __init__(self, parent, title=None, buttons=None):
-        super().__init__(parent)
+    def __init__(self, master, title=None, buttons=None):
+        super().__init__(master)
         self.result = None
 
         if title:
@@ -271,9 +269,8 @@ class CustomDialog(tk.Toplevel):
                 button.pack(side=tk.LEFT, padx=5)
 
         self.protocol("WM_DELETE_WINDOW", self.on_close)
-        self.transient(parent)
         self.grab_set()
-        self.wait_window(parent)
+        self.wait_window(self)
         
 
     def set_result(self, result):
@@ -285,62 +282,60 @@ class CustomDialog(tk.Toplevel):
         self.destroy()
 
 class CustomComboboxDialog(tk.Toplevel):
-    def __init__(self, parent, title=None, prompt=None, values=[]):
-        super().__init__(parent)
-        self.transient(parent)
-        self.title(title)
-        self.parent = parent
+    def __init__(self, values:list,title=None, prompt=None, ):
+        super().__init__()
+        self._window_attributes()
+        self.title = title
         self.result = None
         self.prompt = prompt
         self.values = values
-        self.initialize()
-        self.populate_combobox()
+        self.btn_lbl = ["ok","cancel"]
+        self.btn_vals = []
 
-    def initialize(self):
-        self.grid()
+    def main(self):
+        self._base_frame()
+        self._prompt()
+        self._recipe_combobox()
+        self._btn_frame()
+        self._btn_widgets()
+        self.mainloop()
 
-        self.update_idletasks()  # Update the dialog to set its dimensions
+    def _window_attributes(self):
+        self.h = 100
+        self.w = 150
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
-        window_width = self.winfo_reqwidth()
-        window_height = self.winfo_reqheight()
-        center_x = int(screen_width/2 - window_width/2)
-        center_y = int(screen_height/2 - window_height/2)
-        # Set the window's position to the center of the screen
-        self.geometry(f'+{center_x}+{center_y}')
+        x = int((screen_width / 2) - (self.w / 2)) - 12
+        y = int((screen_height / 2) - (self.h / 2)) - 40
+
+        self.title('combobox')
+        self.geometry(f"{self.w}x{self.h}+{x}+{y}")
+        self.resizable(False, False)
         self.grab_set()
+        self.protocol("WM_DELETE_WINDOW", self.quit())
 
-        if self.prompt:
-            tk.Label(self, text=self.prompt).pack(padx=5, pady=5)
+    def _base_frame(self):
+        self.baseFrame = tk.Frame(self)
+        self.baseFrame.pack(fill='both',expand=True)
 
-        self.combobox = ttk.Combobox(self, values=self.values)
-        self.combobox.pack(padx=5, pady=5)
+    def _prompt(self):
+        self.prompt = tk.Label(self.baseFrame, text=self.prompt)
+        self.prompt.place(relx=0.5,rely=0.15, anchor=CENTER)
 
-        btn_frame = tk.Frame(self)
-        btn_frame.pack(padx=5, pady=5)
-        tk.Button(btn_frame, text="OK", command=self.on_ok).pack(side=tk.LEFT)
-        tk.Button(btn_frame, text="Cancel", command=self.cancel).pack(side=tk.LEFT)
+    def _recipe_combobox(self):
+        self.combobox = ttk.Combobox(self.baseFrame, values=self.values)
+        self.combobox.place(relx=0.5,rely=0.45, anchor=CENTER)
 
-        self.bind("<Return>", self.on_ok)
-        self.bind("<Escape>", self.cancel)
+    def _btn_frame(self):
+        self.btn_frame = tk.Frame(self)
+        self.btn_frame.place(relx=0.5,rely=0.76, anchor=CENTER)
 
-        self.grab_set()
+    def _btn_widgets(self):
+        Functions.create_buttons_using_grid(frame=self.btn_frame,labels=self.btn_lbl,entryList=self.btn_vals,max_columns=2,cmd=self._check_command,btnxPadding=5)
 
-        self.combobox.focus_set()
-
-        self.populate_combobox()  # Populate the combobox with items
-
-        self.wait_window(self)
-
-    def populate_combobox(self):
-        # Example method to populate the combobox with items
-        # This is a placeholder; actual implementation will depend on how your dialog is structured
-        for item in self.items:
-            self.combobox.add(item)
-
-    def on_ok(self, event=None):
-        self.result = self.combobox.get()
-        self.destroy()
-
-    def cancel(self, event=None):
-        self.destroy()
+    def _check_command(self,string):
+        if string == "ok":
+            print(self.combobox.get())
+            return 
+        if string == "cancel":
+            self.destroy()

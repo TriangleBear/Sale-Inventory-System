@@ -57,20 +57,20 @@ class ItemRegisterView(tk.Toplevel):
         self._item_register_frame()
         if self.status == "Raw Item":
             self._item_register_widgets()
-            self._register_button(5,3)
-            self._back_button(5,2)
+            self._register_button(4,3)
+            self._back_button(4,2)
         if self.status == "Supply Item":
             self._supply_register_widgets()
-            self._register_button(5,3)
-            self._back_button(5,2)
+            self._register_button(4,3)
+            self._back_button(4,2)
         self.mainloop()
 
 
     def _window_attributes(self):
         self.h = 420
         self.w = 580
-        screen_width = self.master.winfo_screenwidth()
-        screen_height = self.master.winfo_screenheight()
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
@@ -98,8 +98,8 @@ class ItemRegisterView(tk.Toplevel):
             shortEntryWidth=entrywidth,
             side='e'
         )
-        self._expiry_date_entry(2,2)
-        self._category_dropdown(3,0) #row=2 column=(2-3)
+        self._expiry_date_entry(2,0)
+        self._category_dropdown(2,2) #row=2 column=(2-3)
         subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.registerFrame,
@@ -109,7 +109,7 @@ class ItemRegisterView(tk.Toplevel):
             borderW=1,
             max_columns=2,
             current_r=3,
-            current_c=2,
+            current_c=0,
             shortEntryWidth=entrywidth,
             side='e'
         )
@@ -127,8 +127,8 @@ class ItemRegisterView(tk.Toplevel):
             shortEntryWidth=entrywidth,
             side='e'
         )
-        self._expiry_date_entry(2,2)
-        self._menu_type_dropdown(3,0)
+        self._expiry_date_entry(2,0)
+        self._menu_type_dropdown(2,2)
         subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.registerFrame,
@@ -138,7 +138,7 @@ class ItemRegisterView(tk.Toplevel):
             borderW=1,
             max_columns=2,
             current_r=3,
-            current_c=2,
+            current_c=0,
             shortEntryWidth=entrywidth,
             side='e'
         )

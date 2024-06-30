@@ -1,7 +1,7 @@
 from Utils import Database
 class ManagerModel:
-    def __init__(self,data:list):
-        self.username = data[0]
+    def __init__(self):
+        pass
 
     def get_manager_username(self):
         with Database.get_db_connection() as connection:

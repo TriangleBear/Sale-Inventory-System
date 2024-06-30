@@ -3,13 +3,12 @@ import tkinter as tk
 from tkinter import font,messagebox, simpledialog
 from Utils import Functions, CustomDialog, CustomComboboxDialog
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,master,user_id,recipe_id=None):
+    def __init__(self,managerController,master,user_id):
         self.master = master
         self._main_window_attributes()
         super().__init__(self.master, background="GhostWhite")
         self.managerController = managerController
         self.user_id = user_id
-        self.recipe_id = recipe_id
         self.pack(fill=tk.BOTH,expand=True)
 
         #frames attributes
@@ -169,11 +168,14 @@ class ManagerDashboard(tk.Frame):
             self.show_hm_or_pm()
 
     def show_hm_or_pm(self):
-        dialog = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"])
-        user_choice = dialog.result
+        user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
+        Rid_Rname = Functions.convert_dicc_data(self.managerController.get_rid_rname())
+        RecipeNameData = [data[1] for data in Rid_Rname]
         if user_choice == "Home Made":
-            recipe_id = simpledialog.askstring("Recipe ID", "Enter Recipe ID")
-            if recipe_id:
+            RecipeName = CustomComboboxDialog(values=RecipeNameData,title="Recipe ID | Recipe Name",prompt="Choose Recipe Name").main()
+            if RecipeName == 0:
+                return
+            else:
                 self.managerController.productRegisterController(recipe_id)  # Pass recipe_id to the controller
         if user_choice == "Pre Made":
             recipe_id = simpledialog.askstring("Recipe ID", "Enter Recipe ID")
