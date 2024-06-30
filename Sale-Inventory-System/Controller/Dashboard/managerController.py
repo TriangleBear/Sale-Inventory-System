@@ -52,9 +52,9 @@ class ManagerController:
         pos_page = POSController(master,self)
         pos_page.main()
 
-    def itemRegisterController(self):
+    def itemRegisterController(self,status):
         from Controller import ItemRegisterController
-        item_register_page = ItemRegisterController(self)
+        item_register_page = ItemRegisterController(self,status)
         item_register_page.main()
 
     def mainController(self):

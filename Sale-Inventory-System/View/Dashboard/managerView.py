@@ -16,8 +16,10 @@ class ManagerDashboard(tk.Frame):
 
         #buttons
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance"]
-        self.registration_btn = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
         self.btns = []
+        self.item_btns = []
     
     def main(self):
         self._header_frame()
@@ -30,8 +32,14 @@ class ManagerDashboard(tk.Frame):
 
     def register_page(self):
         self._center_frame()
-        self.main_register_buttons() # load buttons
+        self._main_register_buttons() # load buttons
         self._back_button("register_page")
+
+    def _item_register_page(self):
+        self._center_frame()
+        self._item_register_buttons()
+        self._back_button("item_register_page")
+        
 
     def _main_window_attributes(self):
         # main window
@@ -91,13 +99,26 @@ class ManagerDashboard(tk.Frame):
                                             btnxPadding=10,
                                             cmd=self._check_buttons_command)
 
-    def main_register_buttons(self):
+    def _main_register_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.registration_btn,
+                                            labels=self.registration_btn_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
                                             w=21,
                                             h=1,
+                                            fontSize=12,
+                                            gridxPadding=10,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=5,
+                                            cmd=self._check_buttons_command)
+        
+    def _item_register_buttons(self):
+        Functions.create_buttons_using_grid(self.btn_frame,
+                                            labels=self.item_register_btn_lbls,
+                                            entryList=self.item_btns,
+                                            max_columns=2,
+                                            w=21,
                                             fontSize=12,
                                             gridxPadding=10,
                                             gridyPadding=10,
@@ -120,9 +141,9 @@ class ManagerDashboard(tk.Frame):
         if string == "register_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-
-    def labelframe(self):
-        tk.LabelFrame
+        if string == "item_register_page":
+            Functions.destroy_page(self.bodyFrame)
+            self.register_page()
 
     def _check_buttons_command(self,string):
         if string == "Registration":
@@ -130,12 +151,15 @@ class ManagerDashboard(tk.Frame):
             self.register_page()
         if string == "Security": 
             self.managerController.securityController(self.bodyFrame)
-        if string == "User Activity":
-            self.managerController.securityController(self.bodyFrame)
         if string == "User Registration":
             self.managerController.userRegisterController()
         if string == "Item Registration":
-            self.managerController.itemRegisterController()
+            Functions.destroy_page(self.bodyFrame)
+            self._item_register_page()
+        if string == "Supply Item":
+            self.managerController.itemRegisterController("Supply Item") #not yet made
+        if string == "Raw Item":
+            self.managerController.itemRegisterController("Raw Item")
         if string == "Recipe Registration":
             self.managerController.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":

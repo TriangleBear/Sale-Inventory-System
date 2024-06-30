@@ -41,7 +41,7 @@ class UserRegisterView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
-        self.title('Item Registration')
+        self.title('User Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()
