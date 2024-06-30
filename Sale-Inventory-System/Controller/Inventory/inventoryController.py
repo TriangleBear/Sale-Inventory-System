@@ -15,28 +15,28 @@ class InventoryController:
         inventory_page = InventoryController(self.master)
         inventory_page.main()
     
-    def _get_recipe_on_database(self):
+    def get_recipe_on_database(self):
         model = InventoryModel([])
         return model.get_recipe_on_database()
     
-    def _get_recipe_column_names(self):
+    def get_recipe_column_names(self):
         model = InventoryModel([])
         return model.get_recipe_column_names()
 
-    def _get_product_on_database(self):
+    def get_product_on_database(self):
         model = InventoryModel([])
         return model.get_product_on_database()
     
-    def _get_product_column_names(self):
+    def get_product_column_names(self):
         model = InventoryModel([])
         return model.get_product_column_names()
     
-    def _get_items_on_database(self):
+    def get_items_on_database(self):
         model = InventoryModel([])
         return model.get_items_on_database()
     
-    def _get_items_column_names(self):
-        model = InventoryModel([])
+    def get_items_column_names(self):
+        model = InventoryModel()
         return model.get_items_column_names()
     
     def manager_view(self):

@@ -1,14 +1,15 @@
 from Utils import Database
 class InventoryModel:
-    def __init__(self,data:list):
-        self.product_id = data[0]
-        self.product_name = data[1]
-        self.quantity = data[2]
-        self.supplier = data[3]
-        self.expiration_date = data[4]
-        self.menu = data[5]
-        self.cost = data[6]
-        self.category = data[7]
+    def __init__(self,data:list=None):
+        if data is not None:
+            self.product_id = data[0]
+            self.product_name = data[1]
+            self.quantity = data[2]
+            self.supplier = data[3]
+            self.expiration_date = data[4]
+            self.menu = data[5]
+            self.cost = data[6]
+            self.category = data[7]
     
     def get_recipe_on_database(self):
         with Database.get_db_connection() as connection:
