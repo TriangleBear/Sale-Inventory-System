@@ -32,7 +32,7 @@ class InventoryController:
         return model.get_product_column_names()
     
     def get_items_on_database(self):
-        model = InventoryModel([])
+        model = InventoryModel()
         return model.get_items_on_database()
     
     def get_items_column_names(self):

@@ -2,7 +2,7 @@ from View import ItemRegisterView
 from Utils import Functions
 class ItemRegisterController:
     def __init__(self,managerController,status):
-        self.managerController = managerController
+        self.mC = managerController
         self.status = status
         self.view = ItemRegisterView(self,self.status)
         self.user_id = self.managerController.user_id

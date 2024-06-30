@@ -170,9 +170,10 @@ class ManagerDashboard(tk.Frame):
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
         Rid_Rname = Functions.convert_dicc_data(self.managerController.get_rid_rname())
+        print(Rid_Rname)
         RecipeNameData = [data[1] for data in Rid_Rname]
         if user_choice == "Home Made":
-            RecipeName = CustomComboboxDialog(values=RecipeNameData,title="Recipe ID | Recipe Name",prompt="Choose Recipe Name").main()
+            RecipeName = CustomComboboxDialog(values=Rid_Rname,title="Recipe ID | Recipe Name",prompt="Choose Recipe Name").main()
             if RecipeName == 0:
                 return
             else:

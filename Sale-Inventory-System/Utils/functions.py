@@ -335,7 +335,8 @@ class CustomComboboxDialog(tk.Toplevel):
 
     def _check_command(self,string):
         if string == "ok":
-            print(self.combobox.get())
-            return 
+            self.destroy()
+            return self.combobox.get()
         if string == "cancel":
             self.destroy()
+            return 0
