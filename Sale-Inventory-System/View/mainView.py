@@ -7,8 +7,8 @@ class MainView(tk.Tk):
         super().__init__()
         self.mainController = mainController
         self._main_window_attributes()  # set window attributes
-        self._start_button()
-        # self.managerController()
+        # self._start_button()
+        self.managerController()
         # self.loginController()
         # self.registerController()
 

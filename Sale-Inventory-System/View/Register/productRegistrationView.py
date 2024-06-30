@@ -5,10 +5,9 @@ class ProductRegistrationView(tk.Toplevel):
     def __init__(self, productRegistrationController):
         super().__init__(background="GhostWhite")
         self.productRegistrationController = productRegistrationController
-        self.productRegistrationController.set_product_registration_view(self)
         self._windows_attributes()
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        self.register_labels_with_colspan = {
+        self.product_labels_with_colspan = {
             "Product Name": 1,
             "Quantity": 1,
             "Category": 1,
@@ -21,13 +20,16 @@ class ProductRegistrationView(tk.Toplevel):
         }
         self.product_entry_boxes = []
         self.product_inputs = []
+        self.product_categories = ["test1","test2","test3"] # Please change, this is just a placeholder
+        self.product_stock_level = ["test1", "test2", "test3"] # Please change, this is just a placeholder
         self.mainBg = "Gray89"
 
     def main(self):
-        self._product_frame()
+        self._header_frame()
+        self._base_frame()
         self._entry_frame()
         self._product_widgets()
-        self._product_button()
+        self._register_button()
         self._back_button()
         self.mainloop()
 
@@ -45,68 +47,71 @@ class ProductRegistrationView(tk.Toplevel):
         self.grab_set()
         self.protocol("WM_DELETE_WINDOW", self.quit())
 
-    def _product_frame(self):
-        self.registerFrame = tk.Frame(self, background=self.mainBg, padx=40, pady=80)
-        self.registerFrame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+    def _header_frame(self):
+        self.headerFrame = tk.Frame(self,background=self.mainBg)
+        self.headerFrame.place(x=0,y=0,width=self.w,height=30)
+
+    def _base_frame(self):
+        self.baseFrame = tk.Frame(self, background=self.mainBg)
+        self.baseFrame.place(x=15, y=43, width=self.w-30, height=370)
 
     def _entry_frame(self):
-        self.entryFrame = tk.Frame(self.registerFrame, background=self.mainBg)
-        self.entryFrame.grid(row=1, column=0, columnspan=3, pady=10)
+        self.entryFrame = tk.Frame(self.baseFrame,background=self.mainBg,padx=40,pady=80)
+        self.entryFrame.place(relx =0.5,rely=0.5,anchor='center')
 
     def _product_widgets(self):
-        for label, colspan in self.register_labels_with_colspan.items():
-            self._product_label(label, colspan)
-            self._product_entry(colspan)
-        subset_one = {key: self.register_labels_with_colspan[key] for key in ["Product Name",
-            "Quantity","Category","Price"] if key in self.register_labels_with_colspan}
+        #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
+        subset_one = {key:self.product_labels_with_colspan[key] for key in ["Product Name","Quantity","Price"] if key in self.product_labels_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_one,
-            entry_boxes=self.product_entry_boxes,
-            entry_width=23,
-            entry_font_size=10
+            entryList=self.product_entry_boxes,
+            shortEntryWidth=23,
+            side='e',
+            borderW=1,
+            bgColor=self.mainBg,
+            max_columns=1,
+            #yPadding=15
         )
-        self._expiry_date_entry()
-        self._category_dropdown()
-        self._stock_level_dropdown()
-        subset_two = {key: self.register_labels_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.register_labels_with_colspan}
+        self._prodcut_expiry_date()
+        self._product_stock_level_dropdown()
+        self._product_category_dropdown()
+        subset_two = {key:self.product_labels_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.product_labels_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_two,
-            entry_boxes=self.product_entry_boxes,
-            entry_width=23,
-            entry_font_size=10
+            entryList=self.product_entry_boxes,
+            shortEntryWidth=23,
+            side='e',
+            borderW=1,
+            bgColor=self.mainBg,
+            max_columns=1,
+            #yPadding=15
         )
 
-    def _expiry_date_entry(self):
-        self.expiry_date_lbl = tk.Label(self.entryFrame, text="Expiry Date:", background=self.mainBg)
-        self.expiry_date_lbl.grid(row=4, column=0, padx=2, pady=2, sticky='e')
 
-        self.expiry_date = DateEntry(self.registerFrame,width=20,borderwidth=0,year=2000,date_pattern='YYYY-MM-DD')
-        self.expiry_date.set_date(Functions.get_current_date())
-        self.expiry_date.grid(row=2,column=1,padx=2,pady=2)
+    def _prodcut_expiry_date(self):
+        expiry_date = DateEntry(self.entryFrame, width=20, background=self.mainBg, borderwidth=1)
+        expiry_date.grid(row=3, column=1, sticky='w', padx=5, pady=5)
+        self.product_entry_boxes.append(expiry_date)
 
-    def _category_dropdown(self):
-        self.category_lbl = tk.Label(self.entryFrame, text="Category:", background=self.mainBg)
-        self.category_lbl.grid(row=2, column=2, padx=2, pady=2, sticky='e')
+    def _product_category_dropdown(self):
+        category = tk.StringVar(self.entryFrame)
+        category.set(self.product_stock_level[0])
+        category_dropdown = tk.OptionMenu(self.entryFrame, category, *self.product_stock_level)
+        category_dropdown.grid(row=3, column=1, sticky='w', padx=5, pady=5)
+        self.product_entry_boxes.append(category_dropdown)
 
-        self.category = tk.StringVar()
-        self.category.set("Select Category")
-        self.category_dropdown = tk.OptionMenu(self.entryFrame, self.category, "Unknown") #add more categories
-        self.category_dropdown.config(width=20, font=("Arial", 10))
-        self.category_dropdown.grid(row=2, column=3, padx=2, pady=2)
-
-    def _stock_level_dropdown(self):
-        self.stock_level_lbl = tk.Label(self.entryFrame, text="Stock Level:", background=self.mainBg)
-        self.stock_level_lbl.grid(row=3, column=2, padx=2, pady=2, sticky='e')
-
-        self.stock_level = tk.StringVar()
-        self.stock_level.set("Select Stock Level")
-        self.stock_level_dropdown = tk.OptionMenu(self.entryFrame, self.stock_level, "medium", "low", "high")
+    def _product_stock_level_dropdown(self):
+        stock_level = tk.StringVar(self.entryFrame)
+        stock_level.set(self.product_categories[0])
+        stock_level_dropdown = tk.OptionMenu(self.entryFrame, stock_level, *self.product_categories)
+        stock_level_dropdown.grid(row=2, column=1, sticky='w', padx=5, pady=5)
+        self.product_entry_boxes.append(stock_level_dropdown)
 
     def _register_button(self):
-        register_btn = tk.Button(self.registerFrame, text="Register", command=lambda: self._checkInput(self.product_entry_boxes))
-        register_btn.grid(row=5, column=3, sticky='w', padx=5, pady=5)
+        register_btn = tk.Button(self.entryFrame, text="Register", command=lambda: self._checkInput(self.product_entry_boxes))
+        register_btn.grid(row=5, column=1, sticky='w', padx=5, pady=5)
 
     def _checkInput(self, data: list):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
@@ -116,5 +121,5 @@ class ProductRegistrationView(tk.Toplevel):
         self.productRegistrationController.register_product(product_inputs)
 
     def _back_button(self):
-        back_btn = tk.Button(self.registerFrame, text="Back", command=self.quit)
-        back_btn.grid(row=5, column=0, sticky='w', padx=5, pady=5)
+        back_btn = tk.Button(self.entryFrame, text="Back", command=self.quit)
+        back_btn.grid(row=5, column=0, sticky='w', padx=5, pady=5) 
