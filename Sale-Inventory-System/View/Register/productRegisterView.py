@@ -2,13 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from Utils import Functions
 from tkcalendar import DateEntry
-class ProductRegistrationView(tk.Toplevel):
-    def __init__(self, productRegistrationController, recipe_id=None):
+class ProductRegisterView(tk.Toplevel):
+    def __init__(self, productRegisterController, recipe_id=None):
         super().__init__(background="GhostWhite")
         self.recipe_id = recipe_id
+        self.productRegisterController = productRegisterController
         if recipe_id is not None:
-            self.recipe_name = self.get_recipe_name_by_id(recipe_id)
-        self.productRegistrationController = productRegistrationController
+            self.recipe_name = self.productRegisterController.get_recipe_name_by_id(recipe_id)
         self._windows_attributes()
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
         self.product_labels_with_colspan = {
@@ -23,9 +23,8 @@ class ProductRegistrationView(tk.Toplevel):
             "Stock Level": 1
         }
         self.product_entry_boxes = []
-        self.product_inputs = []
-        self.product_categories = ["test1","test2","test3"] # Please change, this is just a placeholder
-        self.product_stock_level = ["test1", "test2", "test3"] # Please change, this is just a placeholder
+        self.product_input = []
+        self.product_categories = ["Breakfast","Lunch","Dinner","Desert","Drinks","Snacks"] # Please change, this is just a placeholder
         self.mainBg = "Gray89"
 
     def main(self):
@@ -45,6 +44,7 @@ class ProductRegistrationView(tk.Toplevel):
 
         # Set's the title to a specific recipe_id if recipe_id is not None
         if self.recipe_id is not None:
+            print(f'{self.recipe_id}')
             self.title(f'Product Registration | Recipe ID: {self.recipe_id}')
         else:
             self.title('Product Registration')
@@ -113,14 +113,13 @@ class ProductRegistrationView(tk.Toplevel):
 
     def _checkInput(self, data: list):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        product_inputs = []
-        for entry in data:
-            product_inputs.append(entry.get())
-        self.productRegistrationController.register_product(product_inputs)
+        product_inputs = [entry.get() for entry in data]
+        print(f'Product Inputs: {product_inputs}')
+        self.productRegisterController.register_product(product_inputs)
 
 
     def _back_button(self):
-        back_btn = tk.Button(self.entryFrame, text="Back", command=self.quit)
+        back_btn = tk.Button(self.entryFrame, text="Back", command=lambda:self.destroy())
         back_btn.grid(row=6, column=3, sticky='w', padx=5, pady=5) 
 
 """
@@ -136,6 +135,6 @@ else then
 on top of the pop is supposed to be the recipe ID
 
 register button clicked:
-	quantity * recipe ingredient > items in the database return to back to product registration
+	quantity product * recipe ingredient > items in the database return to back to product registration
 	then minus that to items on what are the items made
 """

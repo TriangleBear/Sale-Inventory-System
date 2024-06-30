@@ -3,11 +3,11 @@ import tkinter as tk
 from tkinter import font,messagebox, simpledialog
 from Utils import Functions, CustomDialog, CustomComboboxDialog
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,master,user_id):
+    def __init__(self,mC,master,user_id):
         self.master = master
         self._main_window_attributes()
         super().__init__(self.master, background="GhostWhite")
-        self.managerController = managerController
+        self.mC = mC
         self.user_id = user_id
         self.pack(fill=tk.BOTH,expand=True)
 
@@ -134,7 +134,7 @@ class ManagerDashboard(tk.Frame):
     def _check_back_command(self,string):
         if string == "logout":
             if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
-                self.managerController.mainController()
+                self.mC.mainController()
         if string == "home page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
@@ -150,36 +150,31 @@ class ManagerDashboard(tk.Frame):
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
         if string == "Security": 
-            self.managerController.securityController(self.bodyFrame)
+            self.mC.securityController(self.bodyFrame)
         if string == "User Registration":
-            self.managerController.userRegisterController()
+            self.mC.userRegisterController()
         if string == "Item Registration":
             Functions.destroy_page(self.bodyFrame)
             self._item_register_page()
         if string == "Supply Item":
-            self.managerController.itemRegisterController("Supply Item") #not yet made
+            self.mC.itemRegisterController("Supply Item") #not yet made
         if string == "Raw Item":
-            self.managerController.itemRegisterController("Raw Item")
+            self.mC.itemRegisterController("Raw Item")
         if string == "Recipe Registration":
-            self.managerController.recipeRegisterController(self.bodyFrame)
+            self.mC.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":
-            self.managerController.inventoryController(self.bodyFrame)
+            self.mC.inventoryController(self.bodyFrame)
         if string == "Product Registration":
             self.show_hm_or_pm()
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
-        Rid_Rname = Functions.convert_dicc_data(self.managerController.get_rid_rname())
-        RecipeNameData = [data[1] for data in Rid_Rname]
+        Rid_Rname = Functions.convert_dicc_data(self.mC.get_rid_rname())
+        formatted_values = [f"{rid} | {rname}" for rid, rname in Rid_Rname]
         if user_choice == "Home Made":
-            RecipeName = CustomComboboxDialog(values=RecipeNameData,title="Recipe ID | Recipe Name",prompt="Choose Recipe Name").main()
-            if RecipeName == 0:
-                return
-            else:
-                self.managerController.productRegisterController(recipe_id)  # Pass recipe_id to the controller
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
         if user_choice == "Pre Made":
-            recipe_id = simpledialog.askstring("Recipe ID", "Enter Recipe ID")
-            if recipe_id:
-                self.managerController.productRegisterController()
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            
 
             

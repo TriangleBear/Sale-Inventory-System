@@ -110,6 +110,9 @@ class Functions:
                     elif access_level == "Ingredient":
                         sql = 'SELECT indg_id FROM Ingredients WHERE indg_id = %s'
                         letter = "C"
+                    elif access_level == "Product":
+                        sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                        letter = "P"
                     unique_id = letter + digits
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
@@ -282,9 +285,10 @@ class CustomDialog(tk.Toplevel):
         self.destroy()
 
 class CustomComboboxDialog(tk.Toplevel):
-    def __init__(self, values:list,title=None, prompt=None, ):
+    def __init__(self, values:list,title=None, prompt=None, controller=None):
         super().__init__()
         self._window_attributes()
+        self.controller = controller
         self.title = title
         self.result = None
         self.prompt = prompt
@@ -336,6 +340,8 @@ class CustomComboboxDialog(tk.Toplevel):
     def _check_command(self,string):
         if string == "ok":
             print(self.combobox.get())
-            return 
+            recipe_id = self.combobox.get()[:5]
+            self.controller.productRegisterController(recipe_id)
+            return 0
         if string == "cancel":
             self.destroy()

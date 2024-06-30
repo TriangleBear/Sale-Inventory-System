@@ -1,19 +1,20 @@
-from Utils import Database
-class ProductRegistrationModel:
-    def __init__(self, data:list):
+from Utils import Database, Functions
+class ProductRegisterModel:
+    def __init__(self, data:list, user_id=None):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        self.product_id = data[0]
-        self.supply_id = data[1]
-        self.product_name = data[2]
-        self.product_price = data[3]
-        self.product_quantity = data[4]
-        self.expiry_date = data[5]
-        self.category = data[6]
+        self.product_id = Functions.generate_unique_id("Product")
+        self.image_id = ''
+        self.user_id = user_id
+        self.product_name = data[0]
+        self.product_price = data[1]
+        self.product_quantity = data[2]
+        self.expiry_date = data[3]
+        self.category = data[4]
+        self.flooring = data[5]
+        self.ceiling = data[6]
         self.stock_level = self.checkStockLevel()
-        self.flooring = data[7]
-        self.ceiling = data[8]
         
-    def get_recipe_name_by_id(self, recipe_id):
+    def get_recipe_name_by_id(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """SELECT recipe_id, recipe_name FROM Recipes"""
@@ -50,23 +51,35 @@ class ProductRegistrationModel:
             connection.close()
         return product_name
     
-    def register_product(self):
+
+    def register_product(self,data:list):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                sql = """INSERT INTO Product (product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                print(f'Data: {self.product_id}, {self.image_id}, {self.user_id}, {self.product_name}, {self.product_quantity}, {self.product_price}, {self.expiry_date}, {self.category}, {self.stock_level}, {self.flooring}, {self.ceiling}')
+                sql = """INSERT INTO Product (product_id, image_id, user_id, product_name, quantity, price, expiry_date, category, flooring, ceiling, stock_level) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
                 #supply_id should pass from supply module
-                cursor.execute(sql, (self.product_id, self.supply_id, self.product_name, self.product_quantity, self.product_price, self.expiry_date, self.category, self.stock_level, self.flooring, self.ceiling))
+                cursor.execute(sql, (self.product_id, 
+                                     self.image_id, 
+                                     self.user_id, 
+                                     self.product_name, 
+                                     self.product_quantity, 
+                                     self.product_price, 
+                                     self.expiry_date, 
+                                     self.category, 
+                                     self.flooring, 
+                                     self.ceiling,
+                                     self.stock_level))
                 connection.commit()
             connection.close()
         return 0
     
     def checkStockLevel(self):
-        if self.quantity > self.flooring and self.quantity < self.ceiling:
+        if self.product_quantity > self.flooring and self.product_quantity < self.ceiling:
             return "Average"
-        if self.quantity < self.flooring:
+        if self.product_quantity < self.flooring:
             return "Danger"
-        if self.quantity >= self.ceiling:
+        if self.product_quantity >= self.ceiling:
             return "Maximum"
     
     # Stock level is
