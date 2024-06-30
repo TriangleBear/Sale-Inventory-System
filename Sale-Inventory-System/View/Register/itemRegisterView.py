@@ -96,7 +96,7 @@ class ItemRegisterView(tk.Toplevel):
         self.expiry_date.grid(row=2,column=1,padx=2,pady=2)
 
         self.item_entry_boxes.append(self.expiry_date)
-
+ 
     def _category_dropdown(self):
         category_lbl = tk.Label(self.registerFrame,text="Category: ",background=self.mainBg,anchor='e')
         category_lbl.grid(row=2,column=2,padx=1,pady=5,sticky='e')

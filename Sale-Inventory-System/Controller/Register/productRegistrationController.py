@@ -9,7 +9,7 @@ class ProductRegistrationController:
         self.view.main()
 
     def register_Product(self):
-        return self.productRegistrationController.registerProduct()
+        return self.productRegistrationController.register_product()
 
     
     
