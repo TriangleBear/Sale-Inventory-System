@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from Utils import Functions
 from tkcalendar import DateEntry
 class ProductRegisterView(tk.Toplevel):
@@ -115,6 +116,9 @@ class ProductRegisterView(tk.Toplevel):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
         product_inputs = [entry.get() for entry in data]
         print(f'Product Inputs: {product_inputs}')
+        if product_inputs is not None:
+            messagebox.showinfo("Product Registration", "Product Registered Successfully!")
+            self.recipeRegisterController.logUserActivity()
         self.productRegisterController.register_product(product_inputs)
 
 

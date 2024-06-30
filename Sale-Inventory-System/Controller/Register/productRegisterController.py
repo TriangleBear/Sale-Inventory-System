@@ -26,6 +26,13 @@ class ProductRegisterController:
     def get_recipe_id(self, recipe_name):
         from Model import ProductRegisterModel
         return ProductRegisterModel.get_recipe_id(self,recipe_name)
+    
+    def logUserActivity(self):
+        Functions.logUserActivity(
+            [self.user_id,
+             "Product Registered",
+             Functions.get_current_date("datetime")
+            ])
 
     
     
