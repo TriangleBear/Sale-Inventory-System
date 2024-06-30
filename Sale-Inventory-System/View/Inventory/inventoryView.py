@@ -8,7 +8,8 @@ class InventoryView(tk.Frame):
     def __init__(self,inventoryController,master):
         self.inventoryController = inventoryController
         self.master = master
-        super().__init__(self.master, background="GhostWhite")
+        self.mainBg = "Gray89"
+        super().__init__(self.master, background=self.mainBg)
 
         self.inventory_labels_with_colspan = {"Product ID":1,
                                              "Product Name":1,
@@ -20,6 +21,8 @@ class InventoryView(tk.Frame):
                                              "Category":1}
         self.inventory_entry_boxes = []
         self.inventory_inputs = []
+        self.menus = ["Items","Supplies","Products","Recipes"]
+        self.table = []
         self.pack(fill=tk.BOTH,expand=True)
 
     def main(self):
@@ -30,9 +33,30 @@ class InventoryView(tk.Frame):
     def _inventory_widgets(self):
         self._back_button()
 
-    def _inventory_frame(self):
-        self.inventoryFrame = tk.Frame(self,background="GhostWhite")
-        self.inventoryFrame.pack(fill=tk.BOTH,expand=True)
+    def _nav_bar_frame(self):
+        w = self.master.winfo_width()
+        h = 23
+        self.navBarFrame = tk.Frame(self,background="GhostWhite")
+        self.navBarFrame.place(relx=0,rely=0,width=w,height=h)
+
+    def _tree_dropdown(self):
+        self.selectTable = ttk.Combobox(self.navBarFrame,values=self.menus)
+        self.selectTable.place(relx=0.5,rely=0.5,anchor=CENTER)
+        self.selectTable.bind('<<ComboboxSelected>>', lambda event: self._update_table(self.selectTable.get()))
+        self.selectTable.set(self.menus[0])
+
+    def display_table(self):
+        self.tree = ttk.Treeview(self, columns=self.table, show='headings',selectmode='browse')
+        for col in self.table:
+            self.tree.heading(col, text=col)    
+            self.tree.column(col, anchor='center')
+        self.tree.bind('<Configure>',Functions.adjust_column_widths)
+
+    def _update_table(self,table):
+        self.tree
+
+    def _nav_bar_label(self):
+        self.navBarLabel =tk.Label(self.navBarFrame,font=font.Font(family='Courier New',size=9,weight='bold'),text=)
     
     def _entry_frame(self):
         self.entryFrame = tk.Frame(self.inventoryFrame,background="Gray82")

@@ -12,7 +12,6 @@ from Model.Inventory.inventoryModel import InventoryModel
 from Model.Supply.suppliesModel import SuppliesModel
 from Model.POS.posModel import PosModel
 from Model.Report.reportModel import ReportModel
-from Model.Security.auditTrailModel import AuditLog
 
 __all__ = ["LoginModel",
            "ManagerModel",
@@ -28,6 +27,5 @@ __all__ = ["LoginModel",
            "SuppliesModel",
            "PosModel",
            "ReportModel",
-           "AuditLog",
            "ProductRegistrationModel"
            ]

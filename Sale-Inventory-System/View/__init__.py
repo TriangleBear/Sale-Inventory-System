@@ -3,7 +3,6 @@ from View.Login.loginView import LoginView
 from View.Login.forgotPasswordView import ForgotPasswordView
 from View.Dashboard.managerView import ManagerDashboard
 from View.Security.securityView import SecurityView
-from View.Security.auditTrailView import AuditView
 from View.Register.userRegisterView import UserRegisterView
 from View.Register.itemRegisterView import ItemRegisterView
 from View.Register.recipeRegisterView import RecipeRegisterView
@@ -29,5 +28,4 @@ __all__ = ["MainView",
            "PosView",
            "ReportView",
            "ForgotPasswordView",
-           "AuditView",
            "ProductRegistrationView"]
