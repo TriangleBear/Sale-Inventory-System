@@ -52,7 +52,7 @@ class ProductRegisterModel:
         return product_name
     
 
-    def register_product(self,data:list):
+    def register_product(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 print(f'Data: {self.product_id}, {self.image_id}, {self.user_id}, {self.product_name}, {self.product_quantity}, {self.product_price}, {self.expiry_date}, {self.category}, {self.stock_level}, {self.flooring}, {self.ceiling}')

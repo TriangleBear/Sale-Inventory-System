@@ -173,6 +173,7 @@ class ManagerDashboard(tk.Frame):
         formatted_values = [f"{rid} | {rname}" for rid, rname in Rid_Rname]
         if user_choice == "Home Made":
             CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            return
         if user_choice == "Pre Made":
             CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
             

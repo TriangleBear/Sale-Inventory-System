@@ -338,11 +338,12 @@ class CustomComboboxDialog(tk.Toplevel):
         Functions.create_buttons_using_grid(frame=self.btn_frame,labels=self.btn_lbl,entryList=self.btn_vals,max_columns=2,cmd=self._check_command,btnxPadding=5)
 
     def _check_command(self,string):
-        if string == "ok":
-            print(self.combobox.get())
+        if string == "ok" and self.combobox.get() == "":
+            messagebox.showerror('no input',"Please select a value from the combobox")
+        if string == "ok" and self.combobox.get() != "":
             recipe_id = self.combobox.get()[:5]
+            self.destroy()
             self.controller.productRegisterController(recipe_id)
-            return 0
         if string == "cancel":
             self.destroy()
-            return 0
+            return

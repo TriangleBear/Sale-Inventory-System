@@ -16,7 +16,7 @@ class ProductRegisterView(tk.Toplevel):
             "Product Name": 1,
             "Quantity": 1,
             "Category": 1,
-            "Price": 1,
+            "Price/unit": 1,
             "Expiry Date": 1,
             "Category": 1,
             "Flooring": 1,
@@ -62,7 +62,7 @@ class ProductRegisterView(tk.Toplevel):
 
     def _product_widgets(self):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        subset_one = {key:self.product_labels_with_colspan[key] for key in ["Product Name","Quantity","Price"] if key in self.product_labels_with_colspan}
+        subset_one = {key:self.product_labels_with_colspan[key] for key in ["Product Name","Quantity","Price/unit"] if key in self.product_labels_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_one,
@@ -70,6 +70,7 @@ class ProductRegisterView(tk.Toplevel):
             bgColor=self.mainBg,
             borderW=1,
             max_columns=2,
+            shortEntryWidth=23,
             side='e'
         )
         self._prodcut_expiry_date()
@@ -101,11 +102,11 @@ class ProductRegisterView(tk.Toplevel):
 
     def _product_category_dropdown(self):
         category_lbl = tk.Label(self.entryFrame,text="Category: ",background=self.mainBg,anchor='e')
-        category_lbl.grid(row=1,column=2,padx=1,pady=5,sticky='e')
+        category_lbl.grid(row=1,column=2,padx=1,pady=5,sticky='w')
         category_lbl.columnconfigure(2,weight=1)
-        category = ttk.Combobox(self.entryFrame, values=self.product_categories)
+        category = ttk.Combobox(self.entryFrame, values=self.product_categories,width=23)
         category.set("Select Category")
-        category.grid(row=1, column=3, sticky='w', padx=1, pady=5)
+        category.grid(row=1, column=3, sticky='e', padx=1, pady=5)
         self.product_entry_boxes.append(category)
 
     def _product_register_button(self):

@@ -13,7 +13,7 @@ class ProductRegisterController:
     def register_product(self,data:list):
         from Model import ProductRegisterModel
         product_model = ProductRegisterModel(data, self.user_id)
-        return product_model.register_product(data)
+        return product_model.register_product()
     
     def manager_view(self,master):
         Functions.destroy_page(master)
