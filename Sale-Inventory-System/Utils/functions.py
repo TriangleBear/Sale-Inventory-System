@@ -65,6 +65,24 @@ class Functions:
             else:
                 current_column +=1 
         
+    def format_float_data(data:list):
+        temp = []
+        for _ in data:
+            temp.append(float(_))
+        return temp
+
+    def format_str_data(data:list):
+        temp = []
+        for _ in data:
+            temp.append(str(_).strip().title())
+        return temp
+    
+    def remove_whitespace(data):
+        temp = []
+        for _ in data:
+            temp.append(str(_).strip())
+        return temp
+
 
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
@@ -182,12 +200,6 @@ class Functions:
                 current_row +=1
             else:
                 current_column +=1 
-
-    def remove_whitespace(data):
-        temp = []
-        for _ in data:
-            temp.append(str(_).strip())
-        return temp
 
     def format_ingredient_data(data:list):
         return [str(data[0]).lower().capitalize(),
