@@ -1,8 +1,12 @@
 from Utils import Database, Functions
 class IngredientRegisterModel():
-    def __init__(self,data:list):
+    def __init__(self,data:list=None):
         self.recipe_id = data[0]
         self.data = data[1:]
+        self.product_quantity = self.data[0]
+        #self.data = [[ingredient_name, quantity, unit], [ingredient_name, quantity, unit], ...]
+        #OR
+        #self.data = [recipe_id, quantity]
 
 
     def save_transaction(self):
@@ -28,3 +32,19 @@ class IngredientRegisterModel():
                     connection.commit()
             connection.close()
         return
+    
+    def get_total_quantity(self):
+        ingredient_totals = {}
+        with Database.get_db_connection() as connection:  # Assuming you have a method to get DB connection
+            with connection.cursor() as cursor:
+                # Query to retrieve ingredients for the given recipe_id
+                cursor.execute("SELECT indg_name, quantity FROM Ingredients WHERE recipe_id = %s", (self.recipe_id,))
+                ingredients = cursor.fetchall()
+                ingredients = Functions.convert_dicc_data(ingredients)
+                
+                for ingredient_name, quantity in ingredients:
+                    # Calculate total quantity required for the ingredient
+                    total_quantity = float(self.product_quantity) * float(quantity)
+                    ingredient_totals[ingredient_name] = total_quantity
+        
+        return ingredient_totals

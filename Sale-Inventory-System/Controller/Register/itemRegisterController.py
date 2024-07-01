@@ -5,7 +5,7 @@ class ItemRegisterController:
         self.mC = managerController
         self.status = status
         self.view = ItemRegisterView(self,self.status)
-        self.user_id = self.managerController.user_id
+        self.user_id = self.mC.user_id
 
     def main(self):
         self.view.main()

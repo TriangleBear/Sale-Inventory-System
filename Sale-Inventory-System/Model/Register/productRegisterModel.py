@@ -1,13 +1,13 @@
 from Utils import Database, Functions
 class ProductRegisterModel:
-    def __init__(self, data:list, user_id=None):
+    def __init__(self, data:list=None, user_id=None):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
         self.product_id = Functions.generate_unique_id("Product")
         self.image_id = ''
         self.user_id = user_id
         self.product_name = data[0]
-        self.product_price = data[1]
-        self.product_quantity = data[2]
+        self.product_quantity = data[1]
+        self.product_price = data[2]
         self.expiry_date = data[3]
         self.category = data[4]
         self.flooring = data[5]
@@ -56,7 +56,7 @@ class ProductRegisterModel:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 print(f'Data: {self.product_id}, {self.image_id}, {self.user_id}, {self.product_name}, {self.product_quantity}, {self.product_price}, {self.expiry_date}, {self.category}, {self.stock_level}, {self.flooring}, {self.ceiling}')
-                sql = """INSERT INTO Product (product_id, image_id, user_id, product_name, quantity, price, expiry_date, category, flooring, ceiling, stock_level) 
+                sql = """INSERT INTO Product (product_id, image_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
                 #supply_id should pass from supply module
                 cursor.execute(sql, (self.product_id, 
@@ -81,5 +81,21 @@ class ProductRegisterModel:
             return "Danger"
         if self.product_quantity >= self.ceiling:
             return "Maximum"
-    
-    # Stock level is
+        
+    def checkInput(self):
+        #check error if error return ValueError else return 0
+        if not self.product_name:
+            return ValueError("Price cannot be empty")
+        if not self.product_quantity:
+            return ValueError("Quantity cannot be empty")
+        if not self.product_price:
+            return ValueError("price/unit cannot be empty")
+        if self.category == "Select Category":
+            return ValueError("Category cannot be empty")
+        if not self.flooring:
+            return ValueError("Flooring cannot be empty")
+        if not self.ceiling:
+            return ValueError("Ceiling cannot be empty")
+        if not self.stock_level:
+            return ValueError("Stock level cannot be empty")
+        return 0

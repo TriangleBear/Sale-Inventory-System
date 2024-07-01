@@ -69,8 +69,8 @@ class ItemRegisterView(tk.Toplevel):
     def _window_attributes(self):
         self.h = 420
         self.w = 580
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
+        screen_width = self.master.winfo_screenwidth()
+        screen_height = self.master.winfo_screenheight()
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 

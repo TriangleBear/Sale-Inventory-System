@@ -12,7 +12,7 @@ class ProductRegisterController:
 
     def register_product(self,data:list):
         from Model import ProductRegisterModel
-        product_model = ProductRegisterModel(data, self.user_id)
+        product_model = ProductRegisterModel(data, self.mC.user_id)
         return product_model.register_product()
     
     def manager_view(self,master):
@@ -26,6 +26,18 @@ class ProductRegisterController:
     def get_recipe_id(self, recipe_name):
         from Model import ProductRegisterModel
         return ProductRegisterModel.get_recipe_id(self,recipe_name)
+    
+    def subtract_stock_level(self, recipe_id, quantity):
+        from Model import ItemRegisterModel, IngredientRegisterModel
+        ingredient_model = IngredientRegisterModel([recipe_id,quantity])
+        item_model = ItemRegisterModel()
+        return item_model.subtract_stock(ingredient_model.get_total_quantity())
+        
+    
+    def verify_product_inputs(self, data:list):
+        from Model import ProductRegisterModel
+        product_model = ProductRegisterModel(data)
+        return product_model.checkInput()
     
     def logUserActivity(self):
         Functions.logUserActivity(
