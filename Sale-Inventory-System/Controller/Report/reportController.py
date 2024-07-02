@@ -16,6 +16,7 @@ class ReportController():
         model = ReportModel()
         model.display_items_stock_level()
 
-    def display_sales_report(self):
+    def display_sales_report(self,date):
+        print(f'Date controller: {date}')
         model = ReportModel()
-        model.display_sales_report()
+        model.display_sales_report(date)

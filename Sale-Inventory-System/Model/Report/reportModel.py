@@ -73,37 +73,70 @@ class ReportModel:
         
         plt.show()
     
-    def fetch_sales_report(self):
+    def fetch_sales_report(self, date):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM Sales")
+                # Use the date parameter in the WHERE clause to filter sales for the specific date
+                query = "SELECT * FROM Sales WHERE sold_on = %s"
+                cursor.execute(query, (date))
                 data = cursor.fetchall()
                 cursor.close()
         return data
 
-    def display_sales_report(self):
-        data = self.fetch_sales_report()  # Fetch all sales
+    
+    def display_sales_report(self,date):
+        data = self.fetch_sales_report(date)  # Fetch sales for the specific date
+        print(f'Sales data for {date} model: {data}')
         product_names = [row['product_name'] for row in data]
         sales_quantities = [row['total'] for row in data]
-        # Assuming 'quantity_sold' is a key in your data representing the quantity sold
         quantities_sold = [row['amount'] for row in data]
-
+    
         fig, ax1 = plt.subplots(figsize=(10, 6))
-
+    
         color = 'tab:blue'
         ax1.set_xlabel('Product Name')
         ax1.set_ylabel('Total Revenue', color=color)
         ax1.bar(product_names, sales_quantities, color='skyblue', label='Total Revenue')
         ax1.tick_params(axis='y', labelcolor=color)
-        ax1.set_xticklabels(product_names, rotation=45, ha="right")
-
-        ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+        ax1.set_xticks(range(len(product_names)))  # Set x-ticks positions
+        ax1.set_xticklabels(product_names, rotation=45, ha="right")  # Set x-tick labels with rotation
+    
+        ax2 = ax1.twinx()
         color = 'tab:red'
-        ax2.set_ylabel('Quantity Sold', color=color)  # we already handled the x-label with ax1
+        ax2.set_ylabel('Quantity Sold', color=color)
         ax2.plot(product_names, quantities_sold, color=color, label='Quantity Sold', marker='o', linestyle='--')
         ax2.tick_params(axis='y', labelcolor=color)
-        ax2.yaxis.set_major_locator(MaxNLocator(integer=True))  # Ensure y-axis has integer values only
-
-        fig.tight_layout()  # to make sure that the layout is not overlapping
-        plt.title('Total Sales Report')
+        ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
+    
+        fig.tight_layout()
+        plt.title(f'Total Sales Report for {date}')
+        plt.annotate(f'Date: {date}', xy=(0.5, -0.15), xycoords='axes fraction', ha='center', va='center')
         plt.show()
+
+    # def display_sales_report(self, date):
+    #     # Fetch sales data for the given date
+    #     sales_data = self.fetch_sales_report(date)  # Hypothetical method to fetch data
+    #     print(f'Sales data for {date}: {sales_data}')
+    #     if not sales_data:
+    #         print("No sales data found for the given date.")
+    #         return
+
+    #     # Process data for plotting
+    #     dates = [data['date'] for data in sales_data]
+    #     sales = [data['sales'] for data in sales_data]
+
+    #     # Plotting
+    #     plt.figure(figsize=(10, 6))
+    #     plt.plot(dates, sales, marker='o', linestyle='-', color='b')
+    #     plt.title('Sales Report')
+    #     plt.xlabel('Date')
+    #     plt.ylabel('Sales')
+    #     plt.grid(True)
+    #     plt.xticks(rotation=45)
+    #     plt.tight_layout()
+
+    #     # Check if there's data to plot
+    #     if dates and sales:
+    #         plt.show()
+    #     else:
+    #         print("No data to plot.")
