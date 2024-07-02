@@ -8,13 +8,27 @@ class IngredientRegisterView(tk.Toplevel):
         self.recipe_id = recipe_id
         self.table = ['Ingredient Name', 'Quantity', 'Unit']
         self.ingredientRegisterController = ingredientRegisterController
+        self.bind("<FocusOut>", lambda e: self.on_focus_out)
         self._window_attributes()
 
         self.ingredient_labels_with_colspan = {
             "Ingredient Name":1,
+            "Description":1,
             "Quantity":1,
-            "Unit":1
         }
+        self.units = [
+            "Grams (g)",
+            "Kilograms (kg)",
+            "Pounds (lb)",
+            "Ounces (oz)",
+            "Milliliters (ml)",
+            "Liters (l)",
+            "Fluid Ounces (fl oz)"
+            "Cups",
+            "Each (ea)",
+            "Dozen (dz)",
+            "Case (cs)"
+        ]
         self.ingredient_entry_boxes = []
         self.mainBg = "Gray89"
 
@@ -25,6 +39,7 @@ class IngredientRegisterView(tk.Toplevel):
         self.display_table()
         self._entry_frame()
         self._ingredient_entry_widgets()
+        self._unit_dropdown(3,0)
         self._add_ing_btn()
         self._remove_ing_btn()
         self._cancel_btn()
@@ -44,6 +59,13 @@ class IngredientRegisterView(tk.Toplevel):
         self.resizable(False, False)
         self.grab_set()
         self.protocol("WM_DELETE_WINDOW", self.quit())
+
+    def on_focus_out(self,event=None):
+        for entry in self.ingredient_entry_boxes:
+            if isinstance(entry,ttk.Combobox):
+                entry.set("Select Category")
+                entry['state'] = 'readonly'
+                entry['state'] = 'normal'
 
     
     def _header_frame(self):
@@ -75,6 +97,15 @@ class IngredientRegisterView(tk.Toplevel):
             max_columns=1,
             yPadding=15
         )
+
+    def _unit_dropdown(self,current_r,current_c):
+        unit_lbl = tk.Label(self.entryFrame,text="Unit: ",background=self.mainBg,anchor='e')
+        unit_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
+        unit_lbl.columnconfigure(2,weight=1)
+        unit = ttk.Combobox(self.entryFrame,values=self.units,width=20)
+        unit.set("Select Category")
+        unit.grid(row=current_r,column=current_c+1,padx=5,pady=5)
+        self.ingredient_entry_boxes.append(unit)
     
 
     def display_table(self):
@@ -110,6 +141,11 @@ class IngredientRegisterView(tk.Toplevel):
         cancel_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                                text="Cancel", command=lambda: self.destroy())
         cancel_btn.place(relx=0.6, rely=0.92, anchor='center')
+
+    def _update_btn(self):
+        update_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
+                               text="Update", command=lambda: self.update_transaction())
+        update_btn.place(relx=0.75, rely=0.92, anchor='center')
 
     def _save_btn(self):
         save_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
@@ -154,6 +190,24 @@ class IngredientRegisterView(tk.Toplevel):
             if quantity_to_remove is not None and quantity_to_remove < current_quantity:
                 new_quantity = current_quantity - quantity_to_remove
                 self.tree.item(i, values=(item[0], new_quantity, item[2]))
+            else:
+                self.tree.delete(i)
+
+    def update_transaction(self):
+        selected_item = self.tree.selection()
+        if not selected_item:
+            return messagebox.showerror("Error", "Please select an item to update")
+        for i in selected_item:
+            item = self.tree.item(i)['values']
+            item_id = item[0]  # Assuming the first value is the item's unique identifier
+            current_quantity = float(item[1])
+            quantity_to_update = simpledialog.askfloat("Update Quantity", f"How much of {item[0]} to update?", parent=self, minvalue=0.0, maxvalue=current_quantity)
+            if quantity_to_update is not None and quantity_to_update <= current_quantity:
+                new_quantity = current_quantity - quantity_to_update
+                # Update the item in the database
+                self.itemRegisterController.update_item_in_database(item_id, new_quantity)
+                # Update the GUI
+                self.tree.item(i, values=(item_id, new_quantity, item[2]))
             else:
                 self.tree.delete(i)
     

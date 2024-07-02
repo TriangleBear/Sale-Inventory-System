@@ -5,20 +5,23 @@ class ItemRegisterModel:
     def __init__(self,data:list=None,user_id=None,status=None):
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling, stock_level
         self.status = status
-        self.item_id = Functions.generate_unique_id("Item")
         self.user_id = user_id
         if data is not None:
             self.item_name = data[0]
-            self.quantity = float(data[1])
+            self.quantity = data[1]
             self.unit = data[2]
             self.supplier = data[3]
             self.expiry_date = data[4]
             self.category = data[5]
-            self.flooring = float(data[6])
-            self.ceiling = float(data[7])
+            self.flooring = data[6]
+            self.ceiling = data[7]
+            self.item_id = data[8]
             self.stock_level = self.checkStockLevel()
         
 
+    def set_item_id(self):
+        return Functions.generate_unique_id("Item")
+    
     def checkInput(self):
         #check error if error return ValueError else return 0
         if not self.item_name:
@@ -114,4 +117,13 @@ class ItemRegisterModel:
                     cursor.execute("UPDATE Items SET quantity = %s WHERE item_name = %s", (new_stock, ingredient_name))
                     connection.commit()
                     
+        return 0  # Indicate success
+    
+    def update_item_in_database(self, item_id, new_quantity):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                update_query = "UPDATE your_table_name SET quantity = ? WHERE id = ?"
+                cursor.execute(update_query, (new_quantity, item_id))
+                self.db_connection.commit()
+            cursor.close()
         return 0  # Indicate success

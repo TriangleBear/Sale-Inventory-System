@@ -41,6 +41,7 @@ class RecipeRegisterView(tk.Frame):
         self.recipe_name_entry.grid(row=0,column=1)  
 
     def _register_recipe_ingredients(self,recipeDetails):
+        print(recipeDetails)
         if messagebox.askyesno("Ingredients Registration","Do you want to register the ingredients for this recipe?"):
             self.recipeRegisterController.mC.ingredientRegisterController(recipeDetails)
         return
@@ -59,7 +60,7 @@ class RecipeRegisterView(tk.Frame):
 
     def _confirm_button(self):
         confirm_button = tk.Button(self.entryFrame, font=font.Font(family='Courier New',size=9,weight='bold'),text="Confirm", 
-                                   command=lambda:self._commit_recipe_name(self.recipe_name_entry.get()))
+                                   command=lambda:self._commit_recipe_name(Functions.format_str(self.recipe_name_entry.get())))
         confirm_button.grid(row=1,column=1,sticky='e')
     
     def _back_button(self):

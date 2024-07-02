@@ -20,5 +20,15 @@ class ItemRegisterController:
         item = ItemRegisterModel(data,self.user_id,self.status)
         item.registerItemData()
 
+    def get_item_id(self):
+        from Model import ItemRegisterModel
+        item = ItemRegisterModel()
+        return item.set_item_id()
+
+    def update_item_in_database(self,item_id,quantity):
+        from Model import ItemRegisterModel
+        item = ItemRegisterModel()
+        item.update_item(item_id,quantity)
+
     def logUserActivity(self):
         Functions.logUserActivity([self.user_id,"Item Registered",Functions.get_current_date("datetime")])

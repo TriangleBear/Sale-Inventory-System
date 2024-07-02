@@ -101,18 +101,15 @@ class UserRegisterView(tk.Toplevel):
         back_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", command=lambda:self.destroy())
         back_btn.grid(row=5,column=2,sticky='e',padx=5,pady=5)
             
-    def _checkInput(self, data:list): 
+    def _checkInput(self, input:list): 
         #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
-        entryData = [entry.get().strip() for entry in data]
-        print(entryData)
-        entryData = [items for items in Functiosns.format_str_data(entryData[0:6]),entryData[7],entryData[8]]
-        print(entryData)
+        entryData = Functions.format_user_data(data=[entry.get() for entry in input])
         print(f"from _checkInput;RegisterView|entryData:\n{entryData}")
         check_pass = self.userRegisterController.check_password_criteria(entryData)
         if check_pass == 0:
             self.userRegisterController.register(entryData)
             messagebox.showinfo('Registration', 'Registration Successful!')
             self.destroy()
-            self.userRegisterController.mC.register_page()
+            self.userRegisterController.mC.view.register_page()
         else:
             messagebox.showerror('Registration Error', check_pass)

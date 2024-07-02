@@ -63,26 +63,7 @@ class Functions:
                 current_column =0
                 current_row +=1
             else:
-                current_column +=1 
-        
-    def format_float_data(data:list):
-        temp = []
-        for _ in data:
-            temp.append(float(_))
-        return temp
-
-    def format_str_data(data:list):
-        temp = []
-        for _ in data:
-            temp.append(str(_).strip().title())
-        return temp
-    
-    def remove_whitespace(data):
-        temp = []
-        for _ in data:
-            temp.append(str(_).strip())
-        return temp
-
+                current_column +=1
 
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
@@ -201,11 +182,47 @@ class Functions:
             else:
                 current_column +=1 
 
-    def format_ingredient_data(data:list):
-        return [str(data[0]).lower().capitalize(),
-                float(data[1]),
-                str(data[2]).lower().capitalize()]
+    
+    def format_float_list(data:list):
+        temp = []
+        for _ in data:
+            temp.append(float(_))
+        return temp
+    
+    def format_float(data:str):
+        return float(data)
 
+    def format_str_list(data:list):
+        temp = []
+        for _ in data:
+            temp.append(str(_).strip().title())
+        return temp
+    
+    def format_str(data:str):
+        return str(data).strip().title()
+
+    def format_ingredient_data(data:list,str_func=format_str, float_func=format_float):
+        return [str_func(data[0]),
+                str_func(data[1]),
+                float_func(data[2]),
+                data[3]]
+    
+    def format_user_data(data:list,str_func=format_str,str_list_func=format_str_list):
+        return [*str_list_func(data[0:5]),
+                data[5],
+                str_func(data[6]),
+                data[7],
+                data[8]]
+
+    def format_item_data(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
+        return [str_func(data[0]),
+                float_func(data[1]),
+                *str_list_func(data[2:4]),
+                data[4],
+                data[5],
+                float_func(data[6]),
+                float_func(data[7])]
+    
     def check_existing_data(insertData,insertedData):
         name,quantity,unit = insertData
         exisiting_name,exisiting_quantity,exisiting_unit = insertedData
