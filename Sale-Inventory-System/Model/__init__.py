@@ -6,13 +6,12 @@ from Model.Register.userRegisterModel import UserRegisterModel
 from Model.Register.itemRegisterModel import ItemRegisterModel
 from Model.Register.ingredientRegisterModel import IngredientRegisterModel
 from Model.Register.recipeRegisterModel import RecipeRegisterModel
-from Model.Register.productRegistrationModel import ProductRegistrationModel
+from Model.Register.productRegisterModel import ProductRegisterModel
 from Model.Dashboard.staffModel import StaffModel
 from Model.Inventory.inventoryModel import InventoryModel
 from Model.Supply.suppliesModel import SuppliesModel
 from Model.POS.posModel import PosModel
 from Model.Report.reportModel import ReportModel
-from Model.Security.auditTrailModel import AuditLog
 
 __all__ = ["LoginModel",
            "ManagerModel",
@@ -28,6 +27,5 @@ __all__ = ["LoginModel",
            "SuppliesModel",
            "PosModel",
            "ReportModel",
-           "AuditLog",
-           "ProductRegistrationModel"
+           "ProductRegisterModel"
            ]

@@ -59,14 +59,11 @@ class Functions:
             b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
             entryList.append(b)
 
-
-
             if (current_column >= max_columns):
                 current_column =0
                 current_row +=1
             else:
-                current_column +=1 
-        
+                current_column +=1
 
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
@@ -112,6 +109,9 @@ class Functions:
                     elif access_level == "Ingredient":
                         sql = 'SELECT indg_id FROM Ingredients WHERE indg_id = %s'
                         letter = "C"
+                    elif access_level == "Product":
+                        sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                        letter = "P"
                     unique_id = letter + digits
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
@@ -182,17 +182,47 @@ class Functions:
             else:
                 current_column +=1 
 
-    def remove_whitespace(data):
+    
+    def format_float_list(data:list):
         temp = []
         for _ in data:
-            temp.append(str(_).strip())
+            temp.append(float(_))
         return temp
+    
+    def format_float(data:str):
+        return float(data)
 
-    def format_ingredient_data(data:list):
-        return [str(data[0]).lower().capitalize(),
-                float(data[1]),
-                str(data[2]).lower().capitalize()]
+    def format_str_list(data:list):
+        temp = []
+        for _ in data:
+            temp.append(str(_).strip().title())
+        return temp
+    
+    def format_str(data:str):
+        return str(data).strip().title()
 
+    def format_ingredient_data(data:list,str_func=format_str, float_func=format_float):
+        return [str_func(data[0]),
+                str_func(data[1]),
+                float_func(data[2]),
+                data[3]]
+    
+    def format_user_data(data:list,str_func=format_str,str_list_func=format_str_list):
+        return [*str_list_func(data[0:5]),
+                data[5],
+                str_func(data[6]),
+                data[7],
+                data[8]]
+
+    def format_item_data(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
+        return [str_func(data[0]),
+                float_func(data[1]),
+                *str_list_func(data[2:4]),
+                data[4],
+                data[5],
+                float_func(data[6]),
+                float_func(data[7])]
+    
     def check_existing_data(insertData,insertedData):
         name,quantity,unit = insertData
         exisiting_name,exisiting_quantity,exisiting_unit = insertedData
@@ -243,3 +273,106 @@ class Functions:
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
+
+class CustomDialog(tk.Toplevel):
+    def __init__(self, master, title=None, buttons=None):
+        super().__init__(master)
+        self.result = None
+
+        if title:
+            self.title(title)
+
+        self.update_idletasks()  # Update the dialog to set its dimensions
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        window_width = self.winfo_reqwidth()
+        window_height = self.winfo_reqheight()
+        center_x = int(screen_width/2 - window_width/2)
+        center_y = int(screen_height/2 - window_height/2)
+        # Set the window's position to the center of the screen
+        self.geometry(f'+{center_x}+{center_y}')
+        self.grab_set()
+        self.button_frame = tk.Frame(self)
+        self.button_frame.pack(pady=10)
+
+        if buttons:
+            for button_name in buttons:
+                button = tk.Button(self.button_frame, text=button_name, command=lambda name=button_name: self.set_result(name))
+                button.pack(side=tk.LEFT, padx=5)
+
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.grab_set()
+        self.wait_window(self)
+        
+
+    def set_result(self, result):
+        self.result = result
+        self.destroy()
+
+    def on_close(self):
+        self.result = None
+        self.destroy()
+
+class CustomComboboxDialog(tk.Toplevel):
+    def __init__(self, values:list,title=None, prompt=None, controller=None):
+        super().__init__()
+        self._window_attributes()
+        self.controller = controller
+        self.title = title
+        self.result = None
+        self.prompt = prompt
+        self.values = values
+        self.btn_lbl = ["ok","cancel"]
+        self.btn_vals = []
+
+    def main(self):
+        self._base_frame()
+        self._prompt()
+        self._recipe_combobox()
+        self._btn_frame()
+        self._btn_widgets()
+        self.mainloop()
+
+    def _window_attributes(self):
+        self.h = 100
+        self.w = 150
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = int((screen_width / 2) - (self.w / 2)) - 12
+        y = int((screen_height / 2) - (self.h / 2)) - 40
+
+        self.title('combobox')
+        self.geometry(f"{self.w}x{self.h}+{x}+{y}")
+        self.resizable(False, False)
+        self.grab_set()
+        self.protocol("WM_DELETE_WINDOW", self.quit())
+
+    def _base_frame(self):
+        self.baseFrame = tk.Frame(self)
+        self.baseFrame.pack(fill='both',expand=True)
+
+    def _prompt(self):
+        self.prompt = tk.Label(self.baseFrame, text=self.prompt)
+        self.prompt.place(relx=0.5,rely=0.15, anchor=CENTER)
+
+    def _recipe_combobox(self):
+        self.combobox = ttk.Combobox(self.baseFrame, values=self.values)
+        self.combobox.place(relx=0.5,rely=0.45, anchor=CENTER)
+
+    def _btn_frame(self):
+        self.btn_frame = tk.Frame(self)
+        self.btn_frame.place(relx=0.5,rely=0.76, anchor=CENTER)
+
+    def _btn_widgets(self):
+        Functions.create_buttons_using_grid(frame=self.btn_frame,labels=self.btn_lbl,entryList=self.btn_vals,max_columns=2,cmd=self._check_command,btnxPadding=5)
+
+    def _check_command(self,string):
+        if string == "ok" and self.combobox.get() == "":
+            messagebox.showerror('no input',"Please select a value from the combobox")
+        if string == "ok" and self.combobox.get() != "":
+            recipe_id = self.combobox.get()[:5]
+            self.destroy()
+            self.controller.productRegisterController(recipe_id)
+        if string == "cancel":
+            self.destroy()
+            return

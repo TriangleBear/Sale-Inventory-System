@@ -52,9 +52,14 @@ class ManagerController:
         pos_page = POSController(master,self)
         pos_page.main()
 
-    def itemRegisterController(self):
+    def reportController(self,master):
+        from Controller import ReportController
+        report_page = ReportController(self)
+        report_page.main()
+
+    def itemRegisterController(self,status):
         from Controller import ItemRegisterController
-        item_register_page = ItemRegisterController(self)
+        item_register_page = ItemRegisterController(self,status)
         item_register_page.main()
 
     def mainController(self):
@@ -69,7 +74,12 @@ class ManagerController:
         ingredient_register_page = IngredientRegisterController(self,recipeDetails[0])
         ingredient_register_page.main()
 
-    def productRegisterController(self):
-        from Controller import ProductRegistrationController
-        product_register_page = ProductRegistrationController(self)
+    def productRegisterController(self,recipe_id):
+        from Controller import ProductRegisterController
+        product_register_page = ProductRegisterController(self,recipe_id)
         product_register_page.main()
+
+    def get_rid_rname(self):
+        from Model import ManagerModel
+        model = ManagerModel()
+        return model.get_recipe_name_and_recipe_id()
