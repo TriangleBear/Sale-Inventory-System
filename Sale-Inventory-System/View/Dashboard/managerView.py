@@ -164,6 +164,8 @@ class ManagerDashboard(tk.Frame):
             self.mC.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":
             self.mC.inventoryController(self.bodyFrame)
+        if string == "Report":
+            self.mC.reportController(self.bodyFrame)
         if string == "Product Registration":
             self.show_hm_or_pm()
 
