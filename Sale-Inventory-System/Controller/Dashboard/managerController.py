@@ -54,7 +54,7 @@ class ManagerController:
 
     def reportController(self,master):
         from Controller import ReportController
-        report_page = ReportController(self)
+        report_page = ReportController(self,master)
         report_page.main()
 
     def itemRegisterController(self,status):

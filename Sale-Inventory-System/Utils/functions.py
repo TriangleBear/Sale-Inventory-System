@@ -1,6 +1,7 @@
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
+from tkcalendar import DateEntry
 from Utils import *
 from email.message import EmailMessage
 import smtplib
@@ -376,3 +377,24 @@ class CustomComboboxDialog(tk.Toplevel):
         if string == "cancel":
             self.destroy()
             return
+        
+
+class CustomCalendar(tk.Toplevel):
+    def __init__(self, master, controller):
+        super().__init__(master)
+        self.controller = controller
+        self.date_entry = DateEntry(self)
+        self.date_entry.pack(fill='both', expand=True)
+        
+        # Add a confirm button to handle date selection
+        confirm_btn = tk.Button(self, text="Confirm", command=self._on_date_confirm)
+        confirm_btn.pack(pady=10)
+        
+        self.grab_set()
+        self.wait_window(self)
+
+    def _on_date_confirm(self):
+        # Fetch the date from DateEntry
+        selected_date = self.date_entry.get()
+        self.controller.set_date(selected_date)
+        self.destroy()
