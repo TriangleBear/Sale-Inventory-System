@@ -44,7 +44,7 @@ class ManagerController:
         from Controller import ItemRegisterController
         item_register_page = ItemRegisterController(self,status)
         item_register_page.main()
-        
+
     def inventoryController(self,master):
         Functions.destroy_page(master)
         from Controller import InventoryController

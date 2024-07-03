@@ -51,3 +51,13 @@ class InventoryController:
     def manager_view(self):
         Functions.destroy_page(self.master)
         self.mC.view.body()
+
+    def recipeUpdate(self,current_recipe_data):
+        from Controller import RecipeUpdateController
+        recipe_update = RecipeUpdateController(self.mC,self,current_recipe_data)
+        recipe_update.main()
+
+    def recipeIngredientUpdate(self,current_recipe_data):
+        from Controller import IngredientUpdateController
+        ingredient_update = IngredientUpdateController(self.mC,recipeDetails=current_recipe_data)
+        ingredient_update.main()

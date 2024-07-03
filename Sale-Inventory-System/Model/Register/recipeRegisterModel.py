@@ -1,8 +1,9 @@
 from Utils import Database, Functions
 class RecipeRegisterModel:
-    def __init__(self,recipe_name,user_id):
+    def __init__(self,current_recipe_id=None,recipe_name=None,user_id=None):
         self.recipe_id = Functions.generate_unique_id("Recipe")
         self.recipe_name = recipe_name
+        self.current_recipe_id = current_recipe_id
         self.user_id = user_id
 
     def create_recipe(self, user_id):
@@ -27,6 +28,18 @@ class RecipeRegisterModel:
                 connection.commit()
             connection.close()
         return [self.recipe_id, self.recipe_name, self.user_id]
+    
+    def update_recipe_name(self):
+        if self.recipe_name == '':
+            return ValueError("Recipe Name cannot be empty")
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                # user_id should be inside the database for tracking
+                sql = """UPDATE Recipes SET recipe_name = %s WHERE recipe_id = %s"""
+                cursor.execute(sql, (self.recipe_name, self.current_recipe_id,))
+                connection.commit()
+            connection.close()
+        return [self.current_recipe_id, self.recipe_name, self.user_id]
 
     def create_recipe_ingredients(self):
         with Database.get_db_connection() as connection:

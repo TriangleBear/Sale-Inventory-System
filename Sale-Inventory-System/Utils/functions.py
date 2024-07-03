@@ -284,6 +284,18 @@ class Functions:
             del inner_dict['image_id']
             temp.append(inner_dict)
         return temp
+    
+    def filter_ingredient_columns(data:list):
+        temp = []
+        for inner_dict in data:
+            del inner_dict['recipe_id']
+            del inner_dict['ingd_id']
+            del inner_dict['user_id']
+
+            temp.append(inner_dict)
+
+        print(f"filtered data: {temp}")
+        return temp
 
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():

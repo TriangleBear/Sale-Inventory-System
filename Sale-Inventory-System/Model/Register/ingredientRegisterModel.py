@@ -1,8 +1,9 @@
 from Utils import Database, Functions
 class IngredientRegisterModel():
-    def __init__(self,data:list=None,user_id=None):
+    def __init__(self,data:list=None,user_id=None,current_recipe_id=None):
         self.user_id = user_id
-        if data is not None:
+        self.current_recipe_id = current_recipe_id
+        if data is not None and len(data) > 1:
             self.recipe_id = data[0]
             self.data = data[1:]
             self.product_quantity = self.data[0]
@@ -20,11 +21,11 @@ class IngredientRegisterModel():
                     cursor.execute(ingd_id,(self.recipe_id,formattedInnerList[0]))
                     ingd_id = cursor.fetchone()
                     if ingd_id:
-                        ingd_id = ingd_id['indg_id']
+                        ingd_id = ingd_id['ingd_id']
                         get_quantity = """SELECT quantity FROM Ingredients WHERE recipe_id = %s AND ingd_name = %s"""
                         cursor.execute(get_quantity,(self.recipe_id,formattedInnerList[0])) #formattedInnetList[0] = ingd_name
                         existing_quantity = float(cursor.fetchone()['quantity'])
-                        new_quantity = existing_quantity + formattedInnerList[1]
+                        new_quantity = existing_quantity + formattedInnerList[2]
                         update_sql = """UPDATE Ingredients SET quantity = %s WHERE recipe_id = %s AND ingd_name = %s"""
                         cursor.execute(update_sql,(new_quantity,self.recipe_id,formattedInnerList[0]))
                     else:
@@ -34,6 +35,16 @@ class IngredientRegisterModel():
                     connection.commit()
             connection.close()
         return
+    
+    def fetch_current_data(self):
+        print(self.current_recipe_id)
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM Ingredients WHERE recipe_id = %s"""
+                cursor.execute(sql, (self.current_recipe_id,))
+                result = cursor.fetchall()
+            connection.close()
+        return result
     
     def get_total_quantity(self):
         ingredient_totals = {}

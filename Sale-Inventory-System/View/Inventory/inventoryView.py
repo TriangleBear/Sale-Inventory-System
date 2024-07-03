@@ -121,7 +121,8 @@ class InventoryView(tk.Frame):
         if table_name == "Products":
             print(self.tree.item(self.tree.selection()[0],'values'))
         if table_name == "Recipes":
-            print(self.tree.item(self.tree.selection()[0],'values'))
+            print(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.inventoryController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
     
     def _update_button(self):
         update_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Update", 
