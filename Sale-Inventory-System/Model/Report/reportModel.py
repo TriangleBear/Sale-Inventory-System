@@ -70,8 +70,8 @@ class ReportModel:
         ax2.legend(loc='upper right')
         
         fig.tight_layout()
-        
-        plt.show()
+
+        plt.show
     
     def fetch_sales_report(self, date):
         with Database.get_db_connection() as conn:
@@ -109,10 +109,10 @@ class ReportModel:
         ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
     
         fig.tight_layout()
+
         plt.title(f'Total Sales Report for {date}')
         plt.annotate(f'Date: {date}', xy=(0.5, -0.15), xycoords='axes fraction', ha='center', va='center')
         plt.show()
-
     # def display_sales_report(self, date):
     #     # Fetch sales data for the given date
     #     sales_data = self.fetch_sales_report(date)  # Hypothetical method to fetch data
