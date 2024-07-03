@@ -17,6 +17,12 @@ class ManagerController:
         login_page = LoginController(master)
         login_page.main()
 
+    def securityController(self,master):
+        Functions.destroy_page(master)
+        from Controller import SecurityController
+        security_page = SecurityController(master,self)
+        security_page.main()
+
     def userRegisterController(self):
         from Controller import UserRegisterController
         user_register_page = UserRegisterController(self)
@@ -28,12 +34,17 @@ class ManagerController:
         recipe_register_page = RecipeRegisterController(self,master)
         recipe_register_page.main()
 
-    def securityController(self,master):
-        Functions.destroy_page(master)
-        from Controller import SecurityController
-        security_page = SecurityController(master,self)
-        security_page.main()
-        
+    def ingredientRegisterController(self,recipeDetails):
+        #recipeDetails = [recipe_id,recipe_name, user_id]
+        from Controller import IngredientRegisterController
+        ingredient_register_page = IngredientRegisterController(self,recipeDetails)
+        ingredient_register_page.main()
+
+    def itemRegisterController(self,status):
+        from Controller import ItemRegisterController
+        item_register_page = ItemRegisterController(self,status)
+        item_register_page.main()
+
     def inventoryController(self,master):
         Functions.destroy_page(master)
         from Controller import InventoryController
@@ -56,22 +67,11 @@ class ManagerController:
         report_page = ReportController(self,master)
         report_page.main()
 
-    def itemRegisterController(self,status):
-        from Controller import ItemRegisterController
-        item_register_page = ItemRegisterController(self,status)
-        item_register_page.main()
-
     def mainController(self):
         self.master.destroy()
         from Controller import MainController
         logout = MainController()
         logout.main()
-    
-    def ingredientRegisterController(self,recipeDetails):
-        #recipeDetails = [recipe_id,recipe_name, user_id]
-        from Controller import IngredientRegisterController
-        ingredient_register_page = IngredientRegisterController(self,recipeDetails[0])
-        ingredient_register_page.main()
 
     def productRegisterController(self,recipe_id):
         from Controller import ProductRegisterController
@@ -82,3 +82,8 @@ class ManagerController:
         from Model import ManagerModel
         model = ManagerModel()
         return model.get_recipe_name_and_recipe_id()
+    
+    def get_ingd_id(self):
+        from Model import IngredientRegisterModel
+        model = IngredientRegisterModel()
+        return model.get_ingd_id()

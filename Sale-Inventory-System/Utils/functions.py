@@ -12,7 +12,6 @@ from hashlib import sha256
 
 
 class Functions:
-
     def logUserActivity(userActivityData:list):
         #[userID,activity,logDate]
         from Model import SecurityModel
@@ -150,7 +149,7 @@ class Functions:
                         sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = %s'
                         letter = "R"
                     elif access_level == "Ingredient":
-                        sql = 'SELECT indg_id FROM Ingredients WHERE indg_id = %s'
+                        sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = %s'
                         letter = "C"
                     elif access_level == "Product":
                         sql = 'SELECT product_id FROM Product WHERE product_id = %s'
@@ -228,7 +227,18 @@ class Functions:
             else:
                 current_column +=1 
 
-    
+    def treeview_style(background):
+        style = ttk.Style()
+        style.configure("Custom.Treeview.Heading",background="GhostWhite", foreground="black",borderwidth=0,relief="sunken")
+        style.configure("Custom.Treeview",background=background, foreground="black",borderwidth=0,relief="sunken")
+        style.layout("Custom.Treeview",[('Treeview.treearea',{'sticky':'nswe'})])
+
+    def change_column(tree, column_lables:list):
+        tree["columns"] = column_lables
+        for col in column_lables:
+            tree.column(col, anchor=tree.column(col)['anchor'], width=tree.column(col)['width'])
+            tree.heading(col, text=col, anchor=tree.heading(col)['anchor'])
+
     def format_float_list(data:list):
         temp = []
         for _ in data:
@@ -247,9 +257,8 @@ class Functions:
     def format_str(data:str):
         return str(data).strip().title()
 
-    def format_ingredient_data(data:list,str_func=format_str, float_func=format_float):
-        return [str_func(data[0]),
-                str_func(data[1]),
+    def format_ingredient_data(data:list,str_list_func=format_str_list, float_func=format_float):
+        return [*str_list_func(data[0:2]),
                 float_func(data[2]),
                 data[3]]
     
@@ -270,13 +279,13 @@ class Functions:
                 float_func(data[7])]
     
     def check_existing_data(insertData,insertedData):
-        name,quantity,unit = insertData
-        exisiting_name,exisiting_quantity,exisiting_unit = insertedData
+        name,descript,quantity,unit = insertData
+        exisiting_name,existing_descript,exisiting_quantity,exisiting_unit = insertedData
         print
-        if name == exisiting_name and unit == exisiting_unit:
+        if name == exisiting_name and descript == existing_descript and unit == exisiting_unit :
             updated_quantity = exisiting_quantity + quantity
-            return [name,updated_quantity,unit]
-        elif name == exisiting_name and unit != exisiting_unit:
+            return [name,descript,updated_quantity,unit]
+        elif name == exisiting_name and descript == existing_descript and unit != exisiting_unit:
             return ValueError("Quantity unit must be the same to update the item.")
         else:
             return
@@ -315,6 +324,24 @@ class Functions:
         for col in _.widget['columns']:
             _.widget.column(col, width=column_width)  # Set each column to the calculated width
     
+    def delete_image_id_column(data:list):
+        temp =[]
+        for inner_dict in data:
+            del inner_dict['image_id']
+            temp.append(inner_dict)
+        return temp
+    
+    def filter_ingredient_columns(data:list):
+        temp = []
+        for inner_dict in data:
+            del inner_dict['recipe_id']
+            del inner_dict['ingd_id']
+            del inner_dict['user_id']
+
+            temp.append(inner_dict)
+
+        print(f"filtered data: {temp}")
+        return temp
 
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():

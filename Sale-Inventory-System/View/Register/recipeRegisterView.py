@@ -10,14 +10,6 @@ class RecipeRegisterView(tk.Frame):
         super().__init__(self.master,background="Gray89")
         self.pack(fill=tk.BOTH,expand=True)
         self.mainBg = "Gray89"
-        # self.recipe_labels_with_colspan = {
-        #     "Recipe Name":1,
-        #     "Category":1,
-        #     "Ingredients":1,
-        #     "Details":3
-        # }
-        # self.recipe_entry_boxes = []
-        # self.recipe_inputs = []
 
     def main(self):
         self._entry_frame()

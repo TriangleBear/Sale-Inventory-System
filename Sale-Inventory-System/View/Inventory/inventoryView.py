@@ -23,14 +23,14 @@ class InventoryView(tk.Frame):
         self.inventory_entry_boxes = []
         self.inventory_inputs = []
         self.menus = ["Items","Supplies","Products","Recipes"]
-        self.table = self.inventoryController.get_items_column_names()
-        print(self.table)
         self.pack(fill=tk.BOTH,expand=True)
 
     def main(self):
         self._nav_bar_frame()
-        self._back_button()
         self._display_table()
+        self._back_button()
+        self._refresh_button()
+        self._update_button()
 
     def _nav_bar_frame(self):
         w = self.master.winfo_width()
@@ -39,22 +39,29 @@ class InventoryView(tk.Frame):
         self.navBarFrame.place(relx=0,rely=0,width=w,height=h)
         self._nav_bar_label()
         self._tree_dropdown()
+        self._search_button()
+        self._search_entry()
 
     def _tree_dropdown(self):
         self.selectTable = ttk.Combobox(self.navBarFrame,values=self.menus)
-        self.selectTable.place(relx=0.4,rely=0.5,anchor=CENTER)
+        self.selectTable.place(relx=0.355,rely=0.5,anchor=CENTER)
         self.selectTable.set(self.menus[0])
-        self.selectTable.bind('<<ComboboxSelected>>', lambda event: self._change_column_labels(self.selectTable.get(),self.selectTable.get()))
+        self.selectTable.bind('<<ComboboxSelected>>', lambda event: self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
         #self._update_table(self.selectTable.get())
 
-    def _insert_table_columns(self):
+    def _insert_table_columns(self,labels):
         for col in self.table:
             self.tree.heading(col, text=col)    
             self.tree.column(col, anchor='center')
+    
 
     def _display_table(self):
-        self.tree = ttk.Treeview(self, columns=self.table, show='headings',selectmode='browse')
-        self._insert_table_columns()
+        # Functions.treeview_style(self.mainBg)
+        self.tree = ttk.Treeview(self, 
+                                 show='headings',
+                                 selectmode='browse',
+                                 style="Custom.Treeview")
+        Functions.change_column(self.tree,self.inventoryController.get_items_column_names())
         self.tree.bind('<Configure>',Functions.adjust_column_widths)
         self.tree.place(relx=0.49999,rely=0.5,anchor='center',width=839.9,height=355)
         self._insert_data(self.inventoryController.get_items_on_database())
@@ -65,45 +72,59 @@ class InventoryView(tk.Frame):
         for item in converted_data:
             self.tree.insert('', 'end', values=item)
 
-    def _change_column_labels(self,tree, table):
-        # Clear existing headers
-        for col in tree["columns"]:
-            tree.heading(col, text="")
-
-        if table == "Items":
-            print("this is from items")
-            self.table = self.inventoryController.get_items_column_names()
-            for i, label in enumerate(self.table):
-                tree.heading(tree["columns"][i], text=label)
-            self._insert_data(self.inventoryController.get_items_on_database())
-            print("this is from items2")
-        if table == "Products":
-            self.table = self.inventoryController.get_product_column_names()
-            for i, label in enumerate(self.table):
-                tree.heading(tree["columns"][i], text=label)
-            self._insert_data(self.inventoryController.get_product_on_database())
-        if table == "Recipes":
-            self.table = self.inventoryController.get_recipe_column_names()
-            for i, label in enumerate(self.table):
-                tree.heading(tree["columns"][i], text=label)
-            self._insert_data(self.inventoryController.get_recipe_on_database())
-        return
-
-
-        # Update headers with new labels
-
-    def _update_table(self,table):
-            # if table == "Supplies":
-            #     self.table = self.inventoryController.get_items_column_names()
-            #     self._insert_table_columns()
-            #     self._insert_data(self.inventoryController.get_items_on_database())
+    def _change_column_labels(self,tree, table_name, data=None):
+        if table_name == "Items":
+            self.navBarLabel.config(text=f"{table_name} Inventory")
+            Functions.change_column(tree,self.inventoryController.get_items_column_names())
+            self._insert_data(self.inventoryController.search_data(table_name,data))
+        if table_name == "Products":
+            self.navBarLabel.config(text=f"{table_name} Inventory")
+            product_labels = self.inventoryController.get_product_column_names()
+            product_labels.remove("image_id")
+            Functions.change_column(tree,product_labels)
+            products_data = Functions.delete_image_id_column(self.inventoryController.search_data(table_name,data))
+            self._insert_data(products_data)
+        if table_name == "Recipes":
+            self.navBarLabel.config(text=f"{table_name} Inventory")
+            Functions.change_column(tree,self.inventoryController.get_recipe_column_names())
+            self._insert_data(self.inventoryController.search_data(table_name,data))
         return
 
     def _nav_bar_label(self):
         self.navBarLabel =tk.Label(self.navBarFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"{self.menus[0]} Inventory",background=self.navBarBg)
         self.navBarLabel.place(relx=0.14,rely=0.5,anchor=CENTER)
+
+    def _search_entry(self):
+        self.search_entry = tk.Entry(self.navBarFrame, borderwidth=0, width=23,font=font.Font(size=12))
+        self.search_entry.place(relx=0.9, rely=0.5,anchor='e')  # Place the entry at the top with some paddin
+
+    def _search_button(self):
+        search_button = tk.Button(self.navBarFrame, font=font.Font(family='Courier New', size=9, weight='bold'), text="Search",
+                                    command=lambda: self._change_column_labels(self.tree,self.selectTable.get(),self.search_entry.get()), padx=7, pady=2)
+        search_button.place(relx=0.64,rely=0.5, anchor='e')  # Place the button at the bottom with some padding
             
     def _back_button(self):
         self.back_btn = tk.Button(self,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                   text="Back", background="Grey89",command=lambda:self.inventoryController.manager_view())
         self.back_btn.place(relx=0.09,rely=0.9,anchor='s')
+
+    def _refresh_button(self):
+        refresh_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Refresh", 
+                                   command=lambda:self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
+        refresh_button.place(relx=0.8,rely=0.9,anchor='se')
+
+    def _update_row_data(self,table_name):
+        if table_name == "Items":
+            print(list(self.tree.item(self.tree.selection()[0],'values')))
+        if table_name == "Supplies":
+            print(self.tree.item(self.tree.selection()[0],'values'))
+        if table_name == "Products":
+            print(self.tree.item(self.tree.selection()[0],'values'))
+        if table_name == "Recipes":
+            print(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.inventoryController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+    
+    def _update_button(self):
+        update_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Update", 
+                                   command=lambda:self._update_row_data(self.selectTable.get()))
+        update_button.place(relx=0.9,rely=0.9,anchor='se')

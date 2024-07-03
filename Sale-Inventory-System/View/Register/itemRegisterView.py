@@ -53,6 +53,20 @@ class ItemRegisterView(tk.Toplevel):
             "Beverages"
         ]
         self.MenuType = ["Drinks","Desserts","Snacks"]
+        self.units = [
+            "Grams (g)",
+            "Kilograms (kg)",
+            "Pounds (lb)",
+            "Ounces (oz)",
+            "Milliliters (ml)",
+            "Liters (l)",
+            "Fluid Ounces (fl oz)"
+            "Cups",
+            "Pc(s)",
+            "Each (ea)",
+            "Dozen (dz)",
+            "Case (cs)"
+        ]
 
     def main(self):
         self._item_entry_frame()
@@ -60,13 +74,13 @@ class ItemRegisterView(tk.Toplevel):
             self._item_register_widgets()
             self._item_id_frame()
             self._item_id_lbl()
-            self._register_button(4,3)
+            self._register_button(status=self.status,current_r=4,current_c=3)
             self._back_button(4,2)
         if self.status == "Supply Item":
             self._supply_register_widgets()
             self._item_id_frame()
             self._item_id_lbl()
-            self._register_button(4,3)
+            self._register_button(status=self.status,current_r=4,current_c=3)
             self._back_button(4,2)
         self.mainloop()
 
@@ -101,7 +115,7 @@ class ItemRegisterView(tk.Toplevel):
     
     def _item_register_widgets(self):
         entrywidth = 23
-        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity","Unit","Price","Supplier"] if key in self.item_lbls_with_colspan}
+        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_one,
@@ -112,12 +126,26 @@ class ItemRegisterView(tk.Toplevel):
             shortEntryWidth=entrywidth,
             side='e'
         )
-        self._expiry_date_entry(2,0)
-        self._category_dropdown(2,2) #row=2 column=(2-3)
-        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
+        self._unit_dropdown(1,0)
+        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Price","Supplier"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_two,
+            bgColor=self.mainBg,
+            entryList=self.item_entry_boxes,
+            borderW=1,
+            max_columns=2,
+            current_r=1,
+            current_c=2,
+            shortEntryWidth=entrywidth,
+            side='e'
+        )
+        self._expiry_date_entry(2,0)
+        self._category_dropdown(2,2) #row=2 column=(2-3)
+        subset_three = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame,
+            labels=subset_three,
             bgColor=self.mainBg,
             entryList=self.item_entry_boxes,
             borderW=1,
@@ -130,7 +158,7 @@ class ItemRegisterView(tk.Toplevel):
 
     def _supply_register_widgets(self):
         entrywidth = 23
-        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity","Unit","Price","Supplier"] if key in self.item_lbls_with_colspan}
+        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_one,
@@ -138,6 +166,20 @@ class ItemRegisterView(tk.Toplevel):
             entryList=self.item_entry_boxes,
             borderW=1,
             max_columns=2,
+            shortEntryWidth=entrywidth,
+            side='e'
+        )
+        self._unit_dropdown(1,0)
+        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Price","Supplier"] if key in self.item_lbls_with_colspan}
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame,
+            labels=subset_two,
+            bgColor=self.mainBg,
+            entryList=self.item_entry_boxes,
+            borderW=1,
+            max_columns=2,
+            current_r=1,
+            current_c=2,
             shortEntryWidth=entrywidth,
             side='e'
         )
@@ -157,7 +199,17 @@ class ItemRegisterView(tk.Toplevel):
             side='e'
         )
 
-    def _expiry_date_entry(self,current_r,current_c): #2,0
+    def _unit_dropdown(self,current_r=0,current_c=0):
+        unit_lbl = tk.Label(self.entryFrame,text="Unit: ",background=self.mainBg,anchor='e')
+        unit_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
+        unit_lbl.columnconfigure(2,weight=1)
+        unit = ttk.Combobox(self.entryFrame,values=self.units)
+        unit.set("Select Unit")
+        unit.grid(row=current_r,column=current_c+1,padx=5,pady=5)
+        self.item_entry_boxes.append(unit)
+
+
+    def _expiry_date_entry(self,current_r=0,current_c=0): #2,0
         self.expiry_date_lbl = tk.Label(self.entryFrame,text="Expiry Date:",background=self.mainBg)
         self.expiry_date_lbl.grid(row=current_r,column=current_c,padx=2,pady=2,sticky='e')
 
@@ -167,7 +219,7 @@ class ItemRegisterView(tk.Toplevel):
 
         self.item_entry_boxes.append(self.expiry_date)
 
-    def _category_dropdown(self,current_r,current_c): #2,2
+    def _category_dropdown(self,current_r=0,current_c=0): #2,2
         category_lbl = tk.Label(self.entryFrame,text="Category: ",background=self.mainBg,anchor='e')
         category_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
         category_lbl.columnconfigure(2,weight=1)
@@ -185,7 +237,7 @@ class ItemRegisterView(tk.Toplevel):
         menu_type.grid(row=current_r,column=current_c+1,padx=5,pady=5)
         self.item_entry_boxes.append(menu_type)
 
-    def _register_button(self,current_r,current_c):#4,3 item #5,3 Supply
+    def _register_button(self,current_r=0,current_c=0):#4,3 item #5,3 Supply
         register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                  text="Register", command=lambda:self._checkInput(self.item_entry_boxes))
         register_btn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)
