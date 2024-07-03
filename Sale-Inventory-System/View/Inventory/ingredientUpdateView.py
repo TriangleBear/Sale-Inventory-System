@@ -25,7 +25,7 @@ class IngredientUpdateView(tk.Toplevel):
             "Ounces (oz)",
             "Milliliters (ml)",
             "Liters (l)",
-            "Fluid Ounces (fl oz)"
+            "Fluid Ounces (fl oz)",
             "Cups",
             "Pc(s)",
             "Each (ea)",

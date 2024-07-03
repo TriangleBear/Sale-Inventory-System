@@ -17,7 +17,7 @@ class ProductRegisterView(tk.Toplevel):
             "Quantity": 1,
             "Price/unit": 1,
             "Expiry Date": 1,
-            "Category": 1,
+            "Menu Type": 1,
             "Flooring": 1,
             "Ceiling": 1,
             "Stock Level": 1
@@ -114,7 +114,9 @@ class ProductRegisterView(tk.Toplevel):
     def register_item(self,stock_level,product_inputs):
         if stock_level == 0:
             self.productRegisterController.register_product(product_inputs)
+            self.productRegisterController.logUserActivity()
             messagebox.showinfo('Product Register', 'Product has been registered successfully!')
+            self.destroy()
         else:
             messagebox.showerror("Product Registration", stock_level)
             return
@@ -134,24 +136,6 @@ class ProductRegisterView(tk.Toplevel):
             messagebox.showerror("Product Registration", incorrectInput)
             return
 
-
     def _back_button(self,current_r=0,current_c=0):
         back_btn = tk.Button(self.entryFrame, text="Back", command=lambda:self.destroy())
-        back_btn.grid(row=current_r, column=current_c, sticky='e', padx=5, pady=5) 
-
-"""
-HM or PM
-if HM then
-	recipe_id = recipe_name when creating
-if recipe_name not equal in the database then
-	return
-else then
-	popup register product
-	pop title supposed to be HM or PM
-
-on top of the pop is supposed to be the recipe ID
-
-register button clicked:
-	quantity product * recipe ingredient > items in the database return to back to product registration
-	then minus that to items on what are the items made
-"""
+        back_btn.grid(row=current_r, column=current_c, sticky='e', padx=5, pady=5)

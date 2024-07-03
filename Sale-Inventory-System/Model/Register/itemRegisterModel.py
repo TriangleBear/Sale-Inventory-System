@@ -85,7 +85,7 @@ class ItemRegisterModel:
     def checkStockLevel(self):
         if self.quantity > self.flooring and self.quantity < self.ceiling:
             return "Average"
-        if self.quantity < self.flooring:
+        if self.quantity <= self.flooring:
             return "Danger"
         if self.quantity >= self.ceiling:
             return "Maximum"

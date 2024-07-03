@@ -12,14 +12,16 @@ class InventoryView(tk.Frame):
         self.navBarBg = "Gray84"
         super().__init__(self.master, background=self.mainBg)
 
-        self.inventory_labels_with_colspan = {"Product ID":1,
-                                             "Product Name":1,
-                                             "Quantity":1,
-                                             "Supplier":1,
-                                             "Expirartion Date":1,
-                                             "Menu":1,
-                                             "Cost":1,
-                                             "Category":1}
+        self.inventory_labels_with_colspan = {
+            "Product ID":1,
+            "Product Name":1,
+            "Quantity":1,
+            "Supplier":1,
+            "Expirartion Date":1,
+            "Menu":1,
+            "Cost":1,
+            "Category":1
+        }
         self.inventory_entry_boxes = []
         self.inventory_inputs = []
         self.menus = ["Items","Supplies","Products","Recipes"]
@@ -57,10 +59,12 @@ class InventoryView(tk.Frame):
 
     def _display_table(self):
         # Functions.treeview_style(self.mainBg)
-        self.tree = ttk.Treeview(self, 
-                                 show='headings',
-                                 selectmode='browse',
-                                 style="Custom.Treeview")
+        self.tree = ttk.Treeview(
+            self,
+            show='headings',
+            selectmode='browse',
+            style="Custom.Treeview"
+        )
         Functions.change_column(self.tree,self.inventoryController.get_items_column_names())
         self.tree.bind('<Configure>',Functions.adjust_column_widths)
         self.tree.place(relx=0.49999,rely=0.5,anchor='center',width=839.9,height=355)

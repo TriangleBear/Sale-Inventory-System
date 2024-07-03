@@ -33,7 +33,6 @@ class ProductRegisterController:
         item_model = ItemRegisterModel()
         return item_model.subtract_stock(ingredient_model.get_total_quantity())
         
-    
     def verify_product_inputs(self, data:list):
         from Model import ProductRegisterModel
         product_model = ProductRegisterModel(data)

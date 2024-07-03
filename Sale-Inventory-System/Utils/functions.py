@@ -229,7 +229,7 @@ class Functions:
 
     def treeview_style(background):
         style = ttk.Style()
-        style.configure("Custom.Treeview.Heading",background="GhostWhite", foreground="black",borderwidth=0,relief="sunken")
+        style.configure("Custom.Treeview.Heading",background=background, foreground="black",borderwidth=0,relief="sunken")
         style.configure("Custom.Treeview",background=background, foreground="black",borderwidth=0,relief="sunken")
         style.layout("Custom.Treeview",[('Treeview.treearea',{'sticky':'nswe'})])
 
@@ -337,6 +337,19 @@ class Functions:
             del inner_dict['recipe_id']
             del inner_dict['ingd_id']
             del inner_dict['user_id']
+
+            temp.append(inner_dict)
+        return temp
+    
+    def filter_product_columns(data:list):
+        temp = []
+        for inner_dict in data:
+            del inner_dict['product_id']
+            del inner_dict['image_id']
+            del inner_dict['user_id']
+            del inner_dict['exp_date']
+            del inner_dict['category']
+            del inner_dict['flooring']
 
             temp.append(inner_dict)
         return temp
