@@ -34,21 +34,23 @@ class InventoryModel:
                     search_pattern = f"%{self.search_query}%"
                     cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
                 if self.table_name == "Supply":
+                    print(f"from search_data table_name : {self.table_name}")
                     sql = """SELECT * FROM Supply 
                             WHERE supply_id LIKE %s 
                             OR user_id LIKE %s 
-                            OR supply_name LIKE %s 
-                            OR quantity LIKE %s
+                            OR product_name LIKE %s 
+                            OR quantity LIKE %s 
                             OR unit LIKE %s 
-                            OR price LIKE %s
+                            OR price_per_unit LIKE %s 
                             OR supplier LIKE %s 
                             OR exp_date LIKE %s 
                             OR menu_type LIKE %s 
                             OR flooring LIKE %s 
                             OR ceiling LIKE %s 
-                            OR stock_level %s"""
+                            OR stock_level LIKE %s"""
                     search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
+                    print(f"from search_data search_patter : {search_pattern}")
+                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
                 if self.table_name == "Product":
                     sql = """SELECT * FROM Product 
                             WHERE product_id LIKE %s 
@@ -87,6 +89,25 @@ class InventoryModel:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 sql = """SELECT * FROM Recipes LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
+                cursor.execute(sql)
+                # Extracting column names from the cursor's description attribute
+                column_names = [desc[0] for desc in cursor.description]
+            connection.close()
+        return column_names
+    
+    def get_supply_on_database(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM Supply"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+            connection.close()
+        return result
+    
+    def get_supply_column_names(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM Supply LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
                 cursor.execute(sql)
                 # Extracting column names from the cursor's description attribute
                 column_names = [desc[0] for desc in cursor.description]

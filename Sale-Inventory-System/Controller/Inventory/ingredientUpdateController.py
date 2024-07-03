@@ -10,10 +10,14 @@ class IngredientUpdateController:
             self.recipe_id = recipeDetails[0]
             self.recipe_name = recipeDetails[1]
             self.user_id = recipeDetails[2]
-        self.view = IngredientUpdateView(self,[self.recipe_id,self.recipe_name])
+            self.view = IngredientUpdateView(self,[self.recipe_id,self.recipe_name])
 
     def main(self):
         self.view.main()
+
+    def delete_recipe_ingredients(self,recipe_id):
+        delete_ingd = IngredientRegisterModel()
+        return delete_ingd.delete_recipe_ingd(recipe_id)
 
     def checkInput(self, data: list):
         noItem = IngredientRegisterModel(data)
@@ -27,13 +31,13 @@ class IngredientUpdateController:
             ]
         )
 
+
     def fetch_current_data(self,recipe_id):
         current_ingd =IngredientRegisterModel(current_recipe_id=recipe_id)
-        return current_ingd.fetch_current_data()
+        return current_ingd.fetch_current_data(current_ingd.current_recipe_id)
 
     def save_transaction(self, data: list): 
         #data = [recipe_id, [ingredient_name, quantity, unit],... ]
-        print(data)
         item = IngredientRegisterModel(data=data, user_id=self.user_id)
         item.save_transaction()
 

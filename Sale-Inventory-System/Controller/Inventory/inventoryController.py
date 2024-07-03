@@ -39,11 +39,19 @@ class InventoryController:
         model = InventoryModel()
         return model.get_items_column_names()
     
+    def get_supply_on_database(self):
+        model = InventoryModel()
+        return model.get_supply_on_database()
+    
+    def get_supply_column_names(self):
+        model = InventoryModel()
+        return model.get_supply_column_names()
+    
     def search_data(self,table_name,search_query):
         db_table = table_name
         if table_name == "Supplies":
             db_table = "Supply"
-        if table_name == "Products":
+        elif table_name == "Products":
             db_table = "Product"
         model = InventoryModel(search_entry=search_query,table_name=db_table)
         return model.search_data()
@@ -58,6 +66,16 @@ class InventoryController:
         recipe_update.main()
 
     def recipeIngredientUpdate(self,current_recipe_data):
+        #current_recipe_data = [ingd_name, description,quantity,unit]
         from Controller import IngredientUpdateController
         ingredient_update = IngredientUpdateController(self.mC,recipeDetails=current_recipe_data)
         ingredient_update.main()
+
+    def recipeIngredientDelete(self,current_recipe_data):
+        recipe_id,recipe_name,user_id= current_recipe_data
+        from Controller import IngredientUpdateController, RecipeUpdateController
+        ingredient_update = IngredientUpdateController(self.mC)
+        ingredient_update.delete_recipe_ingredients(recipe_id)
+        recipe_update = RecipeUpdateController(self.mC,self)
+        recipe_update.delete_recipe(recipe_id)
+        return

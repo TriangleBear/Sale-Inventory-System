@@ -6,6 +6,16 @@ class RecipeRegisterModel:
         self.current_recipe_id = current_recipe_id
         self.user_id = user_id
 
+    def delete_recipe(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                print(f"recipe deletion ID: {self.current_recipe_id}")
+                delete_sql = """DELETE FROM Recipes WHERE recipe_id = %s"""
+                cursor.execute(delete_sql, (self.current_recipe_id,))
+                connection.commit() 
+            connection.close()
+        return
+
     def create_recipe(self, user_id):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
