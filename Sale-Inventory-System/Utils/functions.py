@@ -155,6 +155,9 @@ class Functions:
                     elif access_level == "Product":
                         sql = 'SELECT product_id FROM Product WHERE product_id = %s'
                         letter = "P"
+                    elif access_level == "Sales":
+                        sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
+                        letter = "SL"
                     unique_id = letter + digits
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
