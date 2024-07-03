@@ -21,7 +21,6 @@ class ReportView(tk.Frame):
     def main(self):
         self._report_frame()
         self._report_buttons()
-        pass
 
     def _report_frame(self):
         self.reportFrame = tk.Frame(self,background="GhostWhite")

@@ -66,6 +66,48 @@ class Functions:
             else:
                 current_column +=1
 
+    def create_table_using_grid(
+            frame,
+            labels:list,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            fontSize=9,
+            current_r=0,
+            current_c=0,
+            bgColor:str=None,
+            borderW:int=1,
+            w=None,
+            h=None,
+            columnSpan=None,
+            gridxPadding=10,
+            gridyPadding=5,
+            btnxPadding=None,
+            btnyPadding=None,
+            side=None,
+            cmd=None
+    ):
+        current_row = current_r
+        current_column = current_c
+        for string in labels:
+            b = ttk.Treeview(frame, 
+                                font=font.Font(family='Courier New',size=fontSize,weight='bold'),
+                                borderwidth=borderW,
+                                background=bgColor,
+                                text=f"{string}", width=w,height=h,
+                                padx=btnxPadding,pady=btnyPadding,
+                                command=lambda var=string:cmd(f"{var}"))
+            current_column +=1
+            b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
+            entryList.append(b)
+
+            if (current_column >= max_columns):
+                current_column =0
+                current_row +=1
+            else:
+                current_column +=1
+
+
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
         if password == '':

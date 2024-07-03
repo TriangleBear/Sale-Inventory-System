@@ -168,6 +168,8 @@ class ManagerDashboard(tk.Frame):
             self.mC.reportController(self.bodyFrame)
         if string == "Product Registration":
             self.show_hm_or_pm()
+        if string == "Point of Sale":
+            self.mC.posController(self.bodyFrame)
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
