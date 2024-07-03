@@ -25,7 +25,7 @@ class IngredientRegisterView(tk.Toplevel):
             "Ounces (oz)",
             "Milliliters (ml)",
             "Liters (l)",
-            "Fluid Ounces (fl oz)"
+            "Fluid Ounces (fl oz)",
             "Cups",
             "Pc(s)",
             "Each (ea)",
@@ -187,11 +187,11 @@ class IngredientRegisterView(tk.Toplevel):
             return messagebox.showerror("Error", "Please select an item to remove")
         for i in selected_item:
             item = self.tree.item(i)['values']
-            current_quantity = float(item[1])
+            current_quantity = float(item[2])
             quantity_to_remove = simpledialog.askfloat("Remove Quantity", f"How much of {item[0]} to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
             if quantity_to_remove is not None and quantity_to_remove < current_quantity:
                 new_quantity = current_quantity - quantity_to_remove
-                self.tree.item(i, values=(item[0], new_quantity, item[2]))
+                self.tree.item(i, values=(item[0],item[1], new_quantity, item[3]))
             else:
                 self.tree.delete(i)
 

@@ -57,11 +57,21 @@ class RecipeUpdateView(tk.Toplevel):
         self.recipe_name_entry.insert(0,self.recipe_name)
         self.recipe_name_entry.grid(row=0,column=1)  
 
+    def _confirm_button(self):
+        confirm_button = tk.Button(self.entryFrame, font=font.Font(family='Courier New',size=9,weight='bold'),text="Confirm", 
+                                   command=lambda:self._commit_recipe_name(recipe_id=self.recipe_id,recipe_name=Functions.format_str(self.recipe_name_entry.get())))
+        confirm_button.grid(row=1,column=1,sticky='e')
+    
+    def _back_button(self):
+        back_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Back", 
+                                command=lambda:self.destroy())
+        back_button.place(relx=0.1,rely=0.9,anchor='sw')  # Place the button at the bottom with some padding
+
     def _update_recipe_ingredients(self,recipeDetails):
-        print(recipeDetails)
-        if messagebox.askyesno("Ingredients Registration","Do you want to update the ingredients for this recipe?"):
+        if messagebox.askyesno("Ingredient Management","Do you want to update the ingredients for this recipe?"):
             self.destroy()
             self.recipeUpdateController.inventoryController.recipeIngredientUpdate(recipeDetails)
+        self.destroy()
         return
 
     def _commit_recipe_name(self,recipe_id,recipe_name):
@@ -75,13 +85,3 @@ class RecipeUpdateView(tk.Toplevel):
         else:
             messagebox.showerror("Recipe Registration",recipeDetails)
         return
-
-    def _confirm_button(self):
-        confirm_button = tk.Button(self.entryFrame, font=font.Font(family='Courier New',size=9,weight='bold'),text="Confirm", 
-                                   command=lambda:self._commit_recipe_name(recipe_id=self.recipe_id,recipe_name=Functions.format_str(self.recipe_name_entry.get())))
-        confirm_button.grid(row=1,column=1,sticky='e')
-    
-    def _back_button(self):
-        back_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Back", 
-                                command=lambda:self.destroy())
-        back_button.place(relx=0.1,rely=0.9,anchor='sw')  # Place the button at the bottom with some padding

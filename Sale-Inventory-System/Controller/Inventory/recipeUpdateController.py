@@ -3,12 +3,12 @@ from Model import RecipeRegisterModel
 from Utils import Functions
 class RecipeUpdateController:
     def __init__(self, managerController,inventoryController,recipe_data:list=None):
-        if recipe_data is not None:
-            self.recipe_id,self.recipe_name = recipe_data[0:2]
         self.inventoryController = inventoryController
         self.mC = managerController
         self.user_id = self.mC.user_id
-        self.view = RecipeUpdateView(self.mC,self,self.recipe_id,self.recipe_name)
+        if recipe_data is not None:
+            self.recipe_id,self.recipe_name = recipe_data[0:2]
+            self.view = RecipeUpdateView(self.mC,self,self.recipe_id,self.recipe_name)
 
     def main(self):
         self.view.main()
@@ -20,6 +20,10 @@ class RecipeUpdateController:
     def manager_view(self,master):
         Functions.destroy_page(master)
         self.mC.view.register_page()
+    
+    def delete_recipe(self,recipe_id):
+        recipeModel = RecipeRegisterModel(current_recipe_id=recipe_id)
+        return recipeModel.delete_recipe()
 
     def logUserActivity(self):
         Functions.logUserActivity(

@@ -229,7 +229,7 @@ class Functions:
 
     def treeview_style(background):
         style = ttk.Style()
-        style.configure("Custom.Treeview.Heading",background="GhostWhite", foreground="black",borderwidth=0,relief="sunken")
+        style.configure("Custom.Treeview.Heading",background=background, foreground="black",borderwidth=0,relief="sunken")
         style.configure("Custom.Treeview",background=background, foreground="black",borderwidth=0,relief="sunken")
         style.layout("Custom.Treeview",[('Treeview.treearea',{'sticky':'nswe'})])
 
@@ -339,13 +339,33 @@ class Functions:
             del inner_dict['user_id']
 
             temp.append(inner_dict)
+        return temp
+    
+    def filter_product_columns(data:list):
+        temp = []
+        for inner_dict in data:
+            del inner_dict['product_id']
+            del inner_dict['image_id']
+            del inner_dict['user_id']
+            del inner_dict['exp_date']
+            del inner_dict['category']
+            del inner_dict['flooring']
 
-        print(f"filtered data: {temp}")
+            temp.append(inner_dict)
         return temp
 
     def destroy_page(page_to_destroy):
         for child in page_to_destroy.winfo_children():
             child.destroy()
+
+    def check_stock_amount(existing,input):
+        if input == existing:
+            return input
+        if input > existing:
+            return existing + (input - existing)
+        if input < existing:
+            return existing - (existing - input)
+
 
 class CustomDialog(tk.Toplevel):
     def __init__(self, master, title=None, buttons=None):
@@ -365,6 +385,7 @@ class CustomDialog(tk.Toplevel):
         # Set the window's position to the center of the screen
         self.geometry(f'+{center_x}+{center_y}')
         self.grab_set()
+        self.resizable(False,False)
         self.button_frame = tk.Frame(self)
         self.button_frame.pack(pady=10)
 

@@ -77,12 +77,13 @@ class ProductRegisterModel:
     def checkStockLevel(self):
         if self.product_quantity > self.flooring and self.product_quantity < self.ceiling:
             return "Average"
-        if self.product_quantity < self.flooring:
+        if self.product_quantity <= self.flooring:
             return "Danger"
         if self.product_quantity >= self.ceiling:
             return "Maximum"
         
     def checkInput(self):
+        print(self.stock_level)
         #check error if error return ValueError else return 0
         if not self.product_name:
             return ValueError("Price cannot be empty")

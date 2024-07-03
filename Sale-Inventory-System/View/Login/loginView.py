@@ -38,6 +38,9 @@ class LoginView(tk.Frame):
                 self.loginController.managerController(self.master,verifiedUserData[0])
             if verifiedUserData[1] == "Staff":
                 self.loginController.staffController(self.master,verifiedUserData[0])
+        else:
+            messagebox.showerror('Invalid OTP', 'Incorrect OTP')
+            return
 
     def _checkLoginInput(self, data:list):
         entryData = [entry.get() for entry in data]
@@ -50,6 +53,7 @@ class LoginView(tk.Frame):
             messagebox.showinfo('OTP Sent', 'Check Email for OTP')
             print(f"from _checkLoginInput;loginView|userData:{userData}")
             self._askOTP(userData)
+            return
         else:
             messagebox.showerror('Invalid Input',userData)
 

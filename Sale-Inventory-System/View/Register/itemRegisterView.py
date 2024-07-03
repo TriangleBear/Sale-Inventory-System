@@ -60,7 +60,7 @@ class ItemRegisterView(tk.Toplevel):
             "Ounces (oz)",
             "Milliliters (ml)",
             "Liters (l)",
-            "Fluid Ounces (fl oz)"
+            "Fluid Ounces (fl oz)",
             "Cups",
             "Pc(s)",
             "Each (ea)",
@@ -74,13 +74,13 @@ class ItemRegisterView(tk.Toplevel):
             self._item_register_widgets()
             self._item_id_frame()
             self._item_id_lbl()
-            self._register_button(status=self.status,current_r=4,current_c=3)
+            self._register_button(current_r=4,current_c=3)
             self._back_button(4,2)
         if self.status == "Supply Item":
             self._supply_register_widgets()
             self._item_id_frame()
             self._item_id_lbl()
-            self._register_button(status=self.status,current_r=4,current_c=3)
+            self._register_button(current_r=4,current_c=3)
             self._back_button(4,2)
         self.mainloop()
 
@@ -237,7 +237,7 @@ class ItemRegisterView(tk.Toplevel):
         menu_type.grid(row=current_r,column=current_c+1,padx=5,pady=5)
         self.item_entry_boxes.append(menu_type)
 
-    def _register_button(self,current_r=0,current_c=0):#4,3 item #5,3 Supply
+    def _register_button(self,current_r=0,current_c=0,status=None):#4,3 item #5,3 Supply
         register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                  text="Register", command=lambda:self._checkInput(self.item_entry_boxes))
         register_btn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)

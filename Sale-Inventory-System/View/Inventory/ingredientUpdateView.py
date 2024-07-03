@@ -25,7 +25,7 @@ class IngredientUpdateView(tk.Toplevel):
             "Ounces (oz)",
             "Milliliters (ml)",
             "Liters (l)",
-            "Fluid Ounces (fl oz)"
+            "Fluid Ounces (fl oz)",
             "Cups",
             "Pc(s)",
             "Each (ea)",
@@ -127,15 +127,6 @@ class IngredientUpdateView(tk.Toplevel):
             formattedData = Functions.convert_dicc_data(current_ingredients)
         for data in formattedData:
             self._insert_data(data)
-    
-    def on_select(self,_):
-        selected_item = self.tree.focus()
-        current_selection = self.tree.selection()
-
-        if current_selection == selected_item  :
-            self.tree.selection_remove(current_selection)
-        else:
-            self.tree.selection_set(selected_item)
 
     def _add_ing_btn(self):
         add_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
@@ -151,12 +142,7 @@ class IngredientUpdateView(tk.Toplevel):
         cancel_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                                text="Cancel", command=lambda: self.destroy())
         cancel_btn.place(relx=0.6, rely=0.92, anchor='center')
-
-    def _update_btn(self):
-        update_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
-                               text="Update", command=lambda: self.update_transaction())
-        update_btn.place(relx=0.75, rely=0.92, anchor='center')
-
+        
     def _save_btn(self):
         save_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                              text="Save", command=lambda: self.save_transaction())
@@ -198,25 +184,7 @@ class IngredientUpdateView(tk.Toplevel):
             quantity_to_remove = simpledialog.askfloat("Remove Quantity", f"How much of {item[0]} to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
             if quantity_to_remove is not None and quantity_to_remove < current_quantity:
                 new_quantity = current_quantity - quantity_to_remove
-                self.tree.item(i, values=(item[0], new_quantity, item[2]))
-            else:
-                self.tree.delete(i)
-
-    def update_transaction(self):
-        selected_item = self.tree.selection()
-        if not selected_item:
-            return messagebox.showerror("Error", "Please select an item to update")
-        for i in selected_item:
-            item = self.tree.item(i)['values']
-            item_id = item[0]  # Assuming the first value is the item's unique identifier
-            current_quantity = float(item[1])
-            quantity_to_update = simpledialog.askfloat("Update Quantity", f"How much of {item[0]} to update?", parent=self, minvalue=0.0, maxvalue=current_quantity)
-            if quantity_to_update is not None and quantity_to_update <= current_quantity:
-                new_quantity = current_quantity - quantity_to_update
-                # Update the item in the database
-                self.itemRegisterController.update_item_in_database(item_id, new_quantity)
-                # Update the GUI
-                self.tree.item(i, values=(item_id, new_quantity, item[2]))
+                self.tree.item(i, values=(item[0], item[1], new_quantity, item[3]))
             else:
                 self.tree.delete(i)
     
@@ -230,4 +198,13 @@ class IngredientUpdateView(tk.Toplevel):
         if not messagebox.askyesno("Continue?", "Add more Ingredients?"):
             self.destroy()
         else:
-            return
+            self.tkraise()
+        
+    def on_select(self,_):
+        selected_item = self.tree.focus()
+        current_selection = self.tree.selection()
+
+        if current_selection == selected_item  :
+            self.tree.selection_remove(current_selection)
+        else:
+            self.tree.selection_set(selected_item)
