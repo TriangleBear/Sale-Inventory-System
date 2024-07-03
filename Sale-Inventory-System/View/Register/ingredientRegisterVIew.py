@@ -3,10 +3,12 @@ from tkinter import *
 from tkinter import ttk, font, messagebox, simpledialog
 from Utils import Functions
 class IngredientRegisterView(tk.Toplevel):
-    def __init__(self,ingredientRegisterController,recipe_id):
+    def __init__(self,ingredientRegisterController,recipeDetails:list=None):
         super().__init__(background="GhostWhite")
-        self.recipe_id = recipe_id
-        self.table = ['Ingredient Name', 'Quantity', 'Unit']
+        if recipeDetails is not None:
+            self.recipe_id = recipeDetails[0]
+            self.recipe_name = recipeDetails[1]
+        self.table = ['Ingd Name', 'Description','Quantity','Unit']
         self.ingredientRegisterController = ingredientRegisterController
         self.bind("<FocusOut>", lambda e: self.on_focus_out)
         self._window_attributes()
@@ -25,6 +27,7 @@ class IngredientRegisterView(tk.Toplevel):
             "Liters (l)",
             "Fluid Ounces (fl oz)"
             "Cups",
+            "Pc(s)",
             "Each (ea)",
             "Dozen (dz)",
             "Case (cs)"
@@ -34,7 +37,7 @@ class IngredientRegisterView(tk.Toplevel):
 
     def main(self):
         self._header_frame()
-        self._header_label(f"{self.recipe_id}")
+        self._header_label(name=self.recipe_name,id=self.recipe_id)
         self._base_frame()
         self.display_table()
         self._entry_frame()
@@ -72,9 +75,9 @@ class IngredientRegisterView(tk.Toplevel):
         self.headerFrame = tk.Frame(self,background=self.mainBg)
         self.headerFrame.place(x=0,y=0,width=self.w,height=30)
     
-    def _header_label(self, text:str):
+    def _header_label(self, name:str,id:str):
         self.headerLabel = tk.Label(self.headerFrame,background=self.mainBg,font=font.Font(family='Courier New',size=12,weight='bold'),
-                                    text=f"Ingredients Registration | {text}")
+                                    text=f"Ingredients Registration | Recipe:{name} | ID:{id}")
         self.headerLabel.place(relx=0.05,rely=0.5,anchor='w')
 
     def _base_frame(self):
@@ -153,9 +156,8 @@ class IngredientRegisterView(tk.Toplevel):
         save_btn.place(relx=0.9, rely=0.92, anchor='center')
 
     def _insert_data(self, data):
-        formattedData = Functions.format_ingredient_data(data)
         for iid in self.tree.get_children():
-            existingItem = Functions.check_existing_data(formattedData,Functions.format_ingredient_data(self.tree.item(iid)['values']))
+            existingItem = Functions.check_existing_data(data,Functions.format_ingredient_data(self.tree.item(iid)['values']))
             if existingItem == None:
                 continue
             if type(existingItem) == list:
@@ -164,10 +166,10 @@ class IngredientRegisterView(tk.Toplevel):
             else:
                 messagebox.showerror("Error", existingItem)
                 return
-        self.tree.insert('',0,values=formattedData)
+        self.tree.insert('',0,values=data)
         
     def _checkInput(self): # Check if all fields are filled in before inserting data
-        ingredients = Functions.remove_whitespace([entry.get() for entry in self.ingredient_entry_boxes])
+        ingredients = Functions.format_ingredient_data([entry.get() for entry in self.ingredient_entry_boxes])
         for item in ingredients:
             if item != '':
                 continue
@@ -217,6 +219,7 @@ class IngredientRegisterView(tk.Toplevel):
             ingList.append(self.tree.item(child)['values'])
         self.ingredientRegisterController.save_transaction(ingList)
         messagebox.showinfo("Success", "Transaction Saved")
+        self.ingredientRegisterController.logUserActivity()
         if not messagebox.askyesno("Continue?", "Add more Ingredients?"):
             self.destroy()
         else:
