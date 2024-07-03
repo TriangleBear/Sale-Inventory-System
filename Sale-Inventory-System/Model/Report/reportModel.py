@@ -71,7 +71,7 @@ class ReportModel:
         
         fig.tight_layout()
 
-        plt.show
+        plt.show()
     
     def fetch_sales_report(self, date):
         with Database.get_db_connection() as conn:

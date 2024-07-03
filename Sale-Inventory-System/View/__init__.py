@@ -6,7 +6,7 @@ from View.Security.securityView import SecurityView
 from View.Register.userRegisterView import UserRegisterView
 from View.Register.itemRegisterView import ItemRegisterView
 from View.Register.recipeRegisterView import RecipeRegisterView
-from View.Register.ingredientRegisterView import IngredientRegisterView
+from View.Register.ingredientRegisterVIew import IngredientRegisterView
 from View.Register.productRegisterView import ProductRegisterView
 from View.Dashboard.staffView import StaffDashboard
 from View.Inventory.inventoryView import InventoryView
