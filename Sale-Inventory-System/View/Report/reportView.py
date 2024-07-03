@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, CENTER, simpledialog
 from tkcalendar import Calendar, DateEntry
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Utils import Functions
 from datetime import datetime
 class ReportView(tk.Frame):
@@ -81,6 +82,7 @@ class ReportView(tk.Frame):
             print(f"Selected date view: {mysql_date_str}")
             try:
                 self.reportController.display_sales_report(mysql_date_str)
+                self._embed_plot()
             except Exception as e:
                 print(f"Error in displaying sales report: {e}")                                     
             dialog.destroy()  # Destroy the dialog after selection
@@ -94,4 +96,4 @@ class ReportView(tk.Frame):
         print(f"date_entry: {date_entry.get()}")
         dialog.transient(self)  # Make the dialog transient to the root window
         dialog.grab_set()  # Optional: Make the dialog modal
-        self.wait_window(dialog)
+        self.wait_window(dialog)  # Wait for the dialog to be destroyed
