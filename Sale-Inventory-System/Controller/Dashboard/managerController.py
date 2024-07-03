@@ -58,14 +58,13 @@ class ManagerController:
         supplies_page.main()
 
     def posController(self,master):
-        Functions.destroy_page(master)
-        from Controller import POSController
-        pos_page = POSController(master,self)
+        from Controller import PosController
+        pos_page = PosController(self,master)
         pos_page.main()
 
     def reportController(self,master):
         from Controller import ReportController
-        report_page = ReportController(self)
+        report_page = ReportController(self,master)
         report_page.main()
 
     def mainController(self):

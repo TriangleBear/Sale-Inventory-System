@@ -1,6 +1,7 @@
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
+from tkcalendar import DateEntry
 from Utils import *
 from email.message import EmailMessage
 import smtplib
@@ -64,6 +65,48 @@ class Functions:
             else:
                 current_column +=1
 
+    def create_table_using_grid(
+            frame,
+            labels:list,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            fontSize=9,
+            current_r=0,
+            current_c=0,
+            bgColor:str=None,
+            borderW:int=1,
+            w=None,
+            h=None,
+            columnSpan=None,
+            gridxPadding=10,
+            gridyPadding=5,
+            btnxPadding=None,
+            btnyPadding=None,
+            side=None,
+            cmd=None
+    ):
+        current_row = current_r
+        current_column = current_c
+        for string in labels:
+            b = ttk.Treeview(frame, 
+                                font=font.Font(family='Courier New',size=fontSize,weight='bold'),
+                                borderwidth=borderW,
+                                background=bgColor,
+                                text=f"{string}", width=w,height=h,
+                                padx=btnxPadding,pady=btnyPadding,
+                                command=lambda var=string:cmd(f"{var}"))
+            current_column +=1
+            b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
+            entryList.append(b)
+
+            if (current_column >= max_columns):
+                current_column =0
+                current_row +=1
+            else:
+                current_column +=1
+
+
     def check_password_criteria(password,username,email,fname,lname,old_password=None):
         #fname, lname, user_type, birthdate, contact_num, email,address, username, password
         if password == '':
@@ -111,6 +154,9 @@ class Functions:
                     elif access_level == "Product":
                         sql = 'SELECT product_id FROM Product WHERE product_id = %s'
                         letter = "P"
+                    elif access_level == "Sales":
+                        sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
+                        letter = "SL"
                     unique_id = letter + digits
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
@@ -411,3 +457,24 @@ class CustomComboboxDialog(tk.Toplevel):
         if string == "cancel":
             self.destroy()
             return
+        
+
+class CustomCalendar(tk.Toplevel):
+    def __init__(self, master, controller):
+        super().__init__(master)
+        self.controller = controller
+        self.date_entry = DateEntry(self)
+        self.date_entry.pack(fill='both', expand=True)
+        
+        # Add a confirm button to handle date selection
+        confirm_btn = tk.Button(self, text="Confirm", command=self._on_date_confirm)
+        confirm_btn.pack(pady=10)
+        
+        self.grab_set()
+        self.wait_window(self)
+
+    def _on_date_confirm(self):
+        # Fetch the date from DateEntry
+        selected_date = self.date_entry.get()
+        self.controller.set_date(selected_date)
+        self.destroy()
