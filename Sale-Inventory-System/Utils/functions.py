@@ -398,6 +398,11 @@ class Functions:
         if input < existing:
             return existing - (existing - input)
 
+class CustomShowInfo(tk.Toplevel):
+    def __init__(self,master, title=None):
+        pass
+
+
 class CustomDialog(tk.Toplevel):
     def __init__(self, master, title=None, buttons=None):
         super().__init__(master)

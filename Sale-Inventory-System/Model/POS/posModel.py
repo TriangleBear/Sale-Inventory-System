@@ -18,16 +18,19 @@ class PosModel:
             cursor.close()
         return data[0] if data else None
 
-    def search_product(self, product_name):
+    def search_product(self, search_query):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
                 # Adjust the query to select only the product_id
-                query = "SELECT quantity FROM Product WHERE product_name = %s"
-                cursor.execute(query, (product_name,))
+                query = """SELECT * FROM Product 
+                        WHERE product_name LIKE %s 
+                        OR quantity LIKE %s 
+                        OR category LIKE %s 
+                        OR price LIKE %s 
+                        OR exp_date LIKE %s"""
+                cursor.execute(query, (search_query, search_query,search_query,search_query,search_query,))
                 data = cursor.fetchone()
-            # No need to explicitly close the cursor when using 'with' statement
-        # Return the product_id if a product was found, else return None
-        return data['quantity'] if data else None
+        return data if data else None
 
     def fetch_all_products(self):
         with Database.get_db_connection() as conn:

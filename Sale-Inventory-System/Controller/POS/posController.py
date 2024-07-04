@@ -31,7 +31,7 @@ class PosController:
         model = PosModel(cart_items=cart_items,user_id=self.mC.user_id,datetime=datetime)
         return model.save_transaction(sales_id=sales_id)
 
-    def search_product(self,search):
+    def search_data(self,search):
         model = PosModel()
         return model.search_product(search)
 
