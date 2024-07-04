@@ -61,7 +61,7 @@ class PosView(tk.Frame):
             self.tree_product.heading(col, text=col)
             self.tree_product.column(col, anchor='e')
         self.tree_product.bind("<Configure>", Functions.adjust_column_widths)
-        self.tree_product.bind("<ButtonRelease-1>", self._on_select_product)
+        # self.tree_product.bind("<ButtonRelease-1>", self._on_select_product)
         self.tree_product.place(relx=0.12,rely=0.59,anchor='w',width=350,height=450)
         self._insert_data(Functions.filter_product_columns(self.posController.fetch_all_products()))
 
@@ -84,7 +84,6 @@ class PosView(tk.Frame):
             self.tree_cart.heading(col, text=col)
             self.tree_cart.column(col, anchor='e')
         self.tree_cart.bind("<Configure>", Functions.adjust_column_widths)
-        self.tree_cart.bind("<ButtonRelease-1>", self._on_select_product)
         self.tree_cart.place(relx=0.98,rely=0.48,anchor='e',width=350,height=450)
 
     def _total_amount_label(self):
@@ -105,16 +104,7 @@ class PosView(tk.Frame):
 
     def _pos_button_commands(self,btn):
         if btn == "Add Product":
-            selected_item = self.tree_product.selection()[0]  # Get the focused item in the product table
-            if not selected_item:  # Check if an item is selected
-                return messagebox.showerror("Error", "No product selected.")
-            product_details = self.tree_product.item(selected_item, 'values')[0]
-            product_price = self.tree_product.item(selected_item, 'values')[2]
-            quantity = simpledialog.askinteger("Quantity", "Enter quantity:", minvalue=1)
-            if not quantity or quantity <= 0:  # Ensure a valid quantity is entered
-                return messagebox.showerror("Error", "Invalid quantity.")
-            self.add_product_to_cart(product_details, quantity, float(product_price))
-            self.update_product_table(quantity,selected_item)
+            self.calculate_product_input()
         elif btn == "Remove Product":
             selected_item = self.tree_cart.selection()
             if not selected_item:
@@ -122,6 +112,23 @@ class PosView(tk.Frame):
             self._remove_product_from_cart(selected_item)
         elif btn == "Checkout":
             self._checkout()
+
+    def calculate_product_input(self):
+        selected_item = self.tree_product.selection()[0]  # Get the focused item in the product table
+        if not selected_item:  # Check if an item is selected
+            return messagebox.showerror("Error", "No product selected.")
+        product_details = self.tree_product.item(selected_item, 'values')[0]
+        quantity_available = int(self.tree_product.item(selected_item, 'values')[1])
+        product_price = self.tree_product.item(selected_item, 'values')[2]
+        quantity = simpledialog.askinteger("Quantity", "Enter quantity:", minvalue=1)
+        if quantity > quantity_available:  # Ensure a valid quantity is entered
+            return messagebox.showerror("Error", "Quantity is Greater than available stock.")
+        elif quantity <= quantity_available:
+            self.add_product_to_cart(product_details, quantity, float(product_price))
+            self.update_product_table(quantity,selected_item)
+            return
+        else:
+            return messagebox.showerror("Error", "Invalid quantity entered.")
 
     def _remove_product_from_cart(self,selectedItem):
         for i in selectedItem:
@@ -145,6 +152,15 @@ class PosView(tk.Frame):
 
     def add_product_to_cart(self, product_name, quantity, price):
         total_price = int(quantity) * price
+        for iid in self.tree_cart.get_children():
+            if product_name == self.tree_cart.item(iid, 'values')[0]:
+                current_quantity = int(self.tree_cart.item(iid, 'values')[1])
+                new_quantity = current_quantity + quantity
+                new_total_price = new_quantity * price
+                self.tree_cart.item(iid, values=(product_name, new_quantity, new_total_price))
+                self.calculate_total_amount()
+                self.update_total_amount_label(self.total_amount)
+                return
         self.tree_cart.insert('', 'end', values=(product_name, quantity, total_price))
         self.calculate_total_amount()
         self.update_total_amount_label(self.total_amount)
@@ -159,11 +175,54 @@ class PosView(tk.Frame):
     def update_product_table(self,quantity,item):
         pass
 
-    def _on_select_product(self,event):
-        item = self.tree_product.selection()[0]
-        product_name = self.tree_product.item(item, 'values')[0]
-        product_price = self.tree_product.item(item, 'values')[2]
-        self.sales_entry_boxes.insert(product_name)
+    def generate_invoice(self, cart_items):
+        if not cart_items:       
+            messagebox.showwarning("No Items", "No items to generate invoice.")
+            return
+
+        receipt_text = "Restaurant Name\nAddress Line 1\nAddress Line 2\nPhone: 123-456-7890\n"
+        receipt_text += "Date: {}\n\n".format(Functions.get_current_date('datetime'))
+        receipt_text += "Item Name\tQuantity\tTotal\n" + "-"*40 + "\n"
+        for item in cart_items:
+            receipt_text += "{}\t{}\t{}\n".format(item[0], item[1], item[2])
+        receipt_text += "-"*40 + "\n"
+        subtotal = self.total_amount
+        tax = subtotal * 0.01  # Assuming a 10% tax rate
+        grand_total = subtotal + tax
+        receipt_text += "Subtotal:\t{}\nTax (10%):\t{}\nGrand Total:\t{}\n".format(subtotal, tax, grand_total)
+        receipt_text += "-"*40 + "\nThank you for dining with us!\n"
+
+        with open("receipt.txt", "w") as file:
+            file.write(receipt_text)
+
+        messagebox.showinfo("Invoice Generated", "Invoice has been generated successfully!\n\n" + receipt_text)
+        return
+    
+    def _checkout(self):
+        if self.tree_cart.get_children():
+            cart_items = [] 
+            for child in self.tree_cart.get_children():
+                cart_items.append([*Functions.format_cart_item(*self.tree_cart.item(child, 'values'))])
+            amount_tendered = simpledialog.askfloat("Amount Tendered", "Enter amount tendered:", minvalue=self.total_amount)
+            if amount_tendered > self.total_amount:
+                self.generate_invoice(cart_items=cart_items)
+            sales_id = self.posController.save_sales(amount_tendered,self.total_amount)
+            self.posController.save_transaction_to_sales(cart_items, sales_id)
+            self.posController.update_product_quantity_in_database(cart_items=cart_items) #product_name, quantity
+            print(f'cart_items: {cart_items}')
+            messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
+            self._insert_data(Functions.filter_product_columns(self.posController.fetch_all_products()))
+            self.tree_cart.delete(*self.tree_cart.get_children())
+            self.total_amount = 0
+        else:
+            messagebox.showerror("Checkout Error", "Cart is empty.")
+
+
+    # def _on_select_product(self,event):
+    #     item = self.tree_product.selection()[0]
+    #     product_name = self.tree_product.item(item, 'values')[0]
+    #     product_price = float(self.tree_product.item(item, 'values')[2])
+    #     self.sales_entry_boxes.insert(product_name,product_price)
 
     # def calculate_total_amount(self):
     #     total_amount = 0
@@ -227,23 +286,7 @@ class PosView(tk.Frame):
     #     else:
     #         messagebox.showerror("Search Error","Please enter a product.")
     #     return
-
-    # def _checkout(self):
-    #     if self.tree_cart.get_children():
-    #         cart_items = []
-    #         for child in self.tree_cart.get_children():
-    #             product_name, quantity, total_price = self.tree_cart.item(child, 'values')
-    #             cart_items.append((product_name, int(quantity), float(total_price)))
-    #             print(f'cart_items: {cart_items}')
-    #             self.posController.update_product_quantity_in_database(product_name, int(quantity))
-    #         self.posController.save_transaction_to_sales()
-    #         messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
-    #         self.tree_cart.delete(*self.tree_cart.get_children())
-    #         self.calculate_total_amount()
-    #     else:
-    #         messagebox.showerror("Checkout Error", "Cart is empty.")
-
-    def _back_button(self):
-        self.back_btn = tk.Button(self.posFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", 
-                                  command=lambda:self.posController.managerController(self.master))
-        self.back_btn.pack()
+    # def _back_button(self):
+    #     self.back_btn = tk.Button(self.posFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", 
+    #                               command=lambda:self.posController.managerController(self.master))
+    #     self.back_btn.pack()

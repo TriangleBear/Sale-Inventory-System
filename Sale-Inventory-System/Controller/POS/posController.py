@@ -5,7 +5,6 @@ class PosController:
         self.master = master
         self.mC = managerController
         self.view = PosView(self,master)
-        self.cart_items = []
 
     def main(self):
         self.view.main()
@@ -23,34 +22,26 @@ class PosController:
     def add_product(self,sales):
         model = PosModel()
 
-    def fetch_all_cart_items(self):
-        return self.cart_items
+    def update_product_quantity_in_database(self,cart_items):
+        model = PosModel(cart_items=cart_items)
+        model.update_product_quantity_in_database()
+        return
 
-    def update_product_quantity_in_database(self,product_name,quantity_sold):
-        model = PosModel(self)
-        current_quantity = self.fetch_current_quantity_from_database(product_name)
-        new_quantity = int(current_quantity) - int(quantity_sold)
-        return model.update_product_quantity_in_database(product_name,new_quantity)
-
-    def save_transaction_to_sales(self):
-        model = PosModel()
-        return model.save_transaction()
-    
-    def save_cart_items(self, cart_items):
-        self.posModel.save_transaction(cart_items)
+    def save_transaction_to_sales(self,cart_items,sales_id):
+        model = PosModel(cart_items=cart_items,user_id=self.mC.user_id)
+        return model.save_transaction(sales_id=sales_id)
 
     def search_product(self,search):
         model = PosModel()
         return model.search_product(search)
-    
-    def fetch_current_quantity_from_database(self,product_name):
-        model = PosModel()
-        return model.search_product(product_name)[3]
 
     def fetch_all_products(self):
-        model = PosModel(self.mC)
-        print(f'fetch_all_products: {model.fetch_all_products()}')
+        model = PosModel()
         return model.fetch_all_products()
+    
+    def save_sales(self,amount_tendered,total_price):
+        model = PosModel(total_price=total_price,amount_tendered=amount_tendered,user_id=self.mC.user_id)
+        model.save_sales()
 
 
 

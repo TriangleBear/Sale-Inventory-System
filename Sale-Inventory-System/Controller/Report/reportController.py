@@ -14,9 +14,11 @@ class ReportController():
     
     def display_stock_level(self):
         model = ReportModel()
-        model.display_items_stock_level()
+        fig = model.display_items_stock_level()
+        self.view.embed_graph(fig)
 
     def display_sales_report(self,date):
         print(f'Date controller: {date}')
         model = ReportModel()
-        model.display_sales_report(date)
+        fig = model.display_sales_report(date)
+        self.view.embed_graph(fig)

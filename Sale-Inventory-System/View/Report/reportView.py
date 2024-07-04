@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, CENTER, simpledialog
 from tkcalendar import Calendar, DateEntry
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Utils import Functions
 from datetime import datetime
 class ReportView(tk.Frame):
@@ -23,8 +24,8 @@ class ReportView(tk.Frame):
         self._report_buttons()
 
     def _report_frame(self):
-        self.reportFrame = tk.Frame(self,background="GhostWhite")
-        self.reportFrame.place(relx=0.5,rely=0.5,anchor=CENTER)
+        self.reportFrame = tk.Frame(self,background=self.mainBg)
+        self.reportFrame.place(relx=0.855,rely=0.035,anchor='ne')
 
     def _date_report(self):
         date_label = tk.Label(self.reportFrame, text="Date Report", font=('Courier', 12))
@@ -41,7 +42,7 @@ class ReportView(tk.Frame):
         Functions.create_buttons_using_grid(self.reportFrame,
                                             labels=self.report_btn_lbls,
                                             entryList=self.btns,
-                                            max_columns=1,
+                                            max_columns=2,
                                             w=21,
                                             h=1,
                                             fontSize=12,
@@ -95,3 +96,8 @@ class ReportView(tk.Frame):
         dialog.transient(self)  # Make the dialog transient to the root window
         dialog.grab_set()  # Optional: Make the dialog modal
         self.wait_window(dialog)
+
+    def embed_graph(self, fig):
+        canvas = FigureCanvasTkAgg(fig, master=self)
+        canvas.draw()
+        canvas.get_tk_widget().place(relx=0.49,rely=0.96,anchor='s')

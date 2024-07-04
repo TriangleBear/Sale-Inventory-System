@@ -1,0 +1,15 @@
+Restaurant Name
+Address Line 1
+Address Line 2
+Phone: 123-456-7890
+Date: 2024-07-04 15:15:21
+
+Item Name	Quantity	Total
+----------------------------------------
+adobong baboy	10	250.0
+----------------------------------------
+Subtotal:	250.0
+Tax (10%):	2.5
+Grand Total:	252.5
+----------------------------------------
+Thank you for dining with us!

@@ -42,7 +42,7 @@ class ReportModel:
         x = np.arange(len(categories))  # the label locations
         width = 0.35  # the width of the bars
         
-        fig, ax1= plt.subplots(figsize=(10,6))
+        fig, ax1= plt.subplots(figsize=(8.5,5.5))
         
         # Bar chart for total quantities
         rects = ax1.bar(x, total_quantities, width, label='Total Quantity', color='grey')
@@ -65,13 +65,11 @@ class ReportModel:
         ax2.set_ylabel('Stock Level Quantity', fontsize=14)
         ax1.set_title('Stock Levels by Category', fontsize=16)
         ax1.set_xticks(x)
-        ax1.set_xticklabels(categories, rotation=45, fontsize=12)
+        ax1.set_xticklabels(categories, rotation=45, fontsize=7)
         ax1.legend(loc='upper left')
         ax2.legend(loc='upper right')
-        
-        fig.tight_layout()
 
-        plt.show()
+        return fig
     
     def fetch_sales_report(self, date):
         with Database.get_db_connection() as conn:
@@ -91,7 +89,7 @@ class ReportModel:
         sales_quantities = [row['total'] for row in data]
         quantities_sold = [row['amount'] for row in data]
     
-        fig, ax1 = plt.subplots(figsize=(10, 6))
+        fig, ax1 = plt.subplots(figsize=(10,5))
     
         color = 'tab:blue'
         ax1.set_xlabel('Product Name')
@@ -107,12 +105,8 @@ class ReportModel:
         ax2.plot(product_names, quantities_sold, color=color, label='Quantity Sold', marker='o', linestyle='--')
         ax2.tick_params(axis='y', labelcolor=color)
         ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
-    
-        fig.tight_layout()
 
-        plt.title(f'Total Sales Report for {date}')
-        plt.annotate(f'Date: {date}', xy=(0.5, -0.15), xycoords='axes fraction', ha='center', va='center')
-        plt.show()
+        return fig
     # def display_sales_report(self, date):
     #     # Fetch sales data for the given date
     #     sales_data = self.fetch_sales_report(date)  # Hypothetical method to fetch data

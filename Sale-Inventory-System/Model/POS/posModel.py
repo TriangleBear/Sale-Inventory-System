@@ -1,22 +1,18 @@
 from Utils import Database
 from Utils import Functions
 class PosModel:
-    def __init__(self, user_id=None, product_id=None, price=None, amount=None, total=None):
+    def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None):
         self.sales_id = Functions.generate_unique_id('Sales')
-        self.product_id = product_id
-        self.user_id = user_id
-        self.product_name = self.get_product_name_by_id(product_id)
-        self.price = price
-        self.amount = amount
-        self.total = total
+        self.amount_tendered = amount_tendered
         self.sold_on = Functions.get_current_date('date')
-
-
+        self.user_id = user_id
+        self.total_price = total_price
+        self.cart_items = cart_items
 
     def get_product_name_by_id(self, product_id):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                query = "SELECT product_name FROM Product WHERE product_id = %s"
+                query = "SELECT product_id FROM Product WHERE product_name= %s"
                 cursor.execute(query, (product_id,))
                 data = cursor.fetchone()
             cursor.close()
@@ -26,12 +22,12 @@ class PosModel:
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
                 # Adjust the query to select only the product_id
-                query = "SELECT product_id FROM Product WHERE product_name = %s"
+                query = "SELECT quantity FROM Product WHERE product_name = %s"
                 cursor.execute(query, (product_name,))
                 data = cursor.fetchone()
             # No need to explicitly close the cursor when using 'with' statement
         # Return the product_id if a product was found, else return None
-        return data['product_id'] if data else None
+        return data['quantity'] if data else None
 
     def fetch_all_products(self):
         with Database.get_db_connection() as conn:
@@ -41,38 +37,111 @@ class PosModel:
                 data = cursor.fetchall()
             cursor.close()
         return data
+
+    def fetch_product_quantity(self, product_name):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                query = "SELECT quantity FROM Product WHERE product_name = %s"
+                cursor.execute(query, (product_name,))
+                data = cursor.fetchone()
+            cursor.close()
+        return data['quantity'] if data else None
     
-    def update_product_quantity_in_database(self, product_name, quantity):
+    def update_product_quantity_in_database(self):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                query = "UPDATE Product SET quantity = %s WHERE product_name = %s"
-                cursor.execute(query, (quantity, product_name))
-                conn.commit()
+                for product_name, quantity, total_price in self.cart_items:
+                    current_quantity = self.fetch_product_quantity(product_name)
+                    new_quantity = int(current_quantity) - int(quantity)
+                    query = "UPDATE Product SET quantity = %s WHERE product_name = %s"
+                    cursor.execute(query, (new_quantity, product_name))
+                    conn.commit()
             cursor.close()
         return True
     
-    def save_transaction(self, cart_items):
-        with Database.get_db_connection() as conn:
-            with conn.cursor() as cursor:
-                # Insert transaction record (adjust according to your schema)
-                transaction_query = "INSERT INTO Transactions (date, total_amount) VALUES (NOW(), %s)"
-                cursor.execute(transaction_query, (total_amount,))
-                transaction_id = cursor.lastrowid
+    def fetch_product_id(self, product_name):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT product_id FROM Product WHERE product_name = %s"
+                cursor.execute(sql, (product_name,))
+                data = cursor.fetchone()
+            cursor.close()
+        return data['product_id'] if data else None
     
-                # Insert each cart item as a transaction detail
-                for product_name, quantity, total_price in cart_items:
-                    # Find product_id based on product_name (adjust query as needed)
-                    cursor.execute("SELECT product_id FROM Products WHERE product_name = %s", (product_name,))
-                    product_id = cursor.fetchone()[0]
+    def fetch_product_unit_price(self,product_id):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = "SELECT price FROM Product WHERE product_id = %s"
+                cursor.execute(sql, (product_id,))
+                data = cursor.fetchone()
+            cursor.close()
+        return data['price'] if data else None
+
+    def save_transaction(self,sales_id):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                for item in self.cart_items:
+                    product_id = self.fetch_product_id(item[0])
+                    invoice_id = Functions.generate_unique_id('Invoice')
+                    price = self.fetch_product_unit_price(product_id)
+                    # Insert transaction record (adjust according to your schema)
+                    sql = """INSERT INTO Invoice (
+                            invoice_id, 
+                            sales_id,
+                            product_id,
+                            user_id, 
+                            product_name,
+                            price, 
+                            amount, 
+                            total,
+                            sold_on
+                        ) VALUES 
+                        (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                    cursor.execute(sql, (
+                        invoice_id,
+                        sales_id,
+                        product_id,
+                        self.user_id,
+                        item[0],
+                        price,
+                        item[1],
+                        item[2],
+                        self.sold_on,))
+                connection.commit()
+            connection.close()
+        return
+
+    def save_sales(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                changed = self.amount_tendered - self.total_price
+                sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total_price, amount_changed, created_on) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, Functions.get_current_date('datetime') ))
+                connection.commit()
+            connection.close()
+        return self.sales_id
+
+    # def save_transaction(self):
+    #     with Database.get_db_connection() as conn:
+    #         with conn.cursor() as cursor:
+    #             # Insert transaction record (adjust according to your schema)
+    #             transaction_query = "INSERT INTO Sales (date, total_amount) VALUES (NOW(), %s)"
+    #             cursor.execute(transaction_query, (self.total_price,))
     
-                    # Insert transaction detail (adjust according to your schema)
-                    detail_query = "INSERT INTO TransactionDetails (transaction_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)"
-                    cursor.execute(detail_query, (transaction_id, product_id, quantity, total_price))
+    #             # Insert each cart item as a transaction detail
+    #             for product_name, quantity, total_price in cart_items:
+    #                 # Find product_id based on product_name (adjust query as needed)
+    #                 cursor.execute("SELECT product_id FROM Products WHERE product_name = %s", (product_name,))
+    #                 product_id = cursor.fetchone()[0]
     
-                    # Update product quantity in inventory (adjust query as needed)
-                    update_query = "UPDATE Products SET quantity = quantity - %s WHERE product_id = %s"
-                    cursor.execute(update_query, (quantity, product_id))
+    #                 # Insert transaction detail (adjust according to your schema)
+    #                 detail_query = "INSERT INTO TransactionDetails (transaction_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)"
+    #                 cursor.execute(detail_query, (transaction_id, product_id, quantity, total_price))
     
-                conn.commit()
+    #                 # Update product quantity in inventory (adjust query as needed)
+    #                 update_query = "UPDATE Products SET quantity = quantity - %s WHERE product_id = %s"
+    #                 cursor.execute(update_query, (quantity, product_id))
+    
+    #             conn.commit()
 
         

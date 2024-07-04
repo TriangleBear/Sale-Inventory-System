@@ -157,6 +157,9 @@ class Functions:
                     elif access_level == "Sales":
                         sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
                         letter = "SL"
+                    elif access_level == "Invoice":
+                        sql = 'SELECT invoice_id FROM Invoice WHERE invoice_id = %s'
+                        letter = "INV"
                     unique_id = letter + digits
                     cursor.execute(sql, (unique_id,))
                     if not cursor.fetchone():
@@ -277,6 +280,10 @@ class Functions:
                 data[5],
                 float_func(data[6]),
                 float_func(data[7])]
+
+    def format_cart_item(product, quantity, price):
+        return [product, int(quantity), float(price)]
+
     
     def check_existing_data(insertData,insertedData):
         name,descript,quantity,unit = insertData
@@ -287,6 +294,16 @@ class Functions:
             return [name,descript,updated_quantity,unit]
         elif name == exisiting_name and descript == existing_descript and unit != exisiting_unit:
             return ValueError("Quantity unit must be the same to update the item.")
+        else:
+            return
+
+    def check_existing_cart_item(insertData,insertedData):
+        name,quantity,price = insertData
+        exisiting_name,exisiting_quantity,exisiting_price = insertedData
+        if name == exisiting_name:
+            updated_quantity = exisiting_quantity + quantity
+            updated_price = exisiting_price + price
+            return [name,updated_quantity,updated_price]
         else:
             return
     
@@ -365,7 +382,6 @@ class Functions:
             return existing + (input - existing)
         if input < existing:
             return existing - (existing - input)
-
 
 class CustomDialog(tk.Toplevel):
     def __init__(self, master, title=None, buttons=None):
