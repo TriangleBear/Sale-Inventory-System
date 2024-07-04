@@ -1,10 +1,10 @@
 from Utils import Database
 from Utils import Functions
 class PosModel:
-    def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None):
+    def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None,datetime=None):
         self.sales_id = Functions.generate_unique_id('Sales')
         self.amount_tendered = amount_tendered
-        self.sold_on = Functions.get_current_date('date')
+        self.sold_on = datetime
         self.user_id = user_id
         self.total_price = total_price
         self.cart_items = cart_items
@@ -115,11 +115,12 @@ class PosModel:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 changed = self.amount_tendered - self.total_price
-                sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total_price, amount_changed, created_on) VALUES (%s, %s, %s, %s)"
-                cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, Functions.get_current_date('datetime') ))
+                print(self.sold_on)
+                sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total, amount_changed, created_on) VALUES (%s, %s, %s, %s, %s, %s)"
+                cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, self.sold_on ))
                 connection.commit()
             connection.close()
-        return self.sales_id
+        return [self.sales_id,self.sold_on]
 
     # def save_transaction(self):
     #     with Database.get_db_connection() as conn:

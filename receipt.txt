@@ -1,15 +1,20 @@
-Restaurant Name
-Address Line 1
-Address Line 2
-Phone: 123-456-7890
-Date: 2024-07-04 15:15:21
-
-Item Name	Quantity	Total
-----------------------------------------
-adobong baboy	10	250.0
-----------------------------------------
-Subtotal:	250.0
-Tax (10%):	2.5
-Grand Total:	252.5
-----------------------------------------
+Tapsi ni Vivian
+991 AURORA BLVD, PROJECT 3, QUEZON CITY, 1102 METRO MANILA
+32 GIL FERNANDO AVENUE, QUEZON CITY
+Phone: 286450125
+DATE: 2024-07-05 05:15:53
+REF#: SL1053
+ITEM NAME	QUANTITY	TOTAL
+-------------------------------------------------------
+ADOBONG BABOY	4		100.0
+TINOLANG MANOK	3		75.0
+AROZ CALDO	1		25.0
+-------------------------------------------------------
+SUBTOTAL:			200.0
+TAX (10%):			2.0
+TOTAL:				202.0
+-------------------------------------------------------
+AMOUNT TEND:			500.0
+CHANGE DUE:			300.0
+-------------------------------------------------------
 Thank you for dining with us!

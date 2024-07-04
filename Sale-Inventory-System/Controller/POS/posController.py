@@ -27,8 +27,8 @@ class PosController:
         model.update_product_quantity_in_database()
         return
 
-    def save_transaction_to_sales(self,cart_items,sales_id):
-        model = PosModel(cart_items=cart_items,user_id=self.mC.user_id)
+    def save_transaction_to_sales(self,cart_items,sales_id,datetime):
+        model = PosModel(cart_items=cart_items,user_id=self.mC.user_id,datetime=datetime)
         return model.save_transaction(sales_id=sales_id)
 
     def search_product(self,search):
@@ -39,9 +39,9 @@ class PosController:
         model = PosModel()
         return model.fetch_all_products()
     
-    def save_sales(self,amount_tendered,total_price):
-        model = PosModel(total_price=total_price,amount_tendered=amount_tendered,user_id=self.mC.user_id)
-        model.save_sales()
+    def save_sales(self,amount_tendered,total_price,datetime):
+        model = PosModel(total_price=total_price,amount_tendered=amount_tendered,user_id=self.mC.user_id,datetime=datetime)
+        return model.save_sales()
 
 
 
