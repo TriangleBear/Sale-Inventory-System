@@ -153,3 +153,4 @@ cython_debug/
 Sale-Inventory-System/Utils/credentials.py
 Sale-Inventory-System/.vscode
 Sale-Inventory-System/Utils/test_site.py
+receipt.txt
