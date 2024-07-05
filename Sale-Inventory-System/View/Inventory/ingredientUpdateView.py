@@ -2,14 +2,14 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk, font, messagebox, simpledialog
 from Utils import Functions
-class IngredientRegisterView(tk.Toplevel):
-    def __init__(self,ingredientRegisterController,recipeDetails:list=None):
+class IngredientUpdateView(tk.Toplevel):
+    def __init__(self,ingredientUpdateController,recipeDetails:list=None):
         super().__init__(background="GhostWhite")
         if recipeDetails is not None:
             self.recipe_id = recipeDetails[0]
             self.recipe_name = recipeDetails[1]
         self.table = ['Ingd Name', 'Description','Quantity','Unit']
-        self.ingredientRegisterController = ingredientRegisterController
+        self.ingredientUpdateController = ingredientUpdateController
         self.bind("<FocusOut>", lambda e: self.on_focus_out)
         self._window_attributes()
 
@@ -39,7 +39,7 @@ class IngredientRegisterView(tk.Toplevel):
         self._header_frame()
         self._header_label(name=self.recipe_name,id=self.recipe_id)
         self._base_frame()
-        self.display_table()
+        self._display_table()
         self._entry_frame()
         self._ingredient_entry_widgets()
         self._unit_dropdown(3,0)
@@ -111,7 +111,7 @@ class IngredientRegisterView(tk.Toplevel):
         self.ingredient_entry_boxes.append(unit)
     
 
-    def display_table(self):
+    def _display_table(self):
         self.tree = ttk.Treeview(self.baseFrame, columns=self.table, show='headings')
         for col in self.table:
             self.tree.heading(col, text=col)    
@@ -120,15 +120,13 @@ class IngredientRegisterView(tk.Toplevel):
         self.tree.bind("<Configure>", Functions.adjust_column_widths)
         self.tree.bind("<ButtonRelease-1>", self.on_select)
         self.tree.place(relx=0.975, rely=0.032,anchor='ne',width=330,height=380)
-    
-    def on_select(self,_):
-        selected_item = self.tree.focus()
-        current_selection = self.tree.selection()
 
-        if current_selection == selected_item  :
-            self.tree.selection_remove(current_selection)
-        else:
-            self.tree.selection_set(selected_item)
+        data = self.ingredientUpdateController.fetch_current_data(self.recipe_id)
+        current_ingredients = Functions.filter_ingredient_columns(data)
+        if current_ingredients is not None:
+            formattedData = Functions.convert_dicc_data(current_ingredients)
+        for data in formattedData:
+            self._insert_data(data)
 
     def _add_ing_btn(self):
         add_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
@@ -144,12 +142,7 @@ class IngredientRegisterView(tk.Toplevel):
         cancel_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                                text="Cancel", command=lambda: self.destroy())
         cancel_btn.place(relx=0.6, rely=0.92, anchor='center')
-
-    def _update_btn(self):
-        update_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
-                               text="Update", command=lambda: self.update_transaction())
-        update_btn.place(relx=0.75, rely=0.92, anchor='center')
-
+        
     def _save_btn(self):
         save_btn = tk.Button(self.baseFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
                              text="Save", command=lambda: self.save_transaction())
@@ -191,25 +184,7 @@ class IngredientRegisterView(tk.Toplevel):
             quantity_to_remove = simpledialog.askfloat("Remove Quantity", f"How much of {item[0]} to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
             if quantity_to_remove is not None and quantity_to_remove < current_quantity:
                 new_quantity = current_quantity - quantity_to_remove
-                self.tree.item(i, values=(item[0],item[1], new_quantity, item[3]))
-            else:
-                self.tree.delete(i)
-
-    def update_transaction(self):
-        selected_item = self.tree.selection()
-        if not selected_item:
-            return messagebox.showerror("Error", "Please select an item to update")
-        for i in selected_item:
-            item = self.tree.item(i)['values']
-            item_id = item[0]  # Assuming the first value is the item's unique identifier
-            current_quantity = float(item[1])
-            quantity_to_update = simpledialog.askfloat("Update Quantity", f"How much of {item[0]} to update?", parent=self, minvalue=0.0, maxvalue=current_quantity)
-            if quantity_to_update is not None and quantity_to_update <= current_quantity:
-                new_quantity = current_quantity - quantity_to_update
-                # Update the item in the database
-                self.itemRegisterController.update_item_in_database(item_id, new_quantity)
-                # Update the GUI
-                self.tree.item(i, values=(item_id, new_quantity, item[2]))
+                self.tree.item(i, values=(item[0], item[1], new_quantity, item[3]))
             else:
                 self.tree.delete(i)
     
@@ -217,10 +192,19 @@ class IngredientRegisterView(tk.Toplevel):
         ingList = [self.recipe_id]
         for child in self.tree.get_children():
             ingList.append(self.tree.item(child)['values'])
-        self.ingredientRegisterController.save_transaction(ingList)
+        self.ingredientUpdateController.save_transaction(ingList)
         messagebox.showinfo("Success", "Transaction Saved")
-        self.ingredientRegisterController.logUserActivity()
+        self.ingredientUpdateController.logUserActivity()
         if not messagebox.askyesno("Continue?", "Add more Ingredients?"):
             self.destroy()
         else:
-            return
+            self.tkraise()
+        
+    def on_select(self,_):
+        selected_item = self.tree.focus()
+        current_selection = self.tree.selection()
+
+        if current_selection == selected_item  :
+            self.tree.selection_remove(current_selection)
+        else:
+            self.tree.selection_set(selected_item)

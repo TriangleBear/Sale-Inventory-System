@@ -10,6 +10,7 @@ class MainView(tk.Tk):
         # self._start_button()
         self.managerController()
         # self.loginController()
+        # self.staffController()
         # self.registerController()
 
     def _main_window_attributes(self):
@@ -45,3 +46,6 @@ class MainView(tk.Tk):
     
     def temp_access_ingredientRegister(self):
         self.mainController.ingredientRegisterController('R4461')
+
+    def staffController(self):
+        self.mainController.staffController(self,'S1451')

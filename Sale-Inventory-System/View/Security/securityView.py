@@ -25,7 +25,8 @@ class SecurityView(tk.Frame):
         self.tableFrame.place(relx=0.5,rely=0.5,anchor='center')
         
     def display_table(self):
-        self.tree = ttk.Treeview(self.tableFrame, columns=self.table, show='headings')
+        # Functions.treeview_style(self.mainBg)
+        self.tree = ttk.Treeview(self.tableFrame, columns=self.table, show='headings',style="Custom.Treeview")
         for col in self.table:
             self.tree.heading(col, text=col)    
             self.tree.column(col, anchor='center')

@@ -1,13 +1,13 @@
 from tkinter import *
 import tkinter as tk
-from tkinter import font,messagebox
-from Utils import Functions
+from tkinter import font,messagebox, simpledialog
+from Utils import Functions, CustomDialog, CustomComboboxDialog
 class ManagerDashboard(tk.Frame):
-    def __init__(self,managerController,master,user_id):
+    def __init__(self,mC,master,user_id):
         self.master = master
         self._main_window_attributes()
         super().__init__(self.master, background="GhostWhite")
-        self.managerController = managerController
+        self.mC = mC
         self.user_id = user_id
         self.pack(fill=tk.BOTH,expand=True)
 
@@ -16,8 +16,10 @@ class ManagerDashboard(tk.Frame):
 
         #buttons
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance"]
-        self.registration_btn = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
         self.btns = []
+        self.item_btns = []
     
     def main(self):
         self._header_frame()
@@ -30,8 +32,14 @@ class ManagerDashboard(tk.Frame):
 
     def register_page(self):
         self._center_frame()
-        self.main_register_buttons() # load buttons
+        self._main_register_buttons() # load buttons
         self._back_button("register_page")
+
+    def _item_register_page(self):
+        self._center_frame()
+        self._item_register_buttons()
+        self._back_button("item_register_page")
+        
 
     def _main_window_attributes(self):
         # main window
@@ -91,13 +99,26 @@ class ManagerDashboard(tk.Frame):
                                             btnxPadding=10,
                                             cmd=self._check_buttons_command)
 
-    def main_register_buttons(self):
+    def _main_register_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.registration_btn,
+                                            labels=self.registration_btn_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
                                             w=21,
                                             h=1,
+                                            fontSize=12,
+                                            gridxPadding=10,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=5,
+                                            cmd=self._check_buttons_command)
+        
+    def _item_register_buttons(self):
+        Functions.create_buttons_using_grid(self.btn_frame,
+                                            labels=self.item_register_btn_lbls,
+                                            entryList=self.item_btns,
+                                            max_columns=2,
+                                            w=21,
                                             fontSize=12,
                                             gridxPadding=10,
                                             gridyPadding=10,
@@ -113,34 +134,54 @@ class ManagerDashboard(tk.Frame):
     def _check_back_command(self,string):
         if string == "logout":
             if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
-                self.managerController.mainController()
+                self.mC.mainController()
         if string == "home page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
         if string == "register_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-
-    def labelframe(self):
-        tk.LabelFrame
+        if string == "item_register_page":
+            Functions.destroy_page(self.bodyFrame)
+            self.register_page()
 
     def _check_buttons_command(self,string):
         if string == "Registration":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
         if string == "Security": 
-            self.managerController.securityController(self.bodyFrame)
-        if string == "User Activity":
-            self.managerController.securityController(self.bodyFrame)
+            self.mC.securityController(self.bodyFrame)
         if string == "User Registration":
-            self.managerController.userRegisterController()
+            self.mC.userRegisterController()
         if string == "Item Registration":
-            self.managerController.itemRegisterController()
+            Functions.destroy_page(self.bodyFrame)
+            self._item_register_page()
+        if string == "Supply Item":
+            self.mC.itemRegisterController("Supply Item")
+        if string == "Raw Item":
+            self.mC.itemRegisterController("Raw Item")
         if string == "Recipe Registration":
-            self.managerController.recipeRegisterController(self.bodyFrame)
+            self.mC.recipeRegisterController(self.bodyFrame)
         if string == "Inventory":
-            self.managerController.inventoryController(self.bodyFrame)
+            self.mC.inventoryController(self.bodyFrame)
+        if string == "Report":
+            self.mC.reportController(self.bodyFrame)
+        if string == "Supplies":
+            self.mC.suppliesController(self.bodyFrame)
         if string == "Product Registration":
-            self.managerController.productRegisterController()
-        
+            self.show_hm_or_pm()
+        if string == "Point of Sale":
+            self.mC.posController(self.bodyFrame)
 
+    def show_hm_or_pm(self):
+        user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
+        Rid_Rname = Functions.convert_dicc_data(self.mC.get_rid_rname())
+        formatted_values = [f"{rid} | {rname}" for rid, rname in Rid_Rname]
+        if user_choice == "Home Made":
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            return
+        if user_choice == "Pre Made":
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            
+
+            
