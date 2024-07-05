@@ -104,18 +104,11 @@ class StaffDashboard(tk.Frame):
     def _check_back_command(self,string):
         if string == "logout":
             if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
-                self.mC.mainController()
+                self.sC.mainController()
         if string == "home page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-
-    #def _entry_test(self):
-        
-
     def _check_buttons_command(self,string):
-        # if string == "Registration":
-        #     Functions.destroy_page(self.bodyFrame)
-        #     self.register_page()
         if string == "Point of Sale":
             self.sC.posController(self.bodyFrame)
         if string == "Forget Password":

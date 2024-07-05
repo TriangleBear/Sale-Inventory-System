@@ -121,9 +121,13 @@ class InventoryView(tk.Frame):
                                    command=lambda:self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
         refresh_button.place(relx=0.8,rely=0.9,anchor='se')
 
+    def _update_item_data(self):
+        self.inventoryController.itemUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+
     def _update_row_data(self,table_name):
         if table_name == "Items":
             print(list(self.tree.item(self.tree.selection()[0],'values')))
+            self._update_item_data()
         if table_name == "Supplies":
             print(self.tree.item(self.tree.selection()[0],'values'))
         if table_name == "Products":

@@ -49,7 +49,7 @@ class ItemRegisterModel:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 if self.status == "Supply Item":
-                    sql = """INSERT INTO Supply (supply_id, user_id, product_name, quantity, unit, supplier, exp_date, menu_type, flooring, ceiling, stock_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+                    sql = """INSERT INTO Supply (supply_id, user_id, item_name, quantity, unit, supplier, exp_date, menu_type, flooring, ceiling, stock_level) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
                     cursor.execute(sql, (
                         self.item_id,
                         self.user_id,

@@ -5,12 +5,12 @@ from tkcalendar import DateEntry
 from Utils import Functions
 
 
-class ItemRegisterView(tk.Toplevel):
-    def __init__(self,itemRegisterController,status):
+class ItemUpdateView(tk.Toplevel):
+    def __init__(self,itemUpdateController,item_data):
         super().__init__(background="GhostWhite")
-        self.itemRegisterController = itemRegisterController
-        self.status = status
-        self.item_id = self.itemRegisterController.get_item_id()
+        self.itemUpdateController = itemUpdateController
+        self.item_data = item_data
+        self.item_id = self.item_data[0]
         self._window_attributes()
 
         #frames attributes
@@ -70,20 +70,13 @@ class ItemRegisterView(tk.Toplevel):
 
     def main(self):
         self._item_entry_frame()
-        if self.status == "Raw Item":
-            self._item_register_widgets()
-            self._item_id_frame()
-            self._item_id_lbl()
-            self._register_button(current_r=4,current_c=3)
-            self._back_button(4,2)
-        if self.status == "Supply Item":
-            self._supply_register_widgets()
-            self._item_id_frame()
-            self._item_id_lbl()
-            self._register_button(current_r=4,current_c=3)
-            self._back_button(4,2)
-        self.mainloop()
-
+        self._item_register_widgets()
+        self._insert_into_entry_boxes(self.item_entry_boxes, [item for i, item in enumerate(self.item_data) if i > 1 and i != len(self.item_data) - 1])
+        self._item_id_frame()
+        self._item_id_lbl()
+        self._register_button(current_r=4,current_c=3)
+        self._back_button(4,2)
+        print(f"from main: {[item for i, item in enumerate(self.item_data) if i > 1 and i != len(self.item_data) - 1]}")
 
     def _window_attributes(self):
         self.h = 420
@@ -94,7 +87,7 @@ class ItemRegisterView(tk.Toplevel):
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
         
-        self.title(f'{self.status} Registration')
+        self.title(f'Item Update')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()
@@ -155,49 +148,20 @@ class ItemRegisterView(tk.Toplevel):
             shortEntryWidth=entrywidth,
             side='e'
         )
-
-    def _supply_register_widgets(self):
-        entrywidth = 23
-        subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity"] if key in self.item_lbls_with_colspan}
-        Functions.create_entry_box_using_grid(
-            frame=self.entryFrame,
-            labels=subset_one,
-            bgColor=self.mainBg,
-            entryList=self.item_entry_boxes,
-            borderW=1,
-            max_columns=2,
-            shortEntryWidth=entrywidth,
-            side='e'
-        )
-        self._unit_dropdown(1,0)
-        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Price","Supplier"] if key in self.item_lbls_with_colspan}
-        Functions.create_entry_box_using_grid(
-            frame=self.entryFrame,
-            labels=subset_two,
-            bgColor=self.mainBg,
-            entryList=self.item_entry_boxes,
-            borderW=1,
-            max_columns=2,
-            current_r=1,
-            current_c=2,
-            shortEntryWidth=entrywidth,
-            side='e'
-        )
-        self._expiry_date_entry(2,0)
-        self._menu_type_dropdown(2,2)
-        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
-        Functions.create_entry_box_using_grid(
-            frame=self.entryFrame,
-            labels=subset_two,
-            bgColor=self.mainBg,
-            entryList=self.item_entry_boxes,
-            borderW=1,
-            max_columns=2,
-            current_r=3,
-            current_c=0,
-            shortEntryWidth=entrywidth,
-            side='e'
-        )
+    
+    def _insert_into_entry_boxes(self,entryData,list_to_insert):
+        print(entryData)
+        for i, entry_box in enumerate(entryData):
+            data_to_insert = list_to_insert[i]
+            if isinstance(entry_box, ttk.Combobox):
+                entry_box.set(data_to_insert)
+            if isinstance(entry_box, DateEntry):
+                entry_box.set_date(data_to_insert)
+            try:
+                entry_box.delete(0, 'end')  # Clear existing data
+                entry_box.insert(0, data_to_insert)  # Insert new data
+            except AttributeError:
+                print(f"Error: The widget {type(entry_box)} does not support delete/insert methods.")
 
     def _unit_dropdown(self,current_r=0,current_c=0):
         unit_lbl = tk.Label(self.entryFrame,text="Unit: ",background=self.mainBg,anchor='e')
@@ -228,15 +192,6 @@ class ItemRegisterView(tk.Toplevel):
         category.grid(row=current_r,column=current_c+1,padx=5,pady=5)
         self.item_entry_boxes.append(category)
 
-    def _menu_type_dropdown(self,current_r,current_c): #3,0
-        menu_type_lbl = tk.Label(self.entryFrame,text="Menu Type: ",background=self.mainBg,anchor='e')
-        menu_type_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
-        menu_type_lbl.columnconfigure(2,weight=1)
-        menu_type = ttk.Combobox(self.entryFrame,values=self.MenuType)
-        menu_type.set("Select Menu Type")
-        menu_type.grid(row=current_r,column=current_c+1,padx=5,pady=5)
-        self.item_entry_boxes.append(menu_type)
-
     def _register_button(self,current_r=0,current_c=0,status=None):#4,3 item #5,3 Supply
         register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                  text="Register", command=lambda:self._checkInput(self.item_entry_boxes))
@@ -246,11 +201,13 @@ class ItemRegisterView(tk.Toplevel):
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling
         entryData = Functions.format_item_data(data = [entry.get().strip() for entry in data])
         entryData.append(self.item_id)
-        check_input = self.itemRegisterController.checkInput(entryData)
+        if self.status == "Raw Item":
+            entryData.append(None)
+        check_input = self.itemUpdateController.checkInput(entryData)
         print(f"from _checkInput;RegisterView|entryData:\n{entryData}")
         if check_input == 0:
-            self.itemRegisterController.register(entryData)
-            self.itemRegisterController.logUserActivity()
+            self.itemUpdateController.register(entryData)
+            self.itemUpdateController.logUserActivity()
             messagebox.showinfo('Item Registration', 'Item Registration Successful!')
             self.destroy()
         else:

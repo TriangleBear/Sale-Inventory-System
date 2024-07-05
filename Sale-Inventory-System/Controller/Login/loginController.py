@@ -24,16 +24,11 @@ class LoginController:
     def forgotPasswordController(self,master):
         Functions.destroy_page(master)
         from Controller import ForgotPasswordController
-        forgot_password = ForgotPasswordController(master)
+        forgot_password = ForgotPasswordController(self,master)
         forgot_password.main()
 
-    def logUserActivity(self,userActivityData:list):
-        userActivityData.append("Logged In")
-        userActivityData.append(Functions.get_current_date("datetime"))
-        #[userID,activity,logDate]
-        from Model import SecurityModel
-        model = SecurityModel(activityData=userActivityData)
-        model.log_user_activity()
+    def logUserActivity(self,user_id):
+        Functions.logUserActivity([user_id,"Logged In",Functions.get_current_date("datetime")])
 
     def checkInput(self, data:list):
         print(f"from checkInput;loginController|data:{data}")

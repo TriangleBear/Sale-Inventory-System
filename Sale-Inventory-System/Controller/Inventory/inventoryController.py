@@ -71,6 +71,11 @@ class InventoryController:
         ingredient_update = IngredientUpdateController(self.mC,recipeDetails=current_recipe_data)
         ingredient_update.main()
 
+    def itemUpdate(self,current_item_data):
+        from Controller import ItemUpdateController
+        item_update = ItemUpdateController(self.mC,self,current_item_data)
+        item_update.main()
+
     def recipeIngredientDelete(self,current_recipe_data):
         recipe_id,recipe_name,user_id= current_recipe_data
         from Controller import IngredientUpdateController, RecipeUpdateController

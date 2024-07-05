@@ -14,7 +14,8 @@ class ForgotPasswordView(tk.Frame):
         self.userId = None
         self.username = None
         self.email = None
-
+        
+        self.mainBg = "Gray89"
         self.forgot_password_entry_boxes = []
         self.pack(fill=tk.BOTH,expand=True)
     
@@ -31,7 +32,7 @@ class ForgotPasswordView(tk.Frame):
         self._confirm_button("password")
 
     def _center_frame(self):
-        self.entryFrame = tk.Frame(self,background="Gray82")
+        self.entryFrame = tk.Frame(self,background=self.mainBg,pady=10,padx=10)
         self.entryFrame.place(relx =0.5,rely=0.4,anchor=CENTER)
     
     def _email_entry_widgets(self):
@@ -88,7 +89,8 @@ class ForgotPasswordView(tk.Frame):
         
     def _checkBackInput(self,state:str):
         if state == "email":
-            self.forgotPasswordController.loginController(self.master)
+            Functions.destroy_page(self.master)
+            self.forgotPasswordController.controller.main()
         if state == "password":
             Functions.destroy_page(self)
             self.main()

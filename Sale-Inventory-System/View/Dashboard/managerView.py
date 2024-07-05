@@ -166,8 +166,6 @@ class ManagerDashboard(tk.Frame):
             self.mC.inventoryController(self.bodyFrame)
         if string == "Report":
             self.mC.reportController(self.bodyFrame)
-        if string == "Supplies":
-            self.mC.suppliesController(self.bodyFrame)
         if string == "Product Registration":
             self.show_hm_or_pm()
         if string == "Point of Sale":

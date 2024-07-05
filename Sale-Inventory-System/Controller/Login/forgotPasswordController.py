@@ -2,8 +2,9 @@ from Utils import Functions
 from View import ForgotPasswordView
 from Model import ForgotPasswordModel
 class ForgotPasswordController:
-    def __init__(self,master):
+    def __init__(self,controller,master):
         self.master = master
+        self.controller = controller
         self.view = ForgotPasswordView(self,self.master)
     
     def main(self):
