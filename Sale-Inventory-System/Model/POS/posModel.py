@@ -1,10 +1,10 @@
 from Utils import Database
 from Utils import Functions
 class PosModel:
-    def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None):
+    def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None,datetime=None):
         self.sales_id = Functions.generate_unique_id('Sales')
         self.amount_tendered = amount_tendered
-        self.sold_on = Functions.get_current_date('date')
+        self.sold_on = datetime
         self.user_id = user_id
         self.total_price = total_price
         self.cart_items = cart_items
@@ -115,33 +115,10 @@ class PosModel:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 changed = self.amount_tendered - self.total_price
-                sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total_price, amount_changed, created_on) VALUES (%s, %s, %s, %s)"
-                cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, Functions.get_current_date('datetime') ))
+                print(self.sold_on)
+                sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total, amount_changed, created_on) VALUES (%s, %s, %s, %s, %s, %s)"
+                cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, self.sold_on ))
                 connection.commit()
             connection.close()
-        return self.sales_id
-
-    # def save_transaction(self):
-    #     with Database.get_db_connection() as conn:
-    #         with conn.cursor() as cursor:
-    #             # Insert transaction record (adjust according to your schema)
-    #             transaction_query = "INSERT INTO Sales (date, total_amount) VALUES (NOW(), %s)"
-    #             cursor.execute(transaction_query, (self.total_price,))
-    
-    #             # Insert each cart item as a transaction detail
-    #             for product_name, quantity, total_price in cart_items:
-    #                 # Find product_id based on product_name (adjust query as needed)
-    #                 cursor.execute("SELECT product_id FROM Products WHERE product_name = %s", (product_name,))
-    #                 product_id = cursor.fetchone()[0]
-    
-    #                 # Insert transaction detail (adjust according to your schema)
-    #                 detail_query = "INSERT INTO TransactionDetails (transaction_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)"
-    #                 cursor.execute(detail_query, (transaction_id, product_id, quantity, total_price))
-    
-    #                 # Update product quantity in inventory (adjust query as needed)
-    #                 update_query = "UPDATE Products SET quantity = quantity - %s WHERE product_id = %s"
-    #                 cursor.execute(update_query, (quantity, product_id))
-    
-    #             conn.commit()
-
+        return [self.sales_id,self.sold_on]
         

@@ -191,21 +191,22 @@ class Functions:
         otp = random.randint(100000, 999999)
         return otp
 
-    def create_entry_box_using_grid(frame,
-                                    labels:dict,
-                                    entryList:list,
-                                    max_columns:int,
-                                    max_rows:int=None,
-                                    current_r=0,
-                                    current_c=0,
-                                    bgColor:str="Grey89",
-                                    borderW:int=0,
-                                    xPadding=5,
-                                    yPadding=5,
-                                    longEntryWidth=None,
-                                    shortEntryWidth=None,
-                                    labelWidth=None,
-                                    side=None):
+    def create_entry_box_using_grid(
+            frame,
+            labels:dict,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            current_r=0,
+            current_c=0,
+            bgColor:str="Grey89",
+            borderW:int=0,
+            xPadding=5,
+            yPadding=5,
+            longEntryWidth=None,
+            shortEntryWidth=None,
+            labelWidth=None,
+            side=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]
@@ -297,15 +298,28 @@ class Functions:
         else:
             return
 
-    def check_existing_cart_item(insertData,insertedData):
-        name,quantity,price = insertData
-        exisiting_name,exisiting_quantity,exisiting_price = insertedData
-        if name == exisiting_name:
-            updated_quantity = exisiting_quantity + quantity
-            updated_price = exisiting_price + price
-            return [name,updated_quantity,updated_price]
-        else:
+    def check_existing_cart_item(insertData,insertedData,quantity_available):
+        product_name,quantity,price = insertData
+        existing_name,existing_quantity = insertedData[0:2]
+        if product_name != existing_name:
             return
+        new_quantity = int(existing_quantity) + quantity
+        if new_quantity <= int(quantity_available):
+            return [product_name,new_quantity,float(price*new_quantity)]
+        else:
+            return ValueError("Quantity is greater than available stock.")
+
+        
+        # if product_name == self.tree_cart.item(iid, 'values')[0]:
+        #         current_quantity = int(self.tree_cart.item(iid, 'values')[1])
+        #         new_quantity = current_quantity + quantity
+        #         new_total_price = new_quantity * price
+        #         if new_quantity > int(quantity_available):
+        #             return messagebox.showerror("Error", "Quantity is Greater than available stock.")
+        #         self.tree_cart.item(iid, values=(product_name, new_quantity, new_total_price))
+        #         self.calculate_total_amount()
+        #         self.update_total_amount_label(self.total_amount)
+        #         return
     
         
     #Convert dictionary row to a list in the order of self.table columns
@@ -367,6 +381,8 @@ class Functions:
             del inner_dict['exp_date']
             del inner_dict['category']
             del inner_dict['flooring']
+            del inner_dict['ceiling']
+            del inner_dict['stock_level']
 
             temp.append(inner_dict)
         return temp
