@@ -157,7 +157,7 @@ class ManagerDashboard(tk.Frame):
             Functions.destroy_page(self.bodyFrame)
             self._item_register_page()
         if string == "Supply Item":
-            self.mC.itemRegisterController("Supply Item") #not yet made
+            self.mC.itemRegisterController("Supply Item")
         if string == "Raw Item":
             self.mC.itemRegisterController("Raw Item")
         if string == "Recipe Registration":

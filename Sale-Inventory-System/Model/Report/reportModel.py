@@ -1,8 +1,9 @@
 from Utils import Database
+from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import numpy as np
-from Utils import CustomCalendar
+
 class ReportModel:
     def fetch_items_database(self):
         with Database.get_db_connection() as conn:
@@ -42,7 +43,7 @@ class ReportModel:
         x = np.arange(len(categories))  # the label locations
         width = 0.35  # the width of the bars
         
-        fig, ax1= plt.subplots(figsize=(8.5,5.5))
+        fig, ax1= plt.subplots(figsize=(7.5,5))
         
         # Bar chart for total quantities
         rects = ax1.bar(x, total_quantities, width, label='Total Quantity', color='grey')
@@ -72,37 +73,48 @@ class ReportModel:
         return fig
     
     def fetch_sales_report(self, date):
+        print(f'Date: {date}')
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
                 # Use the date parameter in the WHERE clause to filter sales for the specific date
-                query = "SELECT * FROM Sales WHERE sold_on = %s"
-                cursor.execute(query, (date))
+                query = "SELECT * FROM Invoice WHERE sold_on LIKE %s"
+                _date = f"%{date}%"
+                cursor.execute(query, (_date,))
                 data = cursor.fetchall()
                 cursor.close()
         return data
 
     
-    def display_sales_report(self,date):
+    def display_sales_report(self, date):
         data = self.fetch_sales_report(date)  # Fetch sales for the specific date
         print(f'Sales data for {date} model: {data}')
-        product_names = [row['product_name'] for row in data]
-        sales_quantities = [row['total'] for row in data]
-        quantities_sold = [row['amount'] for row in data]
-    
-        fig, ax1 = plt.subplots(figsize=(10,5))
-    
+
+        # Aggregate totals and amounts for each product
+        aggregated_data = defaultdict(lambda: {'total': 0, 'amount': 0})
+        for row in data:
+            product_name = row['product_name']
+            aggregated_data[product_name]['total'] += row['total']
+            aggregated_data[product_name]['amount'] += row['amount']
+
+        # Extract data for plotting
+        product_names = list(aggregated_data.keys())
+        sales_quantities = [info['total'] for info in aggregated_data.values()]
+        quantities_sold = [info['amount'] for info in aggregated_data.values()]
+
+        fig, ax1 = plt.subplots(figsize=(8, 5))
+
         color = 'tab:blue'
         ax1.set_xlabel('Product Name')
-        ax1.set_ylabel('Total Revenue', color=color)
-        ax1.bar(product_names, sales_quantities, color='skyblue', label='Total Revenue')
+        ax1.set_ylabel('Total Price', color=color)
+        ax1.bar(product_names, sales_quantities, color='skyblue', label='Total Price')
         ax1.tick_params(axis='y', labelcolor=color)
         ax1.set_xticks(range(len(product_names)))  # Set x-ticks positions
-        ax1.set_xticklabels(product_names, rotation=45, ha="right")  # Set x-tick labels with rotation
-    
+        ax1.set_xticklabels(product_names, fontsize= 7,rotation=26, ha="right")  # Set x-tick labels with rotation
+
         ax2 = ax1.twinx()
         color = 'tab:red'
-        ax2.set_ylabel('Quantity Sold', color=color)
-        ax2.plot(product_names, quantities_sold, color=color, label='Quantity Sold', marker='o', linestyle='--')
+        ax2.set_ylabel('Total Sold', color=color)
+        ax2.plot(product_names, quantities_sold, color=color, label='Total Sold', marker='o', linestyle='--')
         ax2.tick_params(axis='y', labelcolor=color)
         ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
 

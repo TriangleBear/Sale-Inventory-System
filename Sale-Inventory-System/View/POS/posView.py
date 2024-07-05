@@ -1,7 +1,9 @@
 import tkinter as tk
+import os,textwrap
 from tkinter import ttk, messagebox, simpledialog
 from tkinter import font, CENTER
 from Utils import Functions
+from textwrap import dedent
 class PosView(tk.Frame):
     def __init__(self,posController,master):
         self.master = master
@@ -193,12 +195,14 @@ class PosView(tk.Frame):
                 sales_id,sold_on = self.posController.save_sales(amount_tendered,self.total_amount,datetime)
                 self.posController.save_transaction_to_sales(cart_items, sales_id,sold_on)
                 self.posController.update_product_quantity_in_database(cart_items=cart_items) #product_name, quantity
-                print(f'cart_items: {cart_items}')
+                self.posController.logUserActivity(sales_id)
                 messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
                 self.generate_invoice(cart_items=cart_items,amount_tendered=amount_tendered,change=amount_tendered - self.total_amount,refNo=sales_id,datetime=datetime)
                 self.tree_cart.delete(*self.tree_cart.get_children())
+                self.tree_product.delete(*self.tree_product.get_children())
                 self._insert_data(self.tree_product,Functions.convert_dicc_data(Functions.filter_product_columns(self.posController.fetch_all_products())))
                 self.total_amount = 0
+                self.update_total_amount_label()
         else:
             messagebox.showerror("Checkout Error", "Cart is empty.")
 
@@ -206,100 +210,44 @@ class PosView(tk.Frame):
         if not cart_items:       
             messagebox.showwarning("No Items", "No items to generate invoice.")
             return
+        max_item_name_width = max(len(item[0]) for item in cart_items) + 2  # Adding a little extra space
+        min_quantity_width = 5  # Minimum width for the quantity column
+        min_total_width = 10  # Minimum width for the total price column
+            
+        receipt_text = dedent(f"""
+        Tapsi ni Vivian
+        991 AURORA BLVD, PROJECT 3, QUEZON CITY, 
+        1102 METRO MANILA
+        32 GIL FERNANDO AVENUE, QUEZON CITY
+        Phone: (02)8645-0125
+        DATE: {datetime}
+        REF#: {refNo}
+        ITEM NAME\tQUANTITY\tTOTAL
+        """ + "-"*55 + "\n")
 
-        receipt_text =          """Tapsi ni Vivian\n"""
-        receipt_text +=         "991 AURORA BLVD, PROJECT 3, QUEZON CITY, 1102 METRO MANILA\n"
-        receipt_text +=         "32 GIL FERNANDO AVENUE, QUEZON CITY\n"
-        receipt_text +=         "Phone: (02)8645-0125\n"
-        receipt_text +=         "DATE: {}\n".format(datetime)
-        receipt_text +=         "REF#: {}\n".format(refNo)
-        receipt_text +=         "ITEM NAME\tQUANTITY\tTOTAL\n" + "-"*55 + "\n"
         for item in cart_items:
-            receipt_text +=     "{}\t{}\t\t{}\n".format(str(item[0]).upper(), item[1], item[2])
-        receipt_text +=         "-"*55 + "\n"
+            item_name, quantity, total = item
+            receipt_text += f"{item_name.upper():<{max_item_name_width}}{quantity:>{min_quantity_width}}{total:>{min_total_width}.2f}\n"
+
         subtotal = self.total_amount
         tax = subtotal * 0.01  # Assuming a 10% tax rate
         grand_total = subtotal + tax
-        receipt_text +=         "SUBTOTAL:\t\t\t{}\nTAX (10%):\t\t\t{}\nTOTAL:\t\t\t\t{}\n".format(subtotal, tax, grand_total)
-        receipt_text +=         "-"*55 + "\n"
-        receipt_text +=         "AMOUNT TEND:\t\t\t{}\nCHANGE DUE:\t\t\t{}\n".format(amount_tendered,change)
-        receipt_text +=         "-"*55 + "\nThank you for dining with us!\n"
+        receipt_text += "-"*55 + "\n"
+        receipt_text += f"SUBTOTAL:\t\t\t{subtotal:.2f}\n"
+        receipt_text += f"TAX (10%):\t\t\t{tax:.2f}\n"
+        receipt_text += f"TOTAL:\t\t\t\t{grand_total:.2f}\n"
+        receipt_text += "-"*55 + "\n"
+        receipt_text += f"AMOUNT TEND:\t\t\t{amount_tendered:.2f}\n"
+        receipt_text += f"CHANGE DUE:\t\t\t{change:.2f}\n"
+        receipt_text += "-"*55 + "\nThank you for dining with us!\n"
 
-        with open("receipt.txt", "w") as file:
+        if not os.path.exists("Sale-Inventory-System/Receipts"):
+            os.makedirs("Sale-Inventory-System/Receipts")
+        
+        path = os.path.join("Sale-Inventory-System/Receipts",f"{refNo}.txt")
+
+        with open(path, "w") as file:
             file.write(receipt_text)
 
         messagebox.showinfo("Invoice Generated", receipt_text)
         return
-
-    # def _on_select_product(self,event):
-    #     item = self.tree_product.selection()[0]
-    #     product_name = self.tree_product.item(item, 'values')[0]
-    #     product_price = float(self.tree_product.item(item, 'values')[2])
-    #     self.sales_entry_boxes.insert(product_name,product_price)
-
-    # def calculate_total_amount(self):
-    #     total_amount = 0
-    #     for child in self.tree_cart.get_children():
-    #         total_amount += float(self.tree_cart.item(child, 'values')[2])
-    #     self.total_amount_label.config(text=f"Total Amount: {total_amount}")    
-
-    # def _remove_product_from_cart(self):
-    #     selected_item = self.tree_cart.selection()
-    #     if not selected_item:
-    #         return messagebox.showerror("Error", "Please select an item to remove")
-    #     for i in selected_item:
-    #         item = self.tree_cart.item(i)['values']
-    #         current_quantity = int(item[1])
-    #         current_total_price = float(item[2])
-    #         unit_price = current_total_price / current_quantity  # Calculate unit price
-
-    #         quantity_to_remove = simpledialog.askfloat("Remove Quantity", f"How much of {item[0]} to remove?", parent=self, minvalue=0.0, maxvalue=current_quantity)
-    #         if quantity_to_remove is not None:
-    #             if quantity_to_remove < current_quantity:
-    #                 new_quantity = current_quantity - quantity_to_remove
-    #                 new_total_price = unit_price * new_quantity  # Recalculate total price based on new quantity
-    #                 self.tree_cart.item(i, values=(item[0], new_quantity, new_total_price))
-    #                 self.update_total_amount()
-    #             else:
-    #                 self.tree_cart.delete(i)
-    #                 self.update_total_amount()
-
-    # def _on_select_product(self,event):
-    #     item = self.tree_product.selection()[0]
-    #     product_name = self.tree_product.item(item, 'values')[0]
-    #     product_price = self.tree_product.item(item, 'values')[2]
-    #     self.sales_entry_boxes[0].delete(0, tk.END)
-    #     self.sales_entry_boxes[0].insert(0, product_name)
-
-    # def _search_button(self):
-    #     search_btn = tk.Button(self.posFrame,borderwidth=5,width=10,font=font.Font(family='Courier New',size=12,weight='bold'),
-    #                            text="Search",command=self._search)
-    #     search_btn.grid(row=3,column=0, sticky='nswe')
-
-    # def _search_entry_box(self):
-    #     search_entry = tk.Entry(self.posFrame, borderwidth=5, width=10,font=font.Font(size=12))
-    #     search_entry.grid(row=3,column=1, sticky='nswe')
-    #     self.sales_entry_boxes.append(search_entry)
-
-    # def _category_product_dropdown(self):
-    #     self.category_product = ttk.Combobox(self.posFrame,values=self.category_product,width=20,font=font.Font(size=12,weight='bold'),
-    #                                          state='readonly',background=self.mainBg)
-    #     self.category_product.grid(row=3,column=2,sticky='nswe')
-    #     self.category_product.set("Product")
-    
-
-    # def _search(self):
-    #     search = self.sales_entry_boxes[0].get()
-    #     if search != "":
-    #         product = self.posController.search_product(search)
-    #         if product:
-    #             self.tree_product.insert('', 'end', values=product)
-    #         else:
-    #             messagebox.showerror("Search Error","Product not found.")
-    #     else:
-    #         messagebox.showerror("Search Error","Please enter a product.")
-    #     return
-    # def _back_button(self):
-    #     self.back_btn = tk.Button(self.posFrame,font=font.Font(family='Courier New',size=9,weight='bold'), text="Back", 
-    #                               command=lambda:self.posController.managerController(self.master))
-    #     self.back_btn.pack()

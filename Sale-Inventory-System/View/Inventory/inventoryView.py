@@ -141,6 +141,15 @@ class InventoryView(tk.Frame):
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
             return
 
+    def _update_product_data(self):
+        user_choice = CustomDialog(self.master,title="Product or Supply",buttons=["Update Product", "Delete Product"]).result
+        if user_choice == "Update Product":
+            self.inventoryController.productUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        if user_choice == "Delete Product":
+            self.inventoryController.productDelete(list(self.tree.item(self.tree.selection()[0],'values')))
+            messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
+            return
+
     def _update_reg_ingd(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Recipe Name", "Recipe Ingredients"]).result
         if user_choice == "Recipe Name":

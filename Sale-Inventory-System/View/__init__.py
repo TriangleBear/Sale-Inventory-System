@@ -10,6 +10,7 @@ from View.Register.ingredientRegisterVIew import IngredientRegisterView
 from View.Register.productRegisterView import ProductRegisterView
 from View.Dashboard.staffView import StaffDashboard
 from View.Inventory.inventoryView import InventoryView
+from View.Inventory.productUpdateView import ProductUpdateView
 from View.Inventory.recipeUpdateView import RecipeUpdateView
 from View.Inventory.ingredientUpdateView import IngredientUpdateView
 from View.Supply.suppliesView import SuppliesView
@@ -27,6 +28,7 @@ __all__ = ["MainView",
            "StaffDashboard",
            "InventoryView",
            "RecipeUpdateView",
+           "ProductUpdateView",
            "IngredientUpdateView",
            "SuppliesView",
            "PosView",

@@ -81,7 +81,7 @@ class ReportView(tk.Frame):
             mysql_date_str = date_obj.strftime('%Y-%m-%d')
             print(f"Selected date view: {mysql_date_str}")
             try:
-                self.reportController.display_sales_report(mysql_date_str)
+                self.reportController.display_sales_report(mysql_date_str).show()
             except Exception as e:
                 print(f"Error in displaying sales report: {e}")                                     
             dialog.destroy()  # Destroy the dialog after selection

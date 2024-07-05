@@ -25,6 +25,12 @@ class MainController:
         from Controller import ManagerController
         manager_dashboard = ManagerController(master,user_id)
         manager_dashboard.main()
+
+    def staffController(self,master,user_id):
+        Functions.destroy_page(master)
+        from Controller import StaffController
+        staff_dashboard = StaffController(master,user_id)
+        staff_dashboard.main()
     
     def ingredientRegisterController(self,recipe_id):
         from Controller import IngredientRegisterController
