@@ -213,7 +213,7 @@ class PosView(tk.Frame):
         receipt_text +=         "Phone: (02)8645-0125\n"
         receipt_text +=         "DATE: {}\n".format(datetime)
         receipt_text +=         "REF#: {}\n".format(refNo)
-        receipt_text +=         "ITEM NAME\t\tQUANTITY\tTOTAL\n" + "-"*55 + "\n"
+        receipt_text +=         "ITEM NAME\tQUANTITY\tTOTAL\n" + "-"*55 + "\n"
         for item in cart_items:
             receipt_text +=     "{}\t{}\t\t{}\n".format(str(item[0]).upper(), item[1], item[2])
         receipt_text +=         "-"*55 + "\n"

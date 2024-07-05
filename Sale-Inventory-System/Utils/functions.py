@@ -191,21 +191,22 @@ class Functions:
         otp = random.randint(100000, 999999)
         return otp
 
-    def create_entry_box_using_grid(frame,
-                                    labels:dict,
-                                    entryList:list,
-                                    max_columns:int,
-                                    max_rows:int=None,
-                                    current_r=0,
-                                    current_c=0,
-                                    bgColor:str="Grey89",
-                                    borderW:int=0,
-                                    xPadding=5,
-                                    yPadding=5,
-                                    longEntryWidth=None,
-                                    shortEntryWidth=None,
-                                    labelWidth=None,
-                                    side=None):
+    def create_entry_box_using_grid(
+            frame,
+            labels:dict,
+            entryList:list,
+            max_columns:int,
+            max_rows:int=None,
+            current_r=0,
+            current_c=0,
+            bgColor:str="Grey89",
+            borderW:int=0,
+            xPadding=5,
+            yPadding=5,
+            longEntryWidth=None,
+            shortEntryWidth=None,
+            labelWidth=None,
+            side=None):
         current_row = current_r
         current_column = current_c
         refName = [label for label in labels.keys()]

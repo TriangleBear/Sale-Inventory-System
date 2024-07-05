@@ -2,17 +2,17 @@ Tapsi ni Vivian
 991 AURORA BLVD, PROJECT 3, QUEZON CITY, 1102 METRO MANILA
 32 GIL FERNANDO AVENUE, QUEZON CITY
 Phone: (02)8645-0125
-DATE: 2024-07-05 07:21:34
-REF#: SL5180
+DATE: 2024-07-05 09:38:51
+REF#: SL4220
 ITEM NAME		QUANTITY	TOTAL
 -------------------------------------------------------
-ADOBONG BABOY	1		25.0
+AROZ CALDO	1		25.0
 -------------------------------------------------------
 SUBTOTAL:			25.0
 TAX (10%):			0.25
 TOTAL:				25.25
 -------------------------------------------------------
-AMOUNT TEND:			1000.0
-CHANGE DUE:			975.0
+AMOUNT TEND:			50.0
+CHANGE DUE:			25.0
 -------------------------------------------------------
 Thank you for dining with us!
