@@ -281,6 +281,21 @@ class Functions:
                 data[5],
                 float_func(data[6]),
                 float_func(data[7])]
+    
+    def format_productdata(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
+        return [str_func(data[0]),
+                float_func(data[1]),
+                *str_list_func(data[2:4]),
+                data[4],
+                data[5],
+                float_func(data[6]),
+                float_func(data[7])]
+    
+    def filter_item_data(data:list):
+        temp = []
+        for _ in data:
+            temp.append(_)
+        return temp
 
     def format_cart_item(product, quantity, price):
         return [product, int(quantity), float(price)]

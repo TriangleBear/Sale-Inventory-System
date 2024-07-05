@@ -12,6 +12,7 @@ from Controller.Dashboard.staffController import StaffController
 from Controller.Inventory.inventoryController import InventoryController
 from Controller.Inventory.recipeUpdateController import RecipeUpdateController
 from Controller.Inventory.productUpdateController import ProductUpdateController
+from Controller.Inventory.itemUpdateController import ItemUpdateController
 from Controller.Inventory.ingredientUpdateController import IngredientUpdateController
 from Controller.Supply.suppliesController import SuppliesController
 from Controller.POS.posController import PosController
@@ -31,6 +32,7 @@ __all__ = ["MainController",
            "InventoryController",
            "RecipeUpdateController",
            "ProductUpdateController",
+           "ItemUpdateController",
            "IngredientUpdateController",
            "SuppliesController",
            "PosController",
