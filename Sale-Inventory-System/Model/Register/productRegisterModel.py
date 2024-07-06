@@ -5,14 +5,15 @@ class ProductRegisterModel:
         self.product_id = Functions.generate_unique_id("Product")
         self.image_id = ''
         self.user_id = user_id
-        self.product_name = data[0]
-        self.product_quantity = data[1]
-        self.product_price = data[2]
-        self.expiry_date = data[3]
-        self.category = data[4]
-        self.flooring = data[5]
-        self.ceiling = data[6]
-        self.stock_level = self.checkStockLevel()
+        if data is not None:
+            self.product_name = data[0]
+            self.product_quantity = data[1]
+            self.product_price = data[2]
+            self.expiry_date = data[3]
+            self.category = data[4]
+            self.flooring = data[5]
+            self.ceiling = data[6]
+            self.stock_level = self.checkStockLevel()
         
     def get_recipe_name_by_id(self):
         with Database.get_db_connection() as connection:
@@ -82,6 +83,14 @@ class ProductRegisterModel:
         if self.product_quantity >= self.ceiling:
             return "Maximum"
         
+    def check_existing_product(self,product_name):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT product_id FROM Product WHERE product_name = %s"""
+                cursor.execute(sql, (product_name,))
+                product_id= cursor.fetchone()
+        return product_id if product_id else None
+
     def checkInput(self):
         print(self.stock_level)
         #check error if error return ValueError else return 0

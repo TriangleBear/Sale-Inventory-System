@@ -15,6 +15,11 @@ class ProductRegisterController:
         product_model = ProductRegisterModel(data, self.mC.user_id)
         return product_model.register_product()
     
+    def check_existing_product(self, product_name):
+        from Model import ProductRegisterModel
+        product_model = ProductRegisterModel()
+        return product_model.check_existing_product(product_name)
+    
     def manager_view(self,master):
         Functions.destroy_page(master)
         self.mC.view.register_page()

@@ -24,7 +24,7 @@ class PosController:
         return
 
     def save_transaction_to_sales(self,cart_items,sales_id,datetime):
-        model = PosModel(cart_items=cart_items,user_id=self.mC.user_id,datetime=datetime)
+        model = PosModel(cart_items=cart_items,user_id=self.controller.user_id,datetime=datetime)
         return model.save_transaction(sales_id=sales_id)
 
     def search_data(self,search):
@@ -36,12 +36,12 @@ class PosController:
         return model.fetch_all_products()
     
     def save_sales(self,amount_tendered,total_price,datetime):
-        model = PosModel(total_price=total_price,amount_tendered=amount_tendered,user_id=self.mC.user_id,datetime=datetime)
+        model = PosModel(total_price=total_price,amount_tendered=amount_tendered,user_id=self.controller.user_id,datetime=datetime)
         return model.save_sales()
     
     def logUserActivity(self,sales_id):
         Functions.logUserActivity([
-            self.mC.user_id,
+            self.controller.user_id,
             f"{sales_id}|Product Sold", 
             Functions.get_current_date("datetime")
             ]
