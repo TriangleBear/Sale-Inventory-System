@@ -1,3 +1,4 @@
+from icecream import ic
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
@@ -42,19 +43,28 @@ class Functions:
             gridyPadding=5,
             btnxPadding=None,
             btnyPadding=None,
+            activeBg=None,
             side=None,
+            relf=None,
             cmd=None
     ):
         current_row = current_r
         current_column = current_c
         for string in labels:
-            b = tk.Button(frame,
-                        font=font.Font(family='Courier New',size=fontSize,weight='bold'),
-                        borderwidth=borderW,
-                        background=bgColor,
-                        text=f"{string}", width=w,height=h,
-                        padx=btnxPadding,pady=btnyPadding,
-                        command=lambda var=string:cmd(f"{var}"))
+            b = tk.Button(
+                    frame,
+                    font=font.Font(family='Courier New',size=fontSize,weight='bold'),
+                    borderwidth=borderW,
+                    background=bgColor,
+                    text=f"{string}",
+                    width=w,
+                    height=h,
+                    padx=btnxPadding,
+                    pady=btnyPadding,
+                    relief=relf,
+                    activebackground=activeBg,
+                    command=lambda var=string:cmd(f"{var}")
+                )
             current_column +=1
             b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
             entryList.append(b)
@@ -390,7 +400,7 @@ class Functions:
             temp.append(inner_dict)
         return temp
     
-    def filter_product_columns(data:list):
+    def filter_product_columns(data:list[dict]):
         temp = []
         for inner_dict in data:
             del inner_dict['product_id']
@@ -409,13 +419,56 @@ class Functions:
         for child in page_to_destroy.winfo_children():
             child.destroy()
 
-    def check_stock_amount(existing,input):
+    def check_stock_amount(existing:float,input:float):
         if input == existing:
             return input
         if input > existing:
             return existing + (input - existing)
         if input < existing:
             return existing - (existing - input)
+        
+    def filter_breakfast_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Breakfast":
+                temp.append(dict)
+        return temp
+    
+    def filter_lunch_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Lunch":
+                temp.append(dict)
+        return temp
+    
+    def filter_dinner_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Dinner":
+                temp.append(dict)
+    
+        return temp
+    
+    def filter_desert_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Desert":
+                temp.append(dict)
+        return temp
+    
+    def filter_drinks_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Drinks":
+                temp.append(dict)
+        return temp
+    
+    def filter_snacks_products(data:list[dict]) -> list[dict]:
+        temp = []
+        for dict in data:
+            if dict['category'] == "Snacks":
+                temp.append(dict)
+        return temp
 
 class CustomShowInfo(tk.Toplevel):
     def __init__(self,master, title=None):

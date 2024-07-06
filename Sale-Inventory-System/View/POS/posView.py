@@ -1,13 +1,15 @@
 import tkinter as tk
-import os,textwrap
+import os,textwrap,copy
 from tkinter import ttk, messagebox, simpledialog
-from tkinter import font, CENTER
+from tkinter import font, CENTER,FLAT
 from Utils import Functions
+from icecream import ic
 from textwrap import dedent
 class PosView(tk.Frame):
     def __init__(self,posController,master):
         self.master = master
-        self.mainBg = 'Grey89'
+        self.mainBg = "Grey89"
+        self.buttonPressBg = "Grey86"
         super().__init__(self.master,background=self.mainBg)
         self.posController = posController
         self.pack(fill=tk.BOTH,expand=True)
@@ -17,26 +19,52 @@ class PosView(tk.Frame):
         self.table_cart = ['Product Name','Quantity','Total Price']
         self.table_product = ['Product Name','Quantity','Price/unit']
         self.category_product = ["Breakfast","Lunch","Dinner","Desert","Drinks","Snacks"]
-        self.sales_entry_boxes = []
+        self._all_products = self.posController.fetch_all_products()
+        self.category_btns = []
+        self.menu_status = "Breakfast" #default
         self.total_amount = 0
+    
+    @property
+    def all_products(self):
+        return copy.deepcopy(self._all_products)
 
     def main(self):
         self._button_add_remove_frame()
-        self._pos_buttons()
+        self._add_remove_buttons()
         self._search_entry()
         self._search_button()
         self._display_product_table()
+        self._category_frame()
+        self._category_buttons()
         self._cart_label()
         self._display_cart_table()
         self._total_amount_label()
         self._total_amount_num_lable()
         self._checkout_button()
 
+    def get_breakfast_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_breakfast_products(data)))
+    
+    def get_lunch_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_lunch_products(data)))
+    
+    def get_dinner_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_dinner_products(data)))
+    
+    def get_desert_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_desert_products(data)))
+    
+    def get_drinks_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_drinks_products(data)))
+    
+    def get_snacks_products(self,data:list[dict]) -> list[dict]:
+        return Functions.convert_dicc_data(Functions.filter_product_columns(Functions.filter_snacks_products(data)))
+
     def _button_add_remove_frame(self):
         self.headerFrame = tk.Frame(self,background=self.mainBg)
         self.headerFrame.place(relx=0.01,rely=0.05,anchor='nw')
 
-    def _pos_buttons(self):
+    def _add_remove_buttons(self):
         Functions.create_buttons_using_grid(
             self.headerFrame,
             labels=self.pos_btn_lbls,
@@ -47,8 +75,6 @@ class PosView(tk.Frame):
             fontSize=12,
             gridxPadding=2,
             gridyPadding=3,
-            btnyPadding=2,
-            btnxPadding=2,
             cmd=self._pos_button_commands
         )
     
@@ -65,7 +91,7 @@ class PosView(tk.Frame):
             self.tree_product.column(col, anchor='e')
         self.tree_product.bind("<Configure>", Functions.adjust_column_widths)
         self.tree_product.place(relx=0.12,rely=0.59,anchor='w',width=350,height=450)
-        self._insert_data(self.tree_product, Functions.convert_dicc_data(Functions.filter_product_columns(self.posController.fetch_all_products())))
+        self._insert_data(self.tree_product, self.get_breakfast_products(self.posController.fetch_all_products()))
 
     def _search_entry(self):
         self.search_entry = tk.Entry(self, borderwidth=0, width=27,font=font.Font(size=12))
@@ -73,8 +99,47 @@ class PosView(tk.Frame):
 
     def _search_button(self):
         search_button = tk.Button(self, font=font.Font(family='Courier New', size=9, weight='bold'), text="Search",
-                                    command=lambda: self._search_data(self.search_entry.get()), padx=7, pady=2)
+                                    command=lambda: self._search_data(self.search_entry.get(),self.menu_status), padx=7, pady=2)
         search_button.place(relx=0.12,rely=0.17, anchor='e')  # Place the button at the bottom with some padding
+
+    def _category_frame(self):
+        self.category_frame = tk.Frame(self,background=self.mainBg,padx=1,pady=3)
+        self.category_frame.place(relx=0,rely=0.5,anchor='w')
+
+    def _category_buttons(self):
+        Functions.create_buttons_using_grid(
+            frame=self.category_frame,
+            labels=self.category_product,
+            entryList=self.category_btns,
+            max_columns=1,
+            gridyPadding=1,
+            relf=FLAT,
+            w=10,
+            h=2,
+            activeBg=self.buttonPressBg,
+            cmd=self._category_commands
+        )
+    
+    def _category_commands(self,button):
+        self.tree_product.delete(*self.tree_product.get_children())
+        if button == "Breakfast":
+            breakfast = self.all_products
+            self._insert_data(self.tree_product, self.get_breakfast_products(breakfast))
+            self.menu_status == "Breakfast"
+        if button == "Lunch":
+            lunch = self.all_products
+            self._insert_data(self.tree_product, self.get_lunch_products(lunch))
+            self.menu_status == "Lunch"
+        if button == "Dinner":
+            dinner = self.all_products
+            self._insert_data(self.tree_product, self.get_dinner_products(self.all_products))
+            self.menu_status == "Dinner"
+        if button == "Desert":
+            self.menu_status == "Desert"
+        if button == "Drinks":
+            self.menu_status == "Drinks"
+        if button == "Snacks":
+            self.menu_status == "Snacks"
 
     def _cart_label(self):
         self.cart = tk.Label(self,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"Cart",background=self.mainBg)
@@ -100,10 +165,10 @@ class PosView(tk.Frame):
 
     def _checkout_button(self):
         checkout_btn = tk.Button(self,font=font.Font(family='Courier New',size=12,weight='bold'),
-                                 padx=100,pady=2,text="Checkout",command=self._checkout)
+                                 padx=100,pady=2,text="Checkout",command=lambda:self._checkout(self.menu_status))
         checkout_btn.place(relx=0.95,rely=0.97,anchor='se')
 
-    def _search_data(self, search_query):
+    def _search_data(self, search_query,menu):
         result = self.posController.search_data(search_query)
         print(result)
         search_results = Functions.convert_dicc_data(Functions.filter_product_columns(result))
@@ -119,15 +184,13 @@ class PosView(tk.Frame):
         if btn == "Add Product":
             self.calculate_product_input()
         elif btn == "Remove Product":
-            selected_item = self.tree_cart.selection()
-            if not selected_item:
-                return messagebox.showerror("Error", "Please select an item to remove")
-            self._remove_product_from_cart(selected_item)
-        elif btn == "Checkout":
-            self._checkout()
+            self._remove_product_from_cart()
 
-    def _remove_product_from_cart(self,selectedItem):
-        for i in selectedItem:
+    def _remove_product_from_cart(self):
+        selected_item = self.tree_cart.selection()
+        if not selected_item:
+            return messagebox.showerror("Error", "Please select an item to remove")
+        for i in selected_item:
             item = self.tree_cart.item(i)['values']
             current_quantity = int(item[1])
             current_total_price = float(item[2])
@@ -157,13 +220,13 @@ class PosView(tk.Frame):
             return messagebox.showerror("Error", "Quantity is greater than available stock.")
         elif quantity <= int(quantity_available):
             self.add_product_to_cart(selected_item=[product_name, quantity, float(product_price)],quantity_available=quantity_available)
-            self.update_product_table(quantity,selected_item)
+            # self.update_product_table(quantity,selected_item)
             return
         else:
             return messagebox.showerror("Error", "Invalid quantity entered.")
 
     def add_product_to_cart(self, selected_item:list,quantity_available):#selected item = [product_name, quantity, price]
-        product_name,quantity,price = selected_item 
+        product_name,quantity,price = selected_item
         total_price = int(quantity) * price
         for iid in self.tree_cart.get_children():
             existingItem = Functions.check_existing_cart_item(
@@ -171,7 +234,6 @@ class PosView(tk.Frame):
                 insertedData=self.tree_cart.item(iid,'values'),
                 quantity_available=quantity_available
             )
-            print(f"from existingItem: {existingItem}")
             if existingItem == None:
                 continue
             if type(existingItem) == list:
@@ -188,11 +250,27 @@ class PosView(tk.Frame):
     
     def update_total_amount_label(self):
         self.total_amount_label.config(text=f"{self.total_amount}")
-
-    def update_product_table(self,quantity,item):
-        pass
     
-    def _checkout(self):
+    def table_reset(self,menu_status:str):
+        self.tree_cart.delete(*self.tree_cart.get_children())
+        self.tree_product.delete(*self.tree_product.get_children())
+        self.total_amount = 0
+        self.update_total_amount_label()
+        self._all_products = self.posController.fetch_all_products()
+        if menu_status == "Breakfast":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+        if menu_status == "Lunch":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+        if menu_status == "Dinner":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+        if menu_status == "Desert":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+        if menu_status == "Drinks":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+        if menu_status == "Snacks":
+            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+
+    def _checkout(self,menu_status:str):
         datetime = Functions.get_current_date("datetime")
         if self.tree_cart.get_children():
             cart_items = [] 
@@ -206,11 +284,7 @@ class PosView(tk.Frame):
                 self.posController.logUserActivity(sales_id)
                 messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
                 self.generate_invoice(cart_items=cart_items,amount_tendered=amount_tendered,change=amount_tendered - self.total_amount,refNo=sales_id,datetime=datetime)
-                self.tree_cart.delete(*self.tree_cart.get_children())
-                self.tree_product.delete(*self.tree_product.get_children())
-                self._insert_data(self.tree_product,Functions.convert_dicc_data(Functions.filter_product_columns(self.posController.fetch_all_products())))
-                self.total_amount = 0
-                self.update_total_amount_label()
+                self.table_reset(menu_status)
         else:
             messagebox.showerror("Checkout Error", "Cart is empty.")
 
