@@ -124,28 +124,4 @@ class PosModel:
                 connection.commit()
             connection.close()
         return [self.sales_id,self.sold_on]
-
-    # def save_transaction(self):
-    #     with Database.get_db_connection() as conn:
-    #         with conn.cursor() as cursor:
-    #             # Insert transaction record (adjust according to your schema)
-    #             transaction_query = "INSERT INTO Sales (date, total_amount) VALUES (NOW(), %s)"
-    #             cursor.execute(transaction_query, (self.total_price,))
-    
-    #             # Insert each cart item as a transaction detail
-    #             for product_name, quantity, total_price in cart_items:
-    #                 # Find product_id based on product_name (adjust query as needed)
-    #                 cursor.execute("SELECT product_id FROM Products WHERE product_name = %s", (product_name,))
-    #                 product_id = cursor.fetchone()[0]
-    
-    #                 # Insert transaction detail (adjust according to your schema)
-    #                 detail_query = "INSERT INTO TransactionDetails (transaction_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)"
-    #                 cursor.execute(detail_query, (transaction_id, product_id, quantity, total_price))
-    
-    #                 # Update product quantity in inventory (adjust query as needed)
-    #                 update_query = "UPDATE Products SET quantity = quantity - %s WHERE product_id = %s"
-    #                 cursor.execute(update_query, (quantity, product_id))
-    
-    #             conn.commit()
-
         

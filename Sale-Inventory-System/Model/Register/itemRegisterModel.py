@@ -108,7 +108,7 @@ class ItemRegisterModel:
                     
                     # Check if sufficient stock is available
                     if required_quantity > current_stock:
-                        return f"Error: Not enough stock for {ingredient_name}. Required: {required_quantity}, Available: {current_stock_level}"
+                        return f"Error: Not enough stock for {ingredient_name}. Required: {required_quantity}, Available: {current_stock}"
                     
                     # Subtract the required quantity from the stock level
                     new_stock = current_stock - required_quantity

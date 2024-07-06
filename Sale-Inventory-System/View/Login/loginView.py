@@ -49,7 +49,7 @@ class LoginView(tk.Frame):
         # userData = [userId,userType, email,otp]
 
         if type(userData) == list:
-            self.loginController.user_otp_verification(userData)
+            #self.loginController.user_otp_verification(userData)
             messagebox.showinfo('OTP Sent', 'Check Email for OTP')
             print(f"from _checkLoginInput;loginView|userData:{userData}")
             self._askOTP(userData)
@@ -62,8 +62,11 @@ class LoginView(tk.Frame):
         self.entryFrame.place(relx =0.5,rely=0.5,anchor=CENTER)
 
     def _login_widgets(self):
-        Functions.create_entry_box_using_grid(frame=self.entryFrame, labels=self.login_labels_with_colspan, 
-                                              entryList=self.login_entry_boxes, max_columns=1)
+        Functions.create_entry_box_using_grid(
+            frame=self.entryFrame, 
+            labels=self.login_labels_with_colspan, 
+            entryList=self.login_entry_boxes, max_columns=1
+        )
         self.login_entry_boxes[1].config(show="*")
         
     def _forgot_password_button(self):

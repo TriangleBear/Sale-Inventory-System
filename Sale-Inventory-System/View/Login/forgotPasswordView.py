@@ -78,7 +78,7 @@ class ForgotPasswordView(tk.Frame):
         #userData = [user_id,username,email, otp] or 0
         
         if type(userData) == list:
-            self.forgotPasswordController.user_otp_verification(userData)
+            # self.forgotPasswordController.user_otp_verification(userData)
             messagebox.showinfo('OTP Sent', 'Check Email for OTP')
             print(f"from _checkAccount;forgotPasswordView|userData:\n{userData}")
             self._askOTP(userData)

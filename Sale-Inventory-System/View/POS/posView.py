@@ -1,7 +1,9 @@
 import tkinter as tk
+import os,textwrap
 from tkinter import ttk, messagebox, simpledialog
 from tkinter import font, CENTER
 from Utils import Functions
+from textwrap import dedent
 class PosView(tk.Frame):
     def __init__(self,posController,master):
         self.master = master
@@ -201,13 +203,14 @@ class PosView(tk.Frame):
                 sales_id,sold_on = self.posController.save_sales(amount_tendered,self.total_amount,datetime)
                 self.posController.save_transaction_to_sales(cart_items, sales_id,sold_on)
                 self.posController.update_product_quantity_in_database(cart_items=cart_items) #product_name, quantity
-                print(f'cart_items: {cart_items}')
+                self.posController.logUserActivity(sales_id)
                 messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
                 self.generate_invoice(cart_items=cart_items,amount_tendered=amount_tendered,change=amount_tendered - self.total_amount,refNo=sales_id,datetime=datetime)
                 self.tree_cart.delete(*self.tree_cart.get_children())
                 self.tree_product.delete(*self.tree_product.get_children())
                 self._insert_data(self.tree_product,Functions.convert_dicc_data(Functions.filter_product_columns(self.posController.fetch_all_products())))
                 self.total_amount = 0
+                self.update_total_amount_label()
         else:
             messagebox.showerror("Checkout Error", "Cart is empty.")
 
@@ -215,6 +218,20 @@ class PosView(tk.Frame):
         if not cart_items:       
             messagebox.showwarning("No Items", "No items to generate invoice.")
             return
+        max_item_name_width = max(len(item[0]) for item in cart_items) + 2  # Adding a little extra space
+        min_quantity_width = 5  # Minimum width for the quantity column
+        min_total_width = 10  # Minimum width for the total price column
+            
+        receipt_text = dedent(f"""
+        Tapsi ni Vivian
+        991 AURORA BLVD, PROJECT 3, QUEZON CITY, 
+        1102 METRO MANILA
+        32 GIL FERNANDO AVENUE, QUEZON CITY
+        Phone: (02)8645-0125
+        DATE: {datetime}
+        REF#: {refNo}
+        ITEM NAME\tQUANTITY\tTOTAL
+        """ + "-"*55 + "\n")
 
         receipt_text = (
             "Tapsi ni Vivian\n"
@@ -249,7 +266,12 @@ class PosView(tk.Frame):
             "Thank you for dining with us!\n"
         )
 
-        with open("receipt.txt", "w") as file:
+        if not os.path.exists("Sale-Inventory-System/Receipts"):
+            os.makedirs("Sale-Inventory-System/Receipts")
+        
+        path = os.path.join("Sale-Inventory-System/Receipts",f"{refNo}.txt")
+
+        with open(path, "w") as file:
             file.write(receipt_text)
 
         messagebox.showinfo("Invoice Generated", receipt_text)

@@ -58,6 +58,7 @@ class ManagerController:
         supplies_page.main()
 
     def posController(self,master):
+        Functions.destroy_page(master)
         from Controller import PosController
         pos_page = PosController(self,master)
         pos_page.main()

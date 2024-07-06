@@ -18,7 +18,6 @@ class ReportController():
         self.view.embed_graph(fig)
 
     def display_sales_report(self,date):
-        print(f'Date controller: {date}')
         model = ReportModel()
         fig = model.display_sales_report(date)
         self.view.embed_graph(fig)
