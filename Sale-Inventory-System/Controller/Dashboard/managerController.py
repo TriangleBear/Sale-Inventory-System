@@ -54,7 +54,7 @@ class ManagerController:
     def suppliesController(self,master):
         Functions.destroy_page(master)
         from Controller import SuppliesController
-        supplies_page = SuppliesController(master,self)
+        supplies_page = SuppliesController(self,master)
         supplies_page.main()
 
     def posController(self,master):

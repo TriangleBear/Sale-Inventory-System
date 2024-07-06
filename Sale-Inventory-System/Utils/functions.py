@@ -296,6 +296,9 @@ class Functions:
         for _ in data:
             temp.append(_)
         return temp
+    
+    def format_float(data:str):
+        return float(data)
 
     def format_cart_item(product, quantity, price):
         return [product, int(quantity), float(price)]
