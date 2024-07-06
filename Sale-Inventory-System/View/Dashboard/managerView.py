@@ -131,44 +131,46 @@ class ManagerDashboard(tk.Frame):
                                   text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
         self.back_btn.place(relx=0.5,rely=0.9,anchor='s')
 
-    def _check_back_command(self,string):
-        if string == "logout":
+    def _check_back_command(self,button:str):
+        if button == "logout":
             if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
                 self.mC.mainController()
-        if string == "home page":
+        if button == "home page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-        if string == "register_page":
+        if button == "register_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-        if string == "item_register_page":
+        if button == "item_register_page":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
 
-    def _check_buttons_command(self,string):
-        if string == "Registration":
+    def _check_buttons_command(self,button:str):
+        if button == "Registration":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
-        if string == "Security": 
+        if button == "Security": 
             self.mC.securityController(self.bodyFrame)
-        if string == "User Registration":
+        if button == "User Registration":
             self.mC.userRegisterController()
-        if string == "Item Registration":
+        if button == "Item Registration":
             Functions.destroy_page(self.bodyFrame)
             self._item_register_page()
-        if string == "Supply Item":
+        if button == "Supply Item":
             self.mC.itemRegisterController("Supply Item")
-        if string == "Raw Item":
+        if button == "Raw Item":
             self.mC.itemRegisterController("Raw Item")
-        if string == "Recipe Registration":
+        if button == "Recipe Registration":
             self.mC.recipeRegisterController(self.bodyFrame)
-        if string == "Inventory":
+        if button == "Inventory":
             self.mC.inventoryController(self.bodyFrame)
-        if string == "Report":
+        if button == "Report":
             self.mC.reportController(self.bodyFrame)
-        if string == "Product Registration":
+        if button == "Product Registration":
             self.show_hm_or_pm()
-        if string == "Point of Sale":
+        if button == "Supplies":
+            self.mC.suppliesController(self.bodyFrame)
+        if button == "Point of Sale":
             self.mC.posController(self.bodyFrame)
 
     def show_hm_or_pm(self):
