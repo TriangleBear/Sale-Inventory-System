@@ -76,7 +76,7 @@ class InventoryView(tk.Frame):
         for item in converted_data:
             self.tree.insert('', 'end', values=item)
 
-    def _change_column_labels(self,tree, table_name, data=None):
+    def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
         if table_name == "Items":
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.inventoryController.get_items_column_names())
@@ -123,6 +123,11 @@ class InventoryView(tk.Frame):
 
     def _update_item_data(self):
         self.inventoryController.itemUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
+
+    def _update_supply_data(self) -> None:
+        self.inventoryController.supplyUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
 
     def _update_row_data(self,table_name):
         if table_name == "Items":
@@ -130,12 +135,14 @@ class InventoryView(tk.Frame):
             self._update_item_data()
         if table_name == "Supplies":
             print(self.tree.item(self.tree.selection()[0],'values'))
+            self._update_supply_data()
         if table_name == "Products":
             print(self.tree.item(self.tree.selection()[0],'values'))
         if table_name == "Recipes":
             print(list(self.tree.item(self.tree.selection()[0],'values')))
             self._update_reg_ingd()
-    
+            self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
+
     def _delete_or_update_recipe_name(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Update Name", "Delete Recipe"]).result
         if user_choice == "Update Name":

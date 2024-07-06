@@ -14,6 +14,7 @@ from View.Inventory.productUpdateView import ProductUpdateView
 from View.Inventory.recipeUpdateView import RecipeUpdateView
 from View.Inventory.ingredientUpdateView import IngredientUpdateView
 from View.Inventory.itemUpdateView import ItemUpdateView
+from View.Inventory.supplyUpdateView import SupplyUpdateView
 from View.Supply.suppliesView import SuppliesView
 from View.POS.posView import PosView
 from View.Report.reportView import ReportView
@@ -32,6 +33,7 @@ __all__ = ["MainView",
            "ProductUpdateView",
            "IngredientUpdateView",
            "ItemUpdateView",
+           "SupplyUpdateView",
            "SuppliesView",
            "PosView",
            "ReportView",

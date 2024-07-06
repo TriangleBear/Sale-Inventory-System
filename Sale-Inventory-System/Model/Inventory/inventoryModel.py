@@ -37,10 +37,9 @@ class InventoryModel:
                     sql = """SELECT * FROM Supply 
                             WHERE supply_id LIKE %s 
                             OR user_id LIKE %s 
-                            OR product_name LIKE %s 
+                            OR item_name LIKE %s 
                             OR quantity LIKE %s 
                             OR unit LIKE %s 
-                            OR price_per_unit LIKE %s 
                             OR supplier LIKE %s 
                             OR exp_date LIKE %s 
                             OR menu_type LIKE %s 
@@ -48,7 +47,7 @@ class InventoryModel:
                             OR ceiling LIKE %s 
                             OR stock_level LIKE %s"""
                     search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
+                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
                 if self.table_name == "Product":
                     sql = """SELECT * FROM Product 
                             WHERE product_id LIKE %s 

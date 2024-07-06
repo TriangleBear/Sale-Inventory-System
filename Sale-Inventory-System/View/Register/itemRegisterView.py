@@ -27,14 +27,7 @@ class ItemRegisterView(tk.Toplevel):
             "menu_type":1,#supply item
             "Flooring":1,
             "Ceiling":1,
-
-
         }
-
-        self.item_entry_boxes = []
-
-        self.action_order = []
-
         self.categories = [
             "Fruits",
             "Vegetables",
@@ -52,7 +45,6 @@ class ItemRegisterView(tk.Toplevel):
             "Condiments and Sauces",
             "Beverages"
         ]
-        self.MenuType = ["Drinks","Desserts","Snacks"]
         self.units = [
             "Grams (g)",
             "Kilograms (kg)",
@@ -67,7 +59,10 @@ class ItemRegisterView(tk.Toplevel):
             "Dozen (dz)",
             "Case (cs)"
         ]
-
+        self.MenuType = ["Drinks","Desserts","Snacks"]
+        self.item_entry_boxes = []
+        self.action_order = []
+        
     def main(self):
         self._item_entry_frame()
         if self.status == "Raw Item":

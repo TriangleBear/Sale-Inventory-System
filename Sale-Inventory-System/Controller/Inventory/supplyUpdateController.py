@@ -1,11 +1,12 @@
-from View import ItemUpdateView
+from View import SupplyUpdateView
 from Utils import Functions
-class ItemUpdateController:
+
+class SupplyUpdateController:
     def __init__(self,managerController,inventoryController,item_data):
         self.mC = managerController
         self.inventoryController = inventoryController
         self.item_data = item_data
-        self.view = ItemUpdateView(self,self.item_data)
+        self.view = SupplyUpdateView(self,self.item_data)
         self.user_id = self.mC.user_id
 
     def main(self):
@@ -27,4 +28,4 @@ class ItemUpdateController:
         item.update_item(item_id,quantity)
 
     def logUserActivity(self):
-        Functions.logUserActivity([self.user_id,"Item Updated",Functions.get_current_date("datetime")])
+        Functions.logUserActivity([self.user_id,"Supply Updated",Functions.get_current_date("datetime")])

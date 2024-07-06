@@ -4,13 +4,13 @@ from tkinter import ttk,font,messagebox
 from tkcalendar import DateEntry
 from Utils import Functions
 
-class ItemUpdateView(tk.Toplevel):
+class SupplyUpdateView(tk.Toplevel):
     def __init__(self,itemUpdateController,item_data):
         super().__init__(background="GhostWhite")
         self.itemUpdateController = itemUpdateController
         self.item_data = item_data
         self.item_id = self.item_data[0]
-        self.status = "Raw Item"
+        self.status = "Supply Item"
         self._window_attributes()
 
         #frames attributes
@@ -65,7 +65,7 @@ class ItemUpdateView(tk.Toplevel):
 
     def main(self):
         self._item_entry_frame()
-        self._item_register_widgets()
+        self._supply_register_widgets()
         self._insert_into_entry_boxes(self.item_entry_boxes, [item for i, item in enumerate(self.item_data) if i > 1 and i != len(self.item_data) - 1])
         self._item_id_frame()
         self._item_id_lbl()
@@ -101,7 +101,7 @@ class ItemUpdateView(tk.Toplevel):
                               text=f"Item ID: {self.item_id}",background=self.mainBg)
         self.itemIdLbl.place(relx=0.5,rely=0.5,anchor=CENTER)
     
-    def _item_register_widgets(self):
+    def _supply_register_widgets(self):
         entrywidth = 23
         subset_one = {key:self.item_lbls_with_colspan[key] for key in ["item Name","Quantity"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
@@ -129,11 +129,11 @@ class ItemUpdateView(tk.Toplevel):
             side='e'
         )
         self._expiry_date_entry(2,0)
-        self._category_dropdown(2,2) #row=2 column=(2-3)
-        subset_three = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
+        self._menu_type_dropdown(2,2)
+        subset_two = {key:self.item_lbls_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.item_lbls_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
-            labels=subset_three,
+            labels=subset_two,
             bgColor=self.mainBg,
             entryList=self.item_entry_boxes,
             borderW=1,
@@ -177,14 +177,14 @@ class ItemUpdateView(tk.Toplevel):
 
         self.item_entry_boxes.append(self.expiry_date)
 
-    def _category_dropdown(self,current_r=0,current_c=0): #2,2
-        category_lbl = tk.Label(self.entryFrame,text="Category: ",background=self.mainBg,anchor='e')
-        category_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
-        category_lbl.columnconfigure(2,weight=1)
-        category = ttk.Combobox(self.entryFrame,values=self.categories)
-        category.set("Select Category")
-        category.grid(row=current_r,column=current_c+1,padx=5,pady=5)
-        self.item_entry_boxes.append(category)
+    def _menu_type_dropdown(self,current_r,current_c): #3,0
+        menu_type_lbl = tk.Label(self.entryFrame,text="Menu Type: ",background=self.mainBg,anchor='e')
+        menu_type_lbl.grid(row=current_r,column=current_c,padx=1,pady=5,sticky='e')
+        menu_type_lbl.columnconfigure(2,weight=1)
+        menu_type = ttk.Combobox(self.entryFrame,values=self.MenuType)
+        menu_type.set("Select Menu Type")
+        menu_type.grid(row=current_r,column=current_c+1,padx=5,pady=5)
+        self.item_entry_boxes.append(menu_type)
 
     def _update_button(self,current_r=0,current_c=0,status=None):#4,3 item #5,3 Supply
         register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
@@ -199,10 +199,10 @@ class ItemUpdateView(tk.Toplevel):
         if check_input == 0:
             self.itemUpdateController.updateItem(entryData,self.status)
             self.itemUpdateController.logUserActivity()
-            messagebox.showinfo('Item Update', 'Item Updated Successfully!')
+            messagebox.showinfo('Supply Item Update', 'Supply Item Updated Successfully!')
             self.destroy()
         else:
-            messagebox.showerror('Item Update Error', check_input)
+            messagebox.showerror('Supply Item Update Error', check_input)
     
     def _back_button(self,current_r,current_c):#4,2 item #5,2 supply
         back_btn = tk.Button(self.entryFrame, text="Back",font=font.Font(family='Courier New',size=9,weight='bold'), command=lambda: self.destroy())

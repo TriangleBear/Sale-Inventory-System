@@ -44,8 +44,7 @@ class ItemRegisterModel:
             return ValueError("Ceiling cannot be empty")
         return 0
 
-    def registerItemData(self):
-        #register item to data base
+    def registerItemData(self) -> int:
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 if self.status == "Supply Item":
@@ -77,6 +76,65 @@ class ItemRegisterModel:
                         self.flooring,
                         self.ceiling,
                         self.stock_level
+                    ))
+            connection.commit()
+            connection.close()
+        return 0
+
+    def updateItemData(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                if self.status == "Supply Item":
+                    sql = """UPDATE Supply SET 
+                            user_id = %s, 
+                            item_name = %s, 
+                            quantity = %s, 
+                            unit = %s, 
+                            supplier = %s, 
+                            exp_date = %s, 
+                            menu_type = %s, 
+                            flooring = %s, 
+                            ceiling = %s, 
+                            stock_level = %s
+                            WHERE supply_id = %s;"""
+                    cursor.execute(sql, (
+                        self.user_id,
+                        self.item_name,
+                        self.quantity,
+                        self.unit,
+                        self.supplier,
+                        self.expiry_date,
+                        self.category,
+                        self.flooring,
+                        self.ceiling,
+                        self.stock_level,
+                        self.item_id,
+                    ))
+                if self.status == "Raw Item":
+                    sql = """UPDATE Items SET 
+                            user_id = %s, 
+                            item_name = %s, 
+                            quantity = %s, 
+                            unit = %s, 
+                            supplier = %s, 
+                            exp_date = %s, 
+                            category = %s, 
+                            flooring = %s, 
+                            ceiling = %s, 
+                            stock_level = %s
+                            WHERE item_id = %s;"""
+                    cursor.execute(sql, (
+                        self.user_id,
+                        self.item_name,
+                        self.quantity,
+                        self.unit,
+                        self.supplier,
+                        self.expiry_date,
+                        self.category,
+                        self.flooring,
+                        self.ceiling,
+                        self.stock_level,
+                        self.item_id,
                     ))
             connection.commit()
             connection.close()
