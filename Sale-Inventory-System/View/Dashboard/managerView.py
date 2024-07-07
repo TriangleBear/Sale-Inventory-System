@@ -172,6 +172,8 @@ class ManagerDashboard(tk.Frame):
             self.mC.suppliesController(self.bodyFrame)
         if button == "Point of Sale":
             self.mC.posController(self.bodyFrame)
+        if button == "Maintenance":
+            self.mC.maintenanceController(self.bodyFrame)
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result

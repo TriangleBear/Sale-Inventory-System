@@ -12,7 +12,7 @@ from Model.Inventory.inventoryModel import InventoryModel
 from Model.Supply.suppliesModel import SuppliesModel
 from Model.POS.posModel import PosModel
 from Model.Report.reportModel import ReportModel
-from Controller.Maintenance.maintenanceController import MaintenanceModel
+from Model.Maintenance.maintenanceModel import MaintenanceModel
 
 __all__ = ["LoginModel",
            "ManagerModel",

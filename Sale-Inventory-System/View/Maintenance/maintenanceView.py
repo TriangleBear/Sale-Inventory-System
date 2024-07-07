@@ -6,17 +6,17 @@ class MaintenanceView(tk.Frame):
         self.mainBg = "Grey89"
         super().__init__(self.master, background=self.mainBg)
         self.maintenanceController = maintenanceController
-        self.pack(fill=tk.BOTH, expand=True)
-
         self.main_btn_lbls = ['Edit Data', 'Backup Data', 'Software Update']
+        self.pack(fill=tk.BOTH, expand=True)
         self.btns = []
 
     def main(self):
-        pass
+        self._buttons_maintenance_frame()
+        self._maintenance_buttons()
 
-    def _buttons_frame(self):
+    def _buttons_maintenance_frame(self):
         self.headerFrame = tk.Frame(self, background=self.mainBg)
-        self.headerFrame.place(relx=0.01, rely=0.05, anchor='nw')
+        self.headerFrame.place(relx=0.5, rely=0.5, anchor='n')
 
     def _maintenance_buttons(self):
         Functions.create_buttons_using_grid(
@@ -24,8 +24,8 @@ class MaintenanceView(tk.Frame):
             labels=self.main_btn_lbls,
             entryList=self.btns,
             max_columns=1,
-            w=21,
-            h=1,
+            w=30,
+            h=2,
             fontSize=12,
             gridxPadding=2,
             gridyPadding=3,
@@ -37,7 +37,9 @@ class MaintenanceView(tk.Frame):
     def _maintenance_button_commands(self, btn):
         if btn == 'Edit Data':
             pass
-        elif btn == 'Backup Data':
+        if btn == 'Backup Data':
             pass
         elif btn == 'Software Update':
             pass
+
+    
