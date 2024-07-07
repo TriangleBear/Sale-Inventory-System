@@ -147,12 +147,25 @@ class ProductRegisterView(tk.Toplevel):
         else:
             messagebox.showerror("Product Registration", insufficientStock)
             return
+    
+    # def register_pre_made_item(self,insufficientStock,product_inputs):
+    #     if insufficientStock == 0:
+    #         self.productRegisterController.register_product(product_inputs,self.product_id,self.name)
+    #         self.productRegisterController.logUserActivity()
+    #         messagebox.showinfo('Product Register', 'Product has been registered successfully!')
+    #         self.destroy()
+    #     else:
+    #         messagebox.showerror("Product Registration", insufficientStock)
+    #         return
 
     def _checkInput(self, data:list,state:str):
         product_inputs = Functions.format_product_data(data=[entry.get() for entry in data])
         #"""product_id""", """image_id""", """user_id""", """product_name""", quantity, price, exp_date, category, flooring, ceiling, stock_level
         print(f'Product Inputs: {product_inputs}')
         incorrectInput = self.productRegisterController.verify_product_inputs(product_inputs)
+        print("debug 1")
+        ic(incorrectInput)
+        ic(self.state)
         if incorrectInput == 0 and self.state == "Recipe":
             insufficientItem = self.productRegisterController.subtract_item_stock_level(self.id,product_inputs[0])
             print(f'Insufficient Item: {insufficientItem}')
