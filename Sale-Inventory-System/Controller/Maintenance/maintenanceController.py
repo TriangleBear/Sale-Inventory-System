@@ -98,6 +98,14 @@ class MaintenanceController:
         user_update = UserUpdateController(self,current_user_data)
         user_update.main()
 
-    def search_data(self,table_name,search_entry):
-        model = MaintenanceModel(search_entry=search_entry,table_name=table_name)
+    def search_data(self,table_name,search_query):
+        db_table = table_name
+        search = search_query
+        if table_name == "Supplies":
+            db_table = "Supply"
+        elif table_name == "Products":
+            db_table = "Product"
+        elif table_name == "Users":
+            db_table = "User"
+        model = MaintenanceModel(search_entry=search_query,table_name=db_table)
         return model.search_data()

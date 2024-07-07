@@ -73,12 +73,29 @@ class MaintenanceModel:
                     if self.table_name == "Users":
                         sql = """SELECT * FROM User
                                 WHERE user_id LIKE %s 
-                                OR username LIKE %s"""
+                                OR fname LIKE %s
+                                OR lname LIKE %s
+                                OR user_type LIKE %s
+                                OR birthdate LIKE %s
+                                OR contact_num LIKE %s
+                                OR email LIKE %s
+                                OR address LIKE %s
+                                OR username LIKE %s
+                                OR created_on LIKE %s"""
                         search_pattern = f"%{self.search_query}%"
                         cursor.execute(sql, (search_pattern,search_pattern))
                     result = cursor.fetchall()
                 finally:
                     connection.close()
+        return result
+    
+    def fetch_data_from_user_activity(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT * FROM UserActivity"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+            connection.close()
         return result
     
     def get_recipe_on_database(self):
