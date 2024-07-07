@@ -3,7 +3,6 @@ import os,textwrap,copy
 from tkinter import ttk, messagebox, simpledialog
 from tkinter import font, CENTER,FLAT
 from Utils import Functions
-from icecream import ic
 from textwrap import dedent
 class PosView(tk.Frame):
     def __init__(self,posController,master):

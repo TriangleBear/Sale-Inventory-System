@@ -10,11 +10,14 @@ class SuppliesView(tk.Frame):
         self.mainBg = "Grey89"
         super().__init__(self.master, background=self.mainBg)
         self.suppliesController = suppliesController
-        self.supplies_btn_lbls = ["Reorder"]
+        self.supplies_btn_lbls = ["Reorder","Order Supplies"]
         self.btns = []  # Initialize btns before calling self.main()
         self.pack(fill=tk.BOTH, expand=True)
-        self.table_cart = ['Product Name', 'Current Quantity', 'Quantity to Add']
-        self.entry_lbls = {'Product Name': 1, 'Current Quantity': 1, 'Quantity to Add': 1}
+        self.table_cart = ['ID', 'Product Name', 'Current Quantity', 'Quantity to Add']
+        self.entry_lbls = {'ID': 1,
+                           'Product Name': 1, 
+                           'Current Quantity': 1, 
+                           'Quantity to Add': 1}
         self.reorder_entry_boxes = []
         self.reorder_items = []
 
@@ -35,7 +38,7 @@ class SuppliesView(tk.Frame):
             self.headerFrame,
             labels=self.supplies_btn_lbls,
             entryList=self.btns,
-            max_columns=2,
+            max_columns=1,
             w=21,
             h=1,
             fontSize=12,
@@ -87,41 +90,42 @@ class SuppliesView(tk.Frame):
             if not selected_item:
                 return messagebox.showerror("Error", "Please select an item to reorder")
             self._reorder_items(selected_item)
+        if btn == "Order Supplies":
+            self._reorder()
 
     def _reorder_items(self, selected_item):
-        # Assuming you want to ask these questions once per reorder action, not per item.
-        type_of_id = simpledialog.askstring("Item Type", "Enter the type (supply or raw?):", parent=self)
-        if type_of_id not in ["supply", "raw"]:
-            messagebox.showerror("Error", "Invalid item type. Please enter 'supply' or 'raw'.")
-            return
-    
         for i in selected_item:
             item = self.tree_cart.item(i)['values']
-            product_name = item[0]
-            current_quantity = int(float(item[1]))
+            print(f'Item: {item}')
+            item_id = item[0]
+            product_name = item[1]
+            current_quantity = int(float(item[2]))
             quantity_to_add = simpledialog.askinteger("Add Quantity", f"How much of {product_name} to add?", parent=self, minvalue=1)
-    
+
             if quantity_to_add is not None:
                 # Assuming you still want to show the updated quantity in the UI
-                new_values = (product_name, current_quantity + quantity_to_add, quantity_to_add)
+                new_values = (item_id, product_name, current_quantity, quantity_to_add)
                 self.tree_cart.item(i, values=new_values)
-                self.reorder_items.append((product_name, current_quantity, quantity_to_add))
-    
-                if type_of_id == "supply":
-                    # Ensure this method adds `quantity_to_add` to the existing quantity in the database
-                    self.suppliesController.update_supply_quantity_in_database(product_name, quantity_to_add)
-                elif type_of_id == "raw":
-                    # Ensure there's a similar method for raw items that adds `quantity_to_add` to the existing quantity
-                    self.suppliesController.update_item_quantity_in_database(product_name, quantity_to_add)
+                self.reorder_items.append((item_id, product_name, current_quantity, quantity_to_add))
+
 
     def _reorder(self,item_name:str=None, current_quantity:int=None):
         if not self.reorder_items:
             return messagebox.showerror("Reorder Error", "No items selected for reorder.")
         
         for item in self.reorder_items:
-            item_name, current_quantity, quantity_to_add = item
+            id_id, item_name, current_quantity, quantity_to_add, *_ = item
             new_quantity = current_quantity + quantity_to_add
-            self.suppliesController.update_item_quantity_in_database(item_name, new_quantity)
+            # Fetch the table name or item type based on the item_id
+            table_name_or_type = self.suppliesController.get_item_type_by_id(id_id)  # Adjusted to use item_id
+            print(f'Table name or type: {table_name_or_type}')
+
+            if table_name_or_type == "Supply":
+                # Ensure this method adds `quantity_to_add` to the existing quantity in the database
+                self.suppliesController.update_supply_quantity_in_database(item_name, new_quantity)
+            elif table_name_or_type == "Items":
+                # Ensure there's a similar method for raw items that adds `quantity_to_add` to the existing quantity
+                self.suppliesController.update_item_quantity_in_database(item_name, new_quantity)
         
         messagebox.showinfo("Reorder", "Reorder successful. Inventory updated.")
         self.tree_cart.delete(*self.tree_cart.get_children())

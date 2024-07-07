@@ -18,6 +18,10 @@ class SuppliesController:
     def fetch_items_quantity(self, item_name, new_quantity):
         model = SuppliesModel()
         return model.fetch_items_quantity(item_name, new_quantity)
+    
+    def fetch_supply_quantity(self, item_name, new_quantity):
+        model = SuppliesModel()
+        return model.fetch_supply_quantity(item_name, new_quantity)
 
     def fetch_items_below_or_equal_flooring(self):
         model = SuppliesModel()
@@ -26,10 +30,6 @@ class SuppliesController:
     def fetch_supply_below_or_equal_flooring(self):
         model = SuppliesModel()
         return model.fetch_supply_below_or_equal_flooring()
-
-    def update_quantity(self,reorder_items):
-        model = PosModel(reorder_items=reorder_items)
-        return model.update_quantity(reorder_items[0], reorder_items[1])
     
     def update_item_quantity_in_database(self, item_name, new_quantity):
         model = SuppliesModel()
@@ -47,13 +47,9 @@ class SuppliesController:
             ]
         )
 
-    def get_supply_id(self, supply_name):
+    def get_item_type_by_id(self, item_id):
         model = SuppliesModel()
-        return model.get_supply_id(supply_name)
-    
-    def get_item_id(self, item_name):
-        model = SuppliesModel()
-        return model.get_item_id(item_name)
+        return model.get_item_type_by_id(item_id)
 
 
 
