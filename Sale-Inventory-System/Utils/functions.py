@@ -1,4 +1,3 @@
-from icecream import ic
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
@@ -332,7 +331,6 @@ class Functions:
             return [product_name,new_quantity,float(price*new_quantity)]
         else:
             return ValueError("Quantity is greater than available stock.")
-
         
         # if product_name == self.tree_cart.item(iid, 'values')[0]:
         #         current_quantity = int(self.tree_cart.item(iid, 'values')[1])
