@@ -84,6 +84,11 @@ class ManagerController:
         model = ManagerModel()
         return model.get_recipe_name_and_recipe_id()
     
+    def get_sid_sname(self):
+        from Model import ManagerModel
+        model = ManagerModel()
+        return model.get_supply_name_and_supply_id()
+    
     def get_ingd_id(self):
         from Model import IngredientRegisterModel
         model = IngredientRegisterModel()

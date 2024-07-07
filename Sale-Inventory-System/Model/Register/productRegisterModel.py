@@ -58,7 +58,6 @@ class ProductRegisterModel:
     def register_product(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                print(f'Data: {self.product_id}, {self.user_id}, {self.product_name}, {self.product_quantity}, {self.product_price}, {self.expiry_date}, {self.category}, {self.stock_level}, {self.flooring}, {self.ceiling}')
                 if not self.product_existence_check():
                     sql = """INSERT INTO Product (product_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""

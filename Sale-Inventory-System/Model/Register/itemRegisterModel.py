@@ -149,34 +149,29 @@ class ItemRegisterModel:
         if self.quantity >= self.ceiling:
             return "Maximum"
         
-    def subtract_stock(self,ingredient_total:dict):
-        #suctract all total quantities from items table that have the same name as the ingredient
-        #return error if total quantity of ingredient needed > stock level
-        #subtract the quantity from the quantity in the items database
-        #update the stock level
-        #return 0 to go back to productRegisterController
+    def subtract_item_stock(self,ingredient_total:dict):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 for ingredient_name, required_quantity in ingredient_total.items():
-                    # Retrieve the current stock level
-                    cursor.execute("SELECT quantity FROM Items WHERE item_name = %s", (ingredient_name,))
-                    result = cursor.fetchone()
+                    cursor.execute("SELECT quantity,flooring,ceiling FROM Items WHERE item_name = %s", (ingredient_name,))
+                    result = cursor.fetchall()
                     if result is None:
                         return f"Error: Ingredient {ingredient_name} not found in stock."
-                    current_stock = float(result['quantity'])
-                    
-                    # Check if sufficient stock is available
-                    if required_quantity > current_stock:
-                        return f"Error: Not enough stock for {ingredient_name}. Required: {required_quantity}, Available: {current_stock}"
-                    
-                    # Subtract the required quantity from the stock level
-                    new_stock = current_stock - required_quantity
-                    
-                    # Update the stock level in the database
-                    cursor.execute("UPDATE Items SET quantity = %s WHERE item_name = %s", (new_stock, ingredient_name))
-                    connection.commit()
-                    
-        return 0  # Indicate success
+                    self.quantity = float(result['quantity'])
+                    self.flooring = float(result['flooring'])
+                    self.ceiling = float(result['ceiling'])
+                    if required_quantity > self.quantity:
+                        return f"Error: Not enough stock for {ingredient_name}. Required: {required_quantity}, Available: {self.quantity}"
+                    self.quantity -= required_quantity
+                    cursor.execute("UPDATE Items SET quantity = %s, stock_level = %s WHERE item_name = %s", (self.quantity, self.checkStockLevel(), ingredient_name))
+                connection.commit()
+            cursor.close()
+        return 0
+    
+    def subtract_supply_stock(self,quantity:int):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as connection:
+                pass
     
     def update_item_in_database(self, item_id, new_quantity):
         with Database.get_db_connection() as connection:
@@ -185,4 +180,4 @@ class ItemRegisterModel:
                 cursor.execute(update_query, (new_quantity, item_id))
                 self.db_connection.commit()
             cursor.close()
-        return 0  # Indicate success
+        return 0

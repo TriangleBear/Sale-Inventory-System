@@ -151,12 +151,12 @@ class ProductRegisterView(tk.Toplevel):
         print(f'Product Inputs: {product_inputs}')
         incorrectInput = self.productRegisterController.verify_product_inputs(product_inputs)
         if incorrectInput == 0 and self.state == "Recipe":
-            insufficientItem = self.productRegisterController.subtract_stock_level(self.id,product_inputs[0])
+            insufficientItem = self.productRegisterController.subtract_item_stock_level(self.id,product_inputs[0])
             print(f'Insufficient Item: {insufficientItem}')
             self.register_home_made_item(insufficientItem,product_inputs)
             return
         elif incorrectInput == 0 and self.state == "Supply":
-            pass
+            insufficientItem = self.productRegisterController.subtract_supply_stock_level(self.id,product_inputs[0])
         else:
             messagebox.showerror("Product Registration", incorrectInput)
             return

@@ -25,9 +25,14 @@ class ProductRegisterController:
         Functions.destroy_page(master)
         self.mC.view.register_page()
     
-    def subtract_stock_level(self, recipe_id, quantity):
+    def subtract_item_stock_level(self, recipe_id, quantity):
         from Model import ItemRegisterModel, IngredientRegisterModel
         ingredient_model = IngredientRegisterModel([recipe_id,quantity])
+        item_model = ItemRegisterModel()
+        return item_model.subtract_item_stock(ingredient_model.get_total_quantity())
+    
+    def subtract_supply_stock_level(self, supply_id, quantity):
+        from Model import ItemRegisterModel
         item_model = ItemRegisterModel()
         return item_model.subtract_stock(ingredient_model.get_total_quantity())
         
