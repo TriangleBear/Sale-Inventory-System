@@ -19,7 +19,7 @@ from Controller.Supply.suppliesController import SuppliesController
 from Controller.POS.posController import PosController
 from Controller.Report.reportController import ReportController
 from Controller.Maintenance.maintenanceController import MaintenanceController
-
+from Controller.Maintenance.userUpdateController import UserUpdateController
 
 __all__ = ["MainController", 
            "LoginController",
@@ -41,4 +41,5 @@ __all__ = ["MainController",
            "PosController",
            "ReportController",
            "ProductRegisterController",
-           "MaintenanceController"]
+           "MaintenanceController",
+           "UserUpdateController"]

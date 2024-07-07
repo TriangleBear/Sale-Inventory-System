@@ -28,13 +28,7 @@ class ManagerController:
         from Controller import SecurityController
         security_page = SecurityController(master,self)
         security_page.main()
-
-    def maintenanceController(self,master):
-        Functions.destroy_page(master)
-        from Controller import MaintenanceController
-        maintenance_page = MaintenanceController(self,master)
-        maintenance_page.main()
-
+        
     def userRegisterController(self):
         from Controller import UserRegisterController
         user_register_page = UserRegisterController(self)

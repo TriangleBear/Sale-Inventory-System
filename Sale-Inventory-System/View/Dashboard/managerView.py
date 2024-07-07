@@ -18,6 +18,7 @@ class ManagerDashboard(tk.Frame):
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance"]
         self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
         self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
+        self.maintenance_btn_lbls = ["Edit Data","Update Software", "Backup Database"]
         self.btns = []
         self.item_btns = []
     
@@ -39,6 +40,11 @@ class ManagerDashboard(tk.Frame):
         self._center_frame()
         self._item_register_buttons()
         self._back_button("item_register_page")
+
+    def _maintenance_page(self):
+        self._center_frame()
+        self._maintenance_buttons()
+        self._back_button("maintenance_page")
         
 
     def _main_window_attributes(self):
@@ -126,6 +132,20 @@ class ManagerDashboard(tk.Frame):
                                             btnxPadding=5,
                                             cmd=self._check_buttons_command)
 
+    def _maintenance_buttons(self):
+        Functions.create_buttons_using_grid(self.btn_frame,
+                                            labels=self.maintenance_btn_lbls,
+                                            entryList=self.btns,
+                                            max_columns=2,
+                                            w=21,
+                                            h=1,
+                                            fontSize=12,
+                                            gridxPadding=10,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=5,
+                                            cmd=self._check_buttons_command)
+
     def _back_button(self,state:str):
         self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                   text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
@@ -144,6 +164,9 @@ class ManagerDashboard(tk.Frame):
         if button == "item_register_page":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
+        if button == "maintenance_page":
+            Functions.destroy_page(self.bodyFrame)
+            self.body()
 
     def _check_buttons_command(self,button:str):
         if button == "Registration":
@@ -173,7 +196,17 @@ class ManagerDashboard(tk.Frame):
         if button == "Point of Sale":
             self.mC.posController(self.bodyFrame)
         if button == "Maintenance":
+            Functions.destroy_page(self.bodyFrame)
+            self._maintenance_page()
+        if button == "Edit Data":
             self.mC.maintenanceController(self.bodyFrame)
+            pass
+        if button == "Update Software":
+            # self.mC.updateSoftwareController()
+            pass
+        if button == "Backup Database":
+            # self.mC.backupDatabaseController()
+            pass
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
