@@ -1,27 +1,21 @@
 from Utils import Database, Functions
 class ProductRegisterModel:
-    def __init__(self, data:list=None, user_id=None):
-        #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        self.product_id = Functions.generate_unique_id("Product")
-        self.image_id = ''
+    def __init__(self, data:list=None, user_id=None,product_id=None,product_name=None):
+        #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling        self.image_id = ''
         self.user_id = user_id
+        self.product_id = product_id
+        self.product_name = product_name
         if data is not None:
-            self.product_name = data[0]
-            self.product_quantity = data[1]
-            self.product_price = data[2]
-            self.expiry_date = data[3]
-            self.category = data[4]
-            self.flooring = data[5]
-            self.ceiling = data[6]
+            self.product_quantity = data[0]
+            self.product_price = data[1]
+            self.expiry_date = data[2]
+            self.category = data[3]
+            self.flooring = data[4]
+            self.ceiling = data[5]
             self.stock_level = self.checkStockLevel()
         
-    def get_recipe_name_by_id(self):
-        with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                sql = """SELECT recipe_id, recipe_name FROM Recipes"""
-                cursor.execute(sql)
-                recipes = cursor.fetchall()
-        return recipes
+    def set_product_id(self):
+        return Functions.generate_unique_id("Product")
 
     def get_product_details(self, product_id):
         with Database.get_db_connection() as connection:
@@ -43,35 +37,65 @@ class ProductRegisterModel:
             connection.close()
         return 0
 
-    def get_product_name(self):
+    def product_existence_check(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                sql = """SELECT product_name FROM Product WHERE product_name = %s"""
+                sql = """SELECT product_id FROM Product WHERE product_name = %s"""
                 cursor.execute(sql, (self.product_name,))
-                product_name = cursor.fetchone()
+                product_id = cursor.fetchone()
             connection.close()
-        return product_name
+        return product_id['product_id'] if product_id else None
     
+    def fetch_existing_product_quantity(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT quantity FROM Product WHERE product_name = %s AND product_id = %s"""
+                cursor.execute(sql, (self.product_name,self.product_id,))
+                quantity = cursor.fetchone()
+            connection.close()
+        return quantity['quantity'] if quantity else None
 
     def register_product(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                print(f'Data: {self.product_id}, {self.image_id}, {self.user_id}, {self.product_name}, {self.product_quantity}, {self.product_price}, {self.expiry_date}, {self.category}, {self.stock_level}, {self.flooring}, {self.ceiling}')
-                sql = """INSERT INTO Product (product_id, image_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
-                #supply_id should pass from supply module
-                cursor.execute(sql, (self.product_id, 
-                                     self.image_id, 
-                                     self.user_id, 
-                                     self.product_name, 
-                                     self.product_quantity, 
-                                     self.product_price, 
-                                     self.expiry_date, 
-                                     self.category, 
-                                     self.flooring, 
-                                     self.ceiling,
-                                     self.stock_level))
-                connection.commit()
+                if not self.product_existence_check():
+                    sql = """INSERT INTO Product (product_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+                    #supply_id should pass from supply module
+                    cursor.execute(sql, (self.product_id, 
+                                        self.user_id, 
+                                        self.product_name, 
+                                        self.product_quantity, 
+                                        self.product_price, 
+                                        self.expiry_date, 
+                                        self.category, 
+                                        self.flooring, 
+                                        self.ceiling,
+                                        self.stock_level))
+                    connection.commit()
+                else:
+                    current_quantity = self.fetch_existing_product_quantity()
+                    current_quantity += self.product_quantity
+                    sql = """UPDATE Product SET 
+                            quantity = %s,
+                            price = %s,
+                            exp_date = %s,
+                            category = %s,
+                            flooring = %s,
+                            ceiling = %s,
+                            stock_level = %s
+                            WHERE product_id = %s;"""
+                    cursor.execute(sql,(
+                        current_quantity,
+                        self.product_price,
+                        self.expiry_date,
+                        self.category,
+                        self.flooring,
+                        self.ceiling,
+                        self.stock_level,
+                        self.product_id
+                        ))
+                    connection.commit()
             connection.close()
         return 0
     
@@ -92,10 +116,7 @@ class ProductRegisterModel:
         return product_id if product_id else None
 
     def checkInput(self):
-        print(self.stock_level)
         #check error if error return ValueError else return 0
-        if not self.product_name:
-            return ValueError("Price cannot be empty")
         if not self.product_quantity:
             return ValueError("Quantity cannot be empty")
         if not self.product_price:

@@ -10,7 +10,7 @@ class ManagerModel:
                 cursor.execute(sql, (self.username,))
                 result = cursor.fetchone()
             connection.close()
-        return result
+        return result if result else None
     
     def get_recipe_name_and_recipe_id(self):
         with Database.get_db_connection() as connection:
@@ -29,3 +29,12 @@ class ManagerModel:
                 result = cursor.fetchone()
             connection.close()
         return result
+    
+    def get_supply_name_and_supply_id(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql ="""SELECT supply_id,item_name FROM Supply"""
+                cursor.execute(sql)
+                result = cursor.fetchall()
+            connection.close()
+        return result if result else None

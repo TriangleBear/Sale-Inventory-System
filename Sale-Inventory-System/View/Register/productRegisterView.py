@@ -1,19 +1,22 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import ttk,font,messagebox,CENTER
 from Utils import Functions
 from tkcalendar import DateEntry
 class ProductRegisterView(tk.Toplevel):
-    def __init__(self, productRegisterController, recipe_id=None):
+    def __init__(self, productRegisterController, id=None,name=None):
         super().__init__(background="GhostWhite")
-        self.recipe_id = recipe_id
+        self.id = id
+        self.name = name
         self.productRegisterController = productRegisterController
-        if recipe_id is not None:
-            self.recipe_name = self.productRegisterController.get_recipe_name_by_id(recipe_id)
+        if id[0] =="R":
+            self.state = "Recipe"
+        if id[0] =="S":
+            self.state = "Supply"
         self._windows_attributes()
+        self.product_id = self.create_product_id()
+
         #product_id, image_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level
         self.product_labels_with_colspan = {
-            "Product Name": 1,
             "Quantity": 1,
             "Price/unit": 1,
             "Expiry Date": 1,
@@ -27,11 +30,19 @@ class ProductRegisterView(tk.Toplevel):
         self.product_categories = ["Breakfast","Lunch","Dinner","Desert","Drinks","Snacks"] # Please change, this is just a placeholder
         self.mainBg = "Gray89"
 
+    def create_product_id(self):
+        id = self.productRegisterController.check_existing_product(self.name)
+        if not id:
+            return self.productRegisterController.get_product_id()
+        else:
+            return id
     def main(self):
         self._product_entry_frame()
+        self._product_id_frame()
+        self._product_id_lbl()
         self._product_widgets()
-        self._product_register_button(6,3)
-        self._back_button(6,2)
+        self._product_register_button(3,3)
+        self._back_button(3,2)
         self.mainloop()
 
     def _windows_attributes(self):
@@ -43,11 +54,12 @@ class ProductRegisterView(tk.Toplevel):
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
         # Set's the title to a specific recipe_id if recipe_id is not None
-        if self.recipe_id is not None:
-            print(f'{self.recipe_id}')
-            self.title(f'Product Registration | Recipe ID: {self.recipe_id}')
-        else:
-            self.title('Product Registration')
+        if self.state == "Recipe":
+            print(f'{self.id}')
+            self.title(f'Product Registration | Recipe ID: {self.id}')
+        elif self.state == "Supply":
+            print(f'{self.id}')
+            self.title(f'Product Registration | Supply ID: {self.id}')
 
 
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
@@ -58,10 +70,24 @@ class ProductRegisterView(tk.Toplevel):
     def _product_entry_frame(self):
         self.entryFrame = tk.Frame(self,background=self.mainBg,padx=40,pady=80)
         self.entryFrame.place(relx =0.5,rely=0.5,anchor='center')
+    
+    def _product_id_frame(self):
+        self.idFrame = tk.Frame(self,background=self.mainBg,width=580,height=40)
+        self.idFrame.place(relx=0,rely=0)
+
+    def _product_id_lbl(self):
+        self.itemIdLbl = tk.Label(
+            self.idFrame,
+            font=font.Font(family='Courier New',size=14,weight='bold'),
+            text=f"Product ID: {self.product_id} | Product Name: {self.name}",
+            background=self.mainBg
+        )
+        self.itemIdLbl.place(relx=0.5,rely=0.5,anchor=CENTER)
+
 
     def _product_widgets(self):
         #product_id, supply_id, product_name, quantity, price, expiration_date, category, stock_level, flooring, celling
-        subset_one = {key:self.product_labels_with_colspan[key] for key in ["Product Name","Quantity","Price/unit"] if key in self.product_labels_with_colspan}
+        subset_one = {key:self.product_labels_with_colspan[key] for key in ["Quantity","Price/unit"] if key in self.product_labels_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
             labels=subset_one,
@@ -72,8 +98,8 @@ class ProductRegisterView(tk.Toplevel):
             shortEntryWidth=23,
             side='e'
         )
-        self._prodcut_expiry_date(1,2)
-        self._product_category_dropdown(2,0)
+        self._prodcut_expiry_date(1,0)
+        self._product_category_dropdown(1,2)
         subset_two = {key:self.product_labels_with_colspan[key] for key in ["Flooring","Ceiling"] if key in self.product_labels_with_colspan}
         Functions.create_entry_box_using_grid(
             frame=self.entryFrame,
@@ -84,11 +110,9 @@ class ProductRegisterView(tk.Toplevel):
             borderW=1,
             bgColor=self.mainBg,
             max_columns=2,
-            current_r=3,
+            current_r=2,
             current_c=0,
-            #yPadding=15
         )
-
 
     def _prodcut_expiry_date(self,current_r=0,current_c=0):
         self.expiry_date_lbl = tk.Label(self.entryFrame,text="Expiry Date:",background=self.mainBg)
@@ -108,30 +132,31 @@ class ProductRegisterView(tk.Toplevel):
         self.product_entry_boxes.append(category)
 
     def _product_register_button(self,current_r=0,current_c=0):
-        register_btn = tk.Button(self.entryFrame, text="Register", command=lambda: self._checkInput(self.product_entry_boxes))
+        register_btn = tk.Button(self.entryFrame, text="Register", command=lambda: self._checkInput(self.product_entry_boxes,self.state))
         register_btn.grid(row=current_r, column=current_c, sticky='w', padx=5, pady=5)
 
-    def register_item(self,stock_level,product_inputs):
-        if stock_level == 0:
-            self.productRegisterController.register_product(product_inputs)
+    def register_home_made_item(self,insufficientStock,product_inputs):
+        if insufficientStock == 0:
+            self.productRegisterController.register_product(product_inputs,self.product_id,self.name)
             self.productRegisterController.logUserActivity()
             messagebox.showinfo('Product Register', 'Product has been registered successfully!')
             self.destroy()
         else:
-            messagebox.showerror("Product Registration", stock_level)
+            messagebox.showerror("Product Registration", insufficientStock)
             return
-        
 
-    def _checkInput(self, data:list):
-        product_inputs = [entry.get() for entry in data]
-        #"""product_id""", """image_id""", """user_id""", product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level
+    def _checkInput(self, data:list,state:str):
+        product_inputs = Functions.format_product_data(data=[entry.get() for entry in data])
+        #"""product_id""", """image_id""", """user_id""", """product_name""", quantity, price, exp_date, category, flooring, ceiling, stock_level
         print(f'Product Inputs: {product_inputs}')
         incorrectInput = self.productRegisterController.verify_product_inputs(product_inputs)
-        if incorrectInput == 0:
-            insufficientItem = self.productRegisterController.subtract_stock_level(self.recipe_id,product_inputs[1])
+        if incorrectInput == 0 and self.state == "Recipe":
+            insufficientItem = self.productRegisterController.subtract_item_stock_level(self.id,product_inputs[0])
             print(f'Insufficient Item: {insufficientItem}')
-            self.register_item(insufficientItem,product_inputs)
+            self.register_home_made_item(insufficientItem,product_inputs)
             return
+        elif incorrectInput == 0 and self.state == "Supply":
+            insufficientItem = self.productRegisterController.subtract_supply_stock_level(self.id,product_inputs[0])
         else:
             messagebox.showerror("Product Registration", incorrectInput)
             return

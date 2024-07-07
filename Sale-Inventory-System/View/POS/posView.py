@@ -122,17 +122,20 @@ class PosView(tk.Frame):
     def _category_commands(self,button):
         self.tree_product.delete(*self.tree_product.get_children())
         if button == "Breakfast":
+            self.menu_status = button
+            print(self.menu_status)
             breakfast = self.all_products
             self._insert_data(self.tree_product, self.get_breakfast_products(breakfast))
-            self.menu_status == "Breakfast"
         if button == "Lunch":
+            self.menu_status = button
+            print(self.menu_status)
             lunch = self.all_products
             self._insert_data(self.tree_product, self.get_lunch_products(lunch))
-            self.menu_status == "Lunch"
         if button == "Dinner":
+            self.menu_status = button
+            print(self.menu_status)
             dinner = self.all_products
             self._insert_data(self.tree_product, self.get_dinner_products(self.all_products))
-            self.menu_status == "Dinner"
         if button == "Desert":
             self.menu_status == "Desert"
         if button == "Drinks":
@@ -153,18 +156,32 @@ class PosView(tk.Frame):
         self.tree_cart.place(relx=0.98,rely=0.48,anchor='e',width=350,height=450)
 
     def _total_amount_num_lable(self):
-        self.total_amount_label = tk.Label(self,font=font.Font(family='Courier New',size=12,weight='bold'),
-                                           text=f"{self.total_amount}",background=self.mainBg)
+        self.total_amount_label = tk.Label(
+            self,
+            font=font.Font(family='Courier New',size=12,weight='bold'),
+            text=f"{self.total_amount}",
+            background=self.mainBg
+        )
         self.total_amount_label.place(relx=0.97,rely=0.9,anchor='se')
 
     def _total_amount_label(self):
-        total_amount_label = tk.Label(self,font=font.Font(family='Courier New',size=12,weight='bold'),
-                                           text=f"Total Amount: ",background=self.mainBg)
+        total_amount_label = tk.Label(
+            self,
+            font=font.Font(family='Courier New',size=12,weight='bold'),
+            text=f"Total Amount: ",
+            background=self.mainBg
+        )
         total_amount_label.place(relx=0.85,rely=0.9,anchor='se')
 
     def _checkout_button(self):
-        checkout_btn = tk.Button(self,font=font.Font(family='Courier New',size=12,weight='bold'),
-                                 padx=100,pady=2,text="Checkout",command=lambda:self._checkout(self.menu_status))
+        checkout_btn = tk.Button(
+            self,
+            font=font.Font(family='Courier New',size=12,weight='bold'),
+            padx=100,
+            pady=2,
+            text="Checkout",
+            command=lambda:self._checkout(self.menu_status)
+        )
         checkout_btn.place(relx=0.95,rely=0.97,anchor='se')
 
     def _search_data(self, search_query,menu):
@@ -210,11 +227,16 @@ class PosView(tk.Frame):
                 return
 
     def calculate_product_input(self):
-        selected_item = self.tree_product.selection()[0]  # Get the focused item in the product table
-        if not selected_item:  # Check if an item is selected
-            return messagebox.showerror("Error", "No product selected.")
-        product_name,quantity_available, product_price = self.tree_product.item(selected_item, 'values')
-        quantity = simpledialog.askinteger("Quantity", "Enter quantity:", minvalue=1)
+        selected_item = self.get_selected_product()
+        product_name,quantity_available, product_price = self.tree_product.item(selected_item, 'values') #unpack selected product values
+        quantity = simpledialog.askinteger("Quantity", "Enter quantity:", minvalue=1) #ask for amount desired for cart
+        self.check_quantity(product_name,quantity_available,product_price,quantity)
+        
+    def get_selected_product(self):
+        selected_item = self.tree_product.selection()[0]
+        return selected_item if selected_item else messagebox.showerror("Error", "No product selected.")
+    
+    def check_quantity(self,product_name,quantity_available,product_price,quantity):
         if quantity > int(quantity_available):  # Ensure a valid quantity is entered
             return messagebox.showerror("Error", "Quantity is greater than available stock.")
         elif quantity <= int(quantity_available):
@@ -224,7 +246,7 @@ class PosView(tk.Frame):
         else:
             return messagebox.showerror("Error", "Invalid quantity entered.")
 
-    def add_product_to_cart(self, selected_item:list,quantity_available):#selected item = [product_name, quantity, price]
+    def add_product_to_cart(self, selected_item:list,quantity_available:int):#selected item = [product_name, quantity, price]
         product_name,quantity,price = selected_item
         total_price = int(quantity) * price
         for iid in self.tree_cart.get_children():
@@ -250,7 +272,8 @@ class PosView(tk.Frame):
     def update_total_amount_label(self):
         self.total_amount_label.config(text=f"{self.total_amount}")
     
-    def table_reset(self,menu_status:str):
+    def table_reset(self,menu_status:str) -> None:
+        print(menu_status)
         self.tree_cart.delete(*self.tree_cart.get_children())
         self.tree_product.delete(*self.tree_product.get_children())
         self.total_amount = 0
@@ -259,17 +282,18 @@ class PosView(tk.Frame):
         if menu_status == "Breakfast":
             self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
         if menu_status == "Lunch":
-            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+            self._insert_data(self.tree_product,self.get_lunch_products(self.all_products))
         if menu_status == "Dinner":
-            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+            self._insert_data(self.tree_product,self.get_dinner_products(self.all_products))
         if menu_status == "Desert":
-            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+            self._insert_data(self.tree_product,self.get_desert_products(self.all_products))
         if menu_status == "Drinks":
-            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+            self._insert_data(self.tree_product,self.get_drinks_products(self.all_products))
         if menu_status == "Snacks":
-            self._insert_data(self.tree_product,self.get_breakfast_products(self.all_products))
+            self._insert_data(self.tree_product,self.get_snacks_products(self.all_products))
 
     def _checkout(self,menu_status:str):
+        print(menu_status)
         datetime = Functions.get_current_date("datetime")
         if self.tree_cart.get_children():
             cart_items = [] 
@@ -282,67 +306,54 @@ class PosView(tk.Frame):
                 self.posController.update_product_quantity_in_database(cart_items=cart_items) #product_name, quantity
                 self.posController.logUserActivity(sales_id)
                 messagebox.showinfo("Checkout", "Checkout successful. Inventory updated and sales recorded.")
-                self.generate_invoice(cart_items=cart_items,amount_tendered=amount_tendered,change=amount_tendered - self.total_amount,refNo=sales_id,datetime=datetime)
+                self.generate_invoice(cart_items=cart_items,amount_tendered=amount_tendered,change=amount_tendered - self.total_amount,refNo=sales_id,datetime=datetime,total_sales=self.total_amount)
                 self.table_reset(menu_status)
         else:
             messagebox.showerror("Checkout Error", "Cart is empty.")
 
-    def generate_invoice(self, cart_items, amount_tendered, change, refNo, datetime):
-        if not cart_items:       
+    def generate_invoice(self, cart_items, amount_tendered, change, refNo, datetime,total_sales):
+        if not cart_items:
             messagebox.showwarning("No Items", "No items to generate invoice.")
             return
-        max_item_name_width = max(len(item[0]) for item in cart_items) + 2  # Adding a little extra space
-        min_quantity_width = 5  # Minimum width for the quantity column
-        min_total_width = 10  # Minimum width for the total price column
-            
-        receipt_text = dedent(f"""
-        Tapsi ni Vivian
-        991 AURORA BLVD, PROJECT 3, QUEZON CITY, 
-        1102 METRO MANILA
-        32 GIL FERNANDO AVENUE, QUEZON CITY
-        Phone: (02)8645-0125
-        DATE: {datetime}
-        REF#: {refNo}
-        ITEM NAME\tQUANTITY\tTOTAL
-        """ + "-"*55 + "\n")
+        width = 35
+        currency = 'Php'
+        shop_name = "TAPSI NI VIVIAN"
+        disclaimer = "THIS DOCUMENT IS NOT VALID \nFOR CALIM OF INPUT TAX"
 
-        receipt_text = (
-            "Tapsi ni Vivian\n"
-            "991 AURORA BLVD, PROJECT 3, QUEZON CITY, 1102 METRO MANILA\n"
-            "32 GIL FERNANDO AVENUE, QUEZON CITY\n"
-            "Phone: (02)8645-0125\n"
-            f"DATE: {datetime}\n"
-            f"REF#: {refNo}\n"
-            "ITEM NAME            QUANTITY    TOTAL\n"
-            + "-"*55 + "\n"
-        )
+        items = [
+            shop_name.center(width),
+            str(refNo).center(width),
+            str(datetime).center(width),
+            currency.rjust(width)
+        ]
+        for name,count,price in cart_items:
+            price /= count
+            all_price = str(round(price*count,2))
+            msg = f'{name}'.ljust(width-len(all_price))+all_price
+
+            if type(count) is int and count >=2:
+                msg += f'\n     {count} x {price}'
+            elif type(count) is float:
+                msg += f'\n     {count} kg x {price}'
+            items.append(msg)
+
+        total= str(round(total_sales,2))
+        amt_tnd = str(round(amount_tendered,2))
+        change_due = str(round(change,2))
+        items.append(("-"*width).center(width))
+        items.append("TOTAL:".ljust(width-len(total))+total)
+        items.append("AMT_TND:".ljust(width-len(amt_tnd))+amt_tnd)
+        items.append(("-"*width).center(width))
+        items.append("CHANGE DUE:".ljust(width-len(change_due))+change_due)
+        items.append(("-"*width).center(width))
+        items.append(disclaimer.center(width))
+        receipt_text = '\n'.join(items)
         
-        for item in cart_items:
-            item_name = str(item[0]).upper()
-            quantity = item[1]
-            total = item[2]
-            receipt_text += f"{item_name:<20} {quantity:<10} {total:>10}\n"
-        
-        receipt_text += "-"*55 + "\n"
-        
-        subtotal = self.total_amount
-        tax = subtotal * 0.10  # Assuming a 10% tax rate
-        grand_total = subtotal + tax
-        receipt_text += (
-            f"SUBTOTAL:          {subtotal:>10.2f}\n"
-            f"TAX (10%):         {tax:>10.2f}\n"
-            f"TOTAL:             {grand_total:>10.2f}\n"
-            + "-"*55 + "\n"
-            f"AMOUNT TEND:       {amount_tendered:>10.2f}\n"
-            f"CHANGE DUE:        {change:>10.2f}\n"
-            + "-"*55 + "\n"
-            "Thank you for dining with us!\n"
-        )
 
         if not os.path.exists("Sale-Inventory-System/Receipts"):
             os.makedirs("Sale-Inventory-System/Receipts")
-        
-        path = os.path.join("Sale-Inventory-System/Receipts",f"{refNo}.txt")
+
+        path = os.path.join("Sale-Inventory-System/Receipts", f"{refNo}.txt")
 
         with open(path, "w") as file:
             file.write(receipt_text)

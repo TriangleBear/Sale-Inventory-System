@@ -84,10 +84,8 @@ class InventoryView(tk.Frame):
         if table_name == "Products":
             self.navBarLabel.config(text=f"{table_name} Inventory")
             product_labels = self.inventoryController.get_product_column_names()
-            product_labels.remove("image_id")
             Functions.change_column(tree,product_labels)
-            products_data = Functions.delete_image_id_column(self.inventoryController.search_data(table_name,data))
-            self._insert_data(products_data)
+            self._insert_data(self.inventoryController.search_data(table_name,data))
         if table_name == "Supplies":
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.inventoryController.get_supply_column_names())

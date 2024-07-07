@@ -156,18 +156,18 @@ class ManagerDashboard(tk.Frame):
         if button == "Item Registration":
             Functions.destroy_page(self.bodyFrame)
             self._item_register_page()
+        if button == "Recipe Registration":
+            self.mC.recipeRegisterController(self.bodyFrame)
+        if button == "Product Registration":
+            self.show_hm_or_pm()
         if button == "Supply Item":
             self.mC.itemRegisterController("Supply Item")
         if button == "Raw Item":
             self.mC.itemRegisterController("Raw Item")
-        if button == "Recipe Registration":
-            self.mC.recipeRegisterController(self.bodyFrame)
         if button == "Inventory":
             self.mC.inventoryController(self.bodyFrame)
         if button == "Report":
             self.mC.reportController(self.bodyFrame)
-        if button == "Product Registration":
-            self.show_hm_or_pm()
         if button == "Supplies":
             self.mC.suppliesController(self.bodyFrame)
         if button == "Point of Sale":
@@ -175,13 +175,15 @@ class ManagerDashboard(tk.Frame):
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
-        Rid_Rname = Functions.convert_dicc_data(self.mC.get_rid_rname())
-        formatted_values = [f"{rid} | {rname}" for rid, rname in Rid_Rname]
         if user_choice == "Home Made":
-            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            rid_rname = Functions.convert_dicc_data(self.mC.get_rid_rname())
+            formatted_values = [f"{rid} | {rname}" for rid, rname in rid_rname]
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC,state=user_choice).main()
             return
         if user_choice == "Pre Made":
-            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC).main()
+            sid_sname = Functions.convert_dicc_data(self.mC.get_sid_sname())
+            formatted_values = [f"{sid} | {sname}" for sid,sname in sid_sname]
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC,state=user_choice).main()
             
 
             

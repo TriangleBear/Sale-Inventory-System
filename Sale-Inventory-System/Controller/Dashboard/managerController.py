@@ -74,15 +74,20 @@ class ManagerController:
         logout = MainController()
         logout.main()
 
-    def productRegisterController(self,recipe_id):
+    def productRegisterController(self,id,name):
         from Controller import ProductRegisterController
-        product_register_page = ProductRegisterController(self,recipe_id)
+        product_register_page = ProductRegisterController(self,id,name)
         product_register_page.main()
 
     def get_rid_rname(self):
         from Model import ManagerModel
         model = ManagerModel()
         return model.get_recipe_name_and_recipe_id()
+    
+    def get_sid_sname(self):
+        from Model import ManagerModel
+        model = ManagerModel()
+        return model.get_supply_name_and_supply_id()
     
     def get_ingd_id(self):
         from Model import IngredientRegisterModel

@@ -285,20 +285,16 @@ class Functions:
     def format_item_data(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
         return [str_func(data[0]),
                 float_func(data[1]),
-                *str_list_func(data[2:4]),
-                data[4],
-                data[5],
+                *str_list_func(data[2:6]),
                 float_func(data[6]),
                 float_func(data[7])]
     
-    def format_productdata(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
-        return [str_func(data[0]),
+    def format_product_data(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
+        return [float_func(data[0]),
                 float_func(data[1]),
                 *str_list_func(data[2:4]),
-                data[4],
-                data[5],
-                float_func(data[6]),
-                float_func(data[7])]
+                float_func(data[4]),
+                float_func(data[5])]
     
     def filter_item_data(data:list):
         temp = []
@@ -380,14 +376,7 @@ class Functions:
         column_width = usable_width // num_columns  # Divide the usable width by the number of columns
         for col in _.widget['columns']:
             _.widget.column(col, width=column_width)  # Set each column to the calculated width
-    
-    def delete_image_id_column(data:list):
-        temp =[]
-        for inner_dict in data:
-            del inner_dict['image_id']
-            temp.append(inner_dict)
-        return temp
-    
+
     def filter_ingredient_columns(data:list):
         temp = []
         for inner_dict in data:
@@ -402,7 +391,6 @@ class Functions:
         temp = []
         for inner_dict in data:
             del inner_dict['product_id']
-            del inner_dict['image_id']
             del inner_dict['user_id']
             del inner_dict['exp_date']
             del inner_dict['category']
@@ -514,10 +502,11 @@ class CustomDialog(tk.Toplevel):
         self.destroy()
 
 class CustomComboboxDialog(tk.Toplevel):
-    def __init__(self, values:list,title=None, prompt=None, controller=None):
+    def __init__(self, values:list,title=None, prompt=None, controller=None,state=None):
         super().__init__()
         self._window_attributes()
         self.controller = controller
+        self.state = state
         self.title = title
         self.result = None
         self.prompt = prompt
@@ -569,10 +558,16 @@ class CustomComboboxDialog(tk.Toplevel):
     def _check_command(self,string):
         if string == "ok" and self.combobox.get() == "":
             messagebox.showerror('no input',"Please select a value from the combobox")
-        if string == "ok" and self.combobox.get() != "":
+        if string == "ok" and self.combobox.get() != "" and self.state == "Home Made":
             recipe_id = self.combobox.get()[:5]
+            recipe_name = self.combobox.get()[8:]
             self.destroy()
-            self.controller.productRegisterController(recipe_id)
+            self.controller.productRegisterController(recipe_id,recipe_name)
+        if string == "ok" and self.combobox.get() != "" and self.state == "Pre Made":
+            supply_id = self.combobox.get()[:5]
+            supply_name = self.combobox.get()[8:]
+            self.destroy()
+            self.controller.productRegisterController(supply_id,supply_name)
         if string == "cancel":
             self.destroy()
             return

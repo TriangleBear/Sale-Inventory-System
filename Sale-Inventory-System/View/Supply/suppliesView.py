@@ -76,9 +76,9 @@ class SuppliesView(tk.Frame):
         for item in data:
             tree.insert('', 0, values=item)
 
-    # def _reorder_button(self):
-    #     reorder_btn = tk.Button(self, font=font.Font(family='Courier New', size=12, weight='bold'), padx=100, pady=2, text="Reorder", command=self._reorder)
-    #     reorder_btn.place(relx=0.95, rely=0.97, anchor='se')
+    def _reorder_button(self):
+        reorder_btn = tk.Button(self, font=font.Font(family='Courier New', size=12, weight='bold'), padx=100, pady=2, text="Reorder", command=self._reorder)
+        reorder_btn.place(relx=0.95, rely=0.97, anchor='se')
 
     def _fetch_button(self):
         fetch_btn = tk.Button(self, font=font.Font(family='Courier New', size=12, weight='bold'), padx=100, pady=2, text="Fetch", command=self._load_reorder_items)

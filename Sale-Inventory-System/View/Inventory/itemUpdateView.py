@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk,font,messagebox
 from tkcalendar import DateEntry
 from Utils import Functions
+from icecream import ic
 
 class ItemUpdateView(tk.Toplevel):
     def __init__(self,itemUpdateController,item_data):
@@ -191,10 +192,13 @@ class ItemUpdateView(tk.Toplevel):
                                  text="Update", command=lambda:self._checkInput(self.item_entry_boxes))
         register_btn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)
 
-    def _checkInput(self, data:list): 
+    def _checkInput(self, entries:list): 
+        ic(entries)
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling
-        entryData = Functions.format_item_data(data = [entry.get().strip() for entry in data])
+        entryData = Functions.format_item_data(data = [entry.get().strip() for entry in entries])
+        ic(entryData)
         entryData.append(self.item_id)
+        ic(entryData)
         check_input = self.itemUpdateController.checkInput(entryData,self.status)
         if check_input == 0:
             self.itemUpdateController.updateItem(entryData,self.status)
