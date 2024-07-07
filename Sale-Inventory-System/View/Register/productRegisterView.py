@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk,font,messagebox,CENTER
 from Utils import Functions
 from tkcalendar import DateEntry
+from icecream import ic
 class ProductRegisterView(tk.Toplevel):
     def __init__(self, productRegisterController, id=None,name=None):
         super().__init__(background="GhostWhite")
@@ -10,7 +11,7 @@ class ProductRegisterView(tk.Toplevel):
         self.productRegisterController = productRegisterController
         if id[0] =="R":
             self.state = "Recipe"
-        if id[0] =="S":
+        if id[0] =="I":
             self.state = "Supply"
         self._windows_attributes()
         self.product_id = self.create_product_id()
@@ -135,7 +136,7 @@ class ProductRegisterView(tk.Toplevel):
         register_btn = tk.Button(self.entryFrame, text="Register", command=lambda: self._checkInput(self.product_entry_boxes,self.state))
         register_btn.grid(row=current_r, column=current_c, sticky='w', padx=5, pady=5)
 
-    def register_home_made_item(self,insufficientStock,product_inputs):
+    def register_item(self,insufficientStock,product_inputs):
         if insufficientStock == 0:
             self.productRegisterController.register_product(product_inputs,self.product_id,self.name)
             self.productRegisterController.logUserActivity()
@@ -144,19 +145,33 @@ class ProductRegisterView(tk.Toplevel):
         else:
             messagebox.showerror("Product Registration", insufficientStock)
             return
+    
+    # def register_pre_made_item(self,insufficientStock,product_inputs):
+    #     if insufficientStock == 0:
+    #         self.productRegisterController.register_product(product_inputs,self.product_id,self.name)
+    #         self.productRegisterController.logUserActivity()
+    #         messagebox.showinfo('Product Register', 'Product has been registered successfully!')
+    #         self.destroy()
+    #     else:
+    #         messagebox.showerror("Product Registration", insufficientStock)
+    #         return
 
     def _checkInput(self, data:list,state:str):
         product_inputs = Functions.format_product_data(data=[entry.get() for entry in data])
         #"""product_id""", """image_id""", """user_id""", """product_name""", quantity, price, exp_date, category, flooring, ceiling, stock_level
         print(f'Product Inputs: {product_inputs}')
         incorrectInput = self.productRegisterController.verify_product_inputs(product_inputs)
+        print("debug 1")
+        ic(incorrectInput)
+        ic(self.state)
         if incorrectInput == 0 and self.state == "Recipe":
             insufficientItem = self.productRegisterController.subtract_item_stock_level(self.id,product_inputs[0])
             print(f'Insufficient Item: {insufficientItem}')
-            self.register_home_made_item(insufficientItem,product_inputs)
+            self.register_item(insufficientItem,product_inputs)
             return
         elif incorrectInput == 0 and self.state == "Supply":
-            insufficientItem = self.productRegisterController.subtract_supply_stock_level(self.id,product_inputs[0])
+            insufficientItem = self.productRegisterController.subtract_supply_stock_level(self.id,self.name,product_inputs[0])
+            self.register_item(insufficientItem,product_inputs)
         else:
             messagebox.showerror("Product Registration", incorrectInput)
             return

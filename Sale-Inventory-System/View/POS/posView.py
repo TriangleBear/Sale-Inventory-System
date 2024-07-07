@@ -128,18 +128,18 @@ class PosView(tk.Frame):
             self._insert_data(self.tree_product, self.get_breakfast_products(breakfast))
         if button == "Lunch":
             self.menu_status = button
-            print(self.menu_status)
             lunch = self.all_products
             self._insert_data(self.tree_product, self.get_lunch_products(lunch))
         if button == "Dinner":
             self.menu_status = button
-            print(self.menu_status)
             dinner = self.all_products
-            self._insert_data(self.tree_product, self.get_dinner_products(self.all_products))
+            self._insert_data(self.tree_product, self.get_dinner_products(dinner))
         if button == "Desert":
             self.menu_status == "Desert"
         if button == "Drinks":
-            self.menu_status == "Drinks"
+            self.menu_status == button
+            drinks = self.all_products
+            self._insert_data(self.tree_product, self.get_drinks_products(drinks))
         if button == "Snacks":
             self.menu_status == "Snacks"
 

@@ -75,7 +75,8 @@ class ProductRegisterModel:
                     connection.commit()
                 else:
                     current_quantity = self.fetch_existing_product_quantity()
-                    current_quantity += self.product_quantity
+                    self.product_quantity += current_quantity  
+                    self.stock_level = self.checkStockLevel()
                     sql = """UPDATE Product SET 
                             quantity = %s,
                             price = %s,
@@ -86,7 +87,7 @@ class ProductRegisterModel:
                             stock_level = %s
                             WHERE product_id = %s;"""
                     cursor.execute(sql,(
-                        current_quantity,
+                        self.product_quantity,
                         self.product_price,
                         self.expiry_date,
                         self.category,
