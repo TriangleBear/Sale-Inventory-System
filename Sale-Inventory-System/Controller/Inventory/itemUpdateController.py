@@ -1,5 +1,6 @@
 from View import ItemUpdateView
 from Utils import Functions
+from icecream import ic
 class ItemUpdateController:
     def __init__(self,managerController,inventoryController,item_data):
         self.mC = managerController

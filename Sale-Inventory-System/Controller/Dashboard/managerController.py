@@ -74,9 +74,9 @@ class ManagerController:
         logout = MainController()
         logout.main()
 
-    def productRegisterController(self,recipe_id):
+    def productRegisterController(self,id,name):
         from Controller import ProductRegisterController
-        product_register_page = ProductRegisterController(self,recipe_id)
+        product_register_page = ProductRegisterController(self,id,name)
         product_register_page.main()
 
     def get_rid_rname(self):

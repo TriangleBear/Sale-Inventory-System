@@ -6,6 +6,7 @@ class ItemRegisterModel:
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling, stock_level
         self.status = status
         self.user_id = user_id
+        
         if data is not None:
             self.item_name = data[0]
             self.quantity = data[1]
@@ -141,7 +142,7 @@ class ItemRegisterModel:
         return 0
 
     def checkStockLevel(self):
-        if self.quantity > self.flooring and self.quantity < self.ceiling:
+        if self.quantity >= self.flooring and self.quantity < self.ceiling:
             return "Average"
         if self.quantity <= self.flooring:
             return "Danger"

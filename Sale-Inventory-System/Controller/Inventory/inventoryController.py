@@ -9,11 +9,6 @@ class InventoryController:
 
     def main(self):
         self.view.main()
-
-    def inventoryController(self):
-        from Controller import InventoryController
-        inventory_page = InventoryController(self.master)
-        inventory_page.main()
     
     def get_recipe_on_database(self):
         model = InventoryModel()
