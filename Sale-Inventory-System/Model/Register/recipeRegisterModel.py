@@ -15,15 +15,36 @@ class RecipeRegisterModel:
                 connection.commit() 
             connection.close()
         return
+    
+    def fetch_existing_recipe_quantity(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT quantity FROM Recipe WHERE recipe_name = %s AND recipe_id = %s"""
+                cursor.execute(sql, (self.recipe_name,self.recipe_id,))
+                quantity = cursor.fetchone()
+            connection.close()
+        return quantity['quantity'] if quantity else None
+
+    def recipe_existence_check(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """SELECT recipe_id FROM Recipes WHERE recipe_name = %s"""
+                cursor.execute(sql, (self.recipe_name,))
+                recipe_id = cursor.fetchone()
+            connection.close()
+        return recipe_id['recipe_id'] if recipe_id else None
 
     def create_recipe(self, user_id):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                sql = """INSERT INTO Recipe (user_id, recipe_id, recipe_name, category, ingredients, details) 
-                VALUES (%s, %s, %s, %s, %s, %s)"""
-                # user_id should pass inside cursor.execute
-                cursor.execute(sql, (user_id, self.get_recipe_id(), self.recipe_name, self.category, self.ingredients, self.details))
-                connection.commit()
+                if not self.recipe_existence_check():
+                    sql = """INSERT INTO Recipe (user_id, recipe_id, recipe_name, category, ingredients, details) 
+                    VALUES (%s, %s, %s, %s, %s, %s)"""
+                    # user_id should pass inside cursor.execute
+                    cursor.execute(sql, (user_id, self.get_recipe_id(), self.recipe_name, self.category, self.ingredients, self.details))
+                    connection.commit()
+                else:
+                    return ValueError("Recipe already exists")
             connection.close()
         return 0
     
