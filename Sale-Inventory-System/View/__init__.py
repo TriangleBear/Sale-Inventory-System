@@ -18,6 +18,7 @@ from View.Inventory.supplyUpdateView import SupplyUpdateView
 from View.Supply.suppliesView import SuppliesView
 from View.POS.posView import PosView
 from View.Report.reportView import ReportView
+from View.Maintenance.maintenanceView import MaintenanceView
 __all__ = ["MainView",
            "LoginView",
            "ForgotPasswordView",
@@ -38,4 +39,5 @@ __all__ = ["MainView",
            "PosView",
            "ReportView",
            "ForgotPasswordView",
-           "ProductRegisterView"]
+           "ProductRegisterView",
+           "MaintenanceView"]
