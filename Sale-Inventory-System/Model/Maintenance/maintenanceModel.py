@@ -16,67 +16,69 @@ class MaintenanceModel:
     def search_data(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                if self.table_name == "Items":
-                # Modify the SQL query to search in relevant fields. Here, it searches in the 'user_log' field.
-                # Use '%' wildcards for partial matches. Adjust the field name as per your database schema.
-                    sql = """SELECT * FROM Items 
-                            WHERE item_id LIKE %s 
-                            OR user_id LIKE %s 
-                            OR item_name LIKE %s 
-                            OR quantity LIKE %s 
-                            OR unit LIKE %s 
-                            OR supplier LIKE %s 
-                            OR exp_date LIKE %s 
-                            OR category LIKE %s 
-                            OR flooring LIKE %s 
-                            OR ceiling LIKE %s 
-                            OR stock_level LIKE %s"""
-                    search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
-                if self.table_name == "Supply":
-                    sql = """SELECT * FROM Supply 
-                            WHERE supply_id LIKE %s 
-                            OR user_id LIKE %s 
-                            OR item_name LIKE %s 
-                            OR quantity LIKE %s 
-                            OR unit LIKE %s 
-                            OR supplier LIKE %s 
-                            OR exp_date LIKE %s 
-                            OR menu_type LIKE %s 
-                            OR flooring LIKE %s 
-                            OR ceiling LIKE %s 
-                            OR stock_level LIKE %s"""
-                    search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
-                if self.table_name == "Product":
-                    sql = """SELECT * FROM Product 
-                            WHERE product_id LIKE %s 
-                            OR user_id LIKE %s
-                            OR product_name LIKE %s 
-                            OR quantity LIKE %s 
-                            OR price LIKE %s
-                            OR exp_date LIKE %s
-                            OR category LIKE %s
-                            OR flooring LIKE %s
-                            OR ceiling LIKE %s
-                            OR stock_level LIKE %s"""
-                    search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
-                if self.table_name == "Recipes":
-                    sql = """SELECT * FROM Recipes 
-                            WHERE recipe_id LIKE %s 
-                            OR recipe_name LIKE %s 
-                            OR user_id LIKE %s"""
-                    search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern,search_pattern))
-                if self.table_name == "Users":
-                    sql = """SELECT * FROM User
-                            WHERE user_id LIKE %s 
-                            OR username LIKE %s"""
-                    search_pattern = f"%{self.search_query}%"
-                    cursor.execute(sql, (search_pattern,search_pattern))
-                result = cursor.fetchall()
-            connection.close()
+                try:
+                    if self.table_name == "Items":
+                        # Modify the SQL query to search in relevant fields. Here, it searches in the 'user_log' field.
+                        # Use '%' wildcards for partial matches. Adjust the field name as per your database schema.
+                        sql = """SELECT * FROM Items 
+                                WHERE item_id LIKE %s 
+                                OR user_id LIKE %s 
+                                OR item_name LIKE %s 
+                                OR quantity LIKE %s 
+                                OR unit LIKE %s 
+                                OR supplier LIKE %s 
+                                OR exp_date LIKE %s 
+                                OR category LIKE %s 
+                                OR flooring LIKE %s 
+                                OR ceiling LIKE %s 
+                                OR stock_level LIKE %s"""
+                        search_pattern = f"%{self.search_query}%"
+                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
+                    if self.table_name == "Supply":
+                        sql = """SELECT * FROM Supply 
+                                WHERE supply_id LIKE %s 
+                                OR user_id LIKE %s 
+                                OR item_name LIKE %s 
+                                OR quantity LIKE %s 
+                                OR unit LIKE %s 
+                                OR supplier LIKE %s 
+                                OR exp_date LIKE %s 
+                                OR menu_type LIKE %s 
+                                OR flooring LIKE %s 
+                                OR ceiling LIKE %s 
+                                OR stock_level LIKE %s"""
+                        search_pattern = f"%{self.search_query}%"
+                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
+                    if self.table_name == "Product":
+                        sql = """SELECT * FROM Product 
+                                WHERE product_id LIKE %s 
+                                OR user_id LIKE %s
+                                OR product_name LIKE %s 
+                                OR quantity LIKE %s 
+                                OR price LIKE %s
+                                OR exp_date LIKE %s
+                                OR category LIKE %s
+                                OR flooring LIKE %s
+                                OR ceiling LIKE %s
+                                OR stock_level LIKE %s"""
+                        search_pattern = f"%{self.search_query}%"
+                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
+                    if self.table_name == "Recipes":
+                        sql = """SELECT * FROM Recipes 
+                                WHERE recipe_id LIKE %s 
+                                OR recipe_name LIKE %s 
+                                OR user_id LIKE %s"""
+                        search_pattern = f"%{self.search_query}%"
+                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern))
+                    if self.table_name == "Users":
+                        sql = """SELECT * FROM User
+                                WHERE user_id LIKE %s 
+                                OR username LIKE %s"""
+                        search_pattern = f"%{self.search_query}%"
+                        cursor.execute(sql, (search_pattern,search_pattern))
+                    result = cursor.fetchall()
+                finally:
+                    connection.close()
         return result
     
     def get_recipe_on_database(self):

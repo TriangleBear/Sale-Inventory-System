@@ -63,26 +63,26 @@ class MaintenanceView(tk.Frame):
 
     def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
         if table_name == "Items":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_items_column_names())
-            self._insert_data(self.maintenanceController.itemUpdate(table_name,data))
+            self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Products":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Inventory")
             product_labels = self.maintenanceController.get_product_column_names()
             Functions.change_column(tree,product_labels)
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Supplies":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_supply_column_names())
-            self._insert_data(self.maintenanceController.supplyUpdate(data))
+            self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Recipes":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_recipe_column_names())
-            self._insert_data(self.maintenanceController.recipeUpdate(table_name,data))
+            self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Users":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_users_column_names())
-            self._insert_data(self.maintenanceController.userUpdate(table_name,data))
+            self._insert_data(self.maintenanceController.search_data(table_name,data))
         return
     
     def _search_entry(self):
@@ -138,13 +138,18 @@ class MaintenanceView(tk.Frame):
             return
 
     def _update_user_data(self):
-        self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
-        self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
+        user_choice = CustomDialog(self.master,title="User",buttons=["Update User", "Delete User"]).result
+        if user_choice == "Update User":
+            self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        if user_choice == "Delete User":
+            self.maintenanceController.userDelete(list(self.tree.item(self.tree.selection()[0],'values')))
+            messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
+            return
         
     def userUpdate(self):
         self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
-
+        
 
     def _update_reg_ingd(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Recipe Name", "Recipe Ingredients"]).result
