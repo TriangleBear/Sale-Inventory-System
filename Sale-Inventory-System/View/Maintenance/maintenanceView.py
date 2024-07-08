@@ -65,24 +65,24 @@ class MaintenanceView(tk.Frame):
 
     def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
         if table_name == "Items":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Maintenance")
             Functions.change_column(tree,self.maintenanceController.get_items_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Products":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Maintenance")
             product_labels = self.maintenanceController.get_product_column_names()
             Functions.change_column(tree,product_labels)
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Supplies":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Maintenance")
             Functions.change_column(tree,self.maintenanceController.get_supply_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Recipes":
-            self.navBarLabel.config(text=f"{table_name}")
+            self.navBarLabel.config(text=f"{table_name} Maintenance")
             Functions.change_column(tree,self.maintenanceController.get_recipe_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "User":
-            self.navBarLabel.config(text=f"{table_name}")   
+            self.navBarLabel.config(text=f"{table_name} Maintenance")   
             Functions.change_column(tree,self.maintenanceController.get_users_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         return
@@ -92,7 +92,7 @@ class MaintenanceView(tk.Frame):
         self.searchEntry.place(relx=0.9,rely=0.5,anchor='e')
 
     def _search_button(self):
-        self.searchButton = tk.Button(self.navBarFrame, text="Search",font=font.Font(size=12),background=self.navBarBg,command=lambda: self._change_column_labels(self.tree,self.selectTable.get(),self.searchEntry.get()))
+        self.searchButton = tk.Button(self.navBarFrame, text="Search",font=font.Font(family='Courier New', size=9, weight='bold'),command=lambda: self._change_column_labels(self.tree,self.selectTable.get(),self.searchEntry.get()))
         self.searchButton.place(relx=0.64,rely=0.5,anchor='e')
 
     def _update_item_data(self):
