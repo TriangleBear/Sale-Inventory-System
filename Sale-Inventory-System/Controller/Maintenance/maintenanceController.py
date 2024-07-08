@@ -61,7 +61,7 @@ class MaintenanceController:
     
     def manager_view(self):
         Functions.destroy_page(self.master)
-        self.mC.view.body()
+        self.mC.view.maintenance_page()
 
     def recipeUpdate(self,current_recipe_data):
         from Controller import RecipeUpdateController

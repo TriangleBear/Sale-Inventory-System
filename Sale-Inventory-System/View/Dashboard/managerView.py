@@ -18,7 +18,7 @@ class ManagerDashboard(tk.Frame):
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance","Help & About"]
         self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
         self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
-        self.maintenance_btn_lbls = ["Edit Data","Update Software", "Backup/Restore Database"]
+        self.maintenance_btn_lbls = ["Edit Data", "Backup/Restore"]
         self.help_about_btn_lbls = ["User Manual","About Us"]
         self.btns = []
         self.item_btns = []
@@ -42,7 +42,7 @@ class ManagerDashboard(tk.Frame):
         self._item_register_buttons()
         self._back_button("item_register_page")
 
-    def _maintenance_page(self):
+    def maintenance_page(self):
         self._center_frame()
         self._maintenance_buttons()
         self._back_button("maintenance_page")
@@ -153,7 +153,7 @@ class ManagerDashboard(tk.Frame):
 
     def _help_and_about_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.maintenance_btn_lbls,
+                                            labels=self.help_about_btn_lbls,
                                             entryList=self.btns,
                                             max_columns=2,
                                             w=21,
@@ -186,6 +186,9 @@ class ManagerDashboard(tk.Frame):
         if button == "maintenance_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
+        if button == "Manual":
+            Functions.destroy_page(self.bodyFrame)
+            self._help_and_about()
 
     def _check_buttons_command(self,button:str):
         if button == "Security": 
@@ -216,7 +219,7 @@ class ManagerDashboard(tk.Frame):
             self.mC.posController(self.bodyFrame)
         if button == "Maintenance":
             Functions.destroy_page(self.bodyFrame)
-            self._maintenance_page()
+            self.maintenance_page()
         if button == "Edit Data":
             self.mC.maintenanceController(self.bodyFrame)
             pass
@@ -227,7 +230,16 @@ class ManagerDashboard(tk.Frame):
             self.mC.backupDatabaseController()
             pass
         if button == "Help & About":
+            Functions.destroy_page(self.bodyFrame)
             self._help_and_about()
+        if button == "User Manual":
+            Functions.destroy_page(self.bodyFrame)
+            self.manual_page()
+
+    def manual_page(self):
+        self._center_frame()
+        self._manual_buttons()
+        self._back_button("Manual")
 
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result

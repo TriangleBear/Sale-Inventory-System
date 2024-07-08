@@ -21,6 +21,7 @@ from View.Report.reportView import ReportView
 from View.Maintenance.maintenanceView import MaintenanceView
 from View.Maintenance.userUpdateView import UserUpdateView
 from View.Maintenance.backupDatabaseView import BackupDatabaseView
+from View.HelpAbout.userManualView import UserManualView
 __all__ = ["MainView",
            "LoginView",
            "ForgotPasswordView",
@@ -44,4 +45,5 @@ __all__ = ["MainView",
            "ProductRegisterView",
            "MaintenanceView",
            "UserUpdateView",
-           "BackupDatabaseView"]
+           "BackupDatabaseView",
+           "UserManualView"]

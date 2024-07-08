@@ -3,12 +3,6 @@ import tkinter as tk
 from Utils import Functions
 from tkinter import font, messagebox
 from tkinter.simpledialog import askstring
-import logging
-
-
-"""
-    REMOVE ALL PRINT STATEMENTS
-"""
 
 class LoginView(tk.Frame):
     def __init__(self,loginController,master):
