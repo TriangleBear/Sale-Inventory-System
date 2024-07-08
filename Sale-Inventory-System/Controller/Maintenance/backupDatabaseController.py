@@ -1,13 +1,17 @@
-
+from View import BackupDatabaseView
 class BackupDatabaseController:
-    def __init__(self, ):
-        pass
+    def __init__(self, managerConroller, master):
+        self.master = master
+        self.mC = managerController
+        self.view = BackupDatabaseView(self,self.master)
 
     def main(self):
-        pass
+        self.view.main()
 
     def backupDatabase(self):
-        return self.backupDatabaseModel.backupDatabase()
+        backupModel = BackupDatabaseModel()
+        backupModel.backupDatabase('database_backup.db')
 
     def restoreDatabase(self):
-        return self.backupDatabaseModel.restoreDatabase()
+        backupModel = BackupDatabaseModel()
+        backupModel.restoreDatabase('database_backup.db')

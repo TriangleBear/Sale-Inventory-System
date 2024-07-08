@@ -13,6 +13,7 @@ from Model.Supply.suppliesModel import SuppliesModel
 from Model.POS.posModel import PosModel
 from Model.Report.reportModel import ReportModel
 from Model.Maintenance.maintenanceModel import MaintenanceModel
+from Model.Maintenance.backupDatabaseModel import BackupDatabaseModel
 
 __all__ = ["LoginModel",
            "ManagerModel",
@@ -29,4 +30,5 @@ __all__ = ["LoginModel",
            "PosModel",
            "ReportModel",
            "ProductRegisterModel",
-           "MaintenanceModel"]
+           "MaintenanceModel",
+           "BackupDatabaseModel"]

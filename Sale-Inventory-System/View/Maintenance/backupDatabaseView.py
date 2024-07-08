@@ -7,11 +7,16 @@ class BackupDatabaseView:
         self.master.geometry("400x200")
         self.master.resizable(False, False)
 
-        self.backupDatabaseLabel = Label(self.master, text="Backup Database")
-        self.backupDatabaseLabel.pack()
 
-        self.backupDatabaseButton = Button(self.master, text="Backup Database", command=self.backupDatabase)
-        self.backupDatabaseButton.pack()
+    def createWidgets(self):
+        self.label = Label(self.master, text="Backup Database")
+        self.label.pack()
+
+        self.backupButton = Button(self.master, text="Backup Database", command=self.backupDatabase)
+        self.backupButton.pack()
+
+        self.restoreButton = Button(self.master, text="Restore Database", command=self.restoreDatabase)
+        self.restoreButton.pack()
 
     def backupDatabase(self):
         try:

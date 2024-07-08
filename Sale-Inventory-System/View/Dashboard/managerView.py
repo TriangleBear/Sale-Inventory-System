@@ -226,7 +226,7 @@ class ManagerDashboard(tk.Frame):
         if button == "Update Software":
             # self.mC.updateSoftwareController()
             pass
-        if button == "Backup Database":
+        if button == "Backup/Restore":
             self.mC.backupDatabaseController()
             pass
         if button == "Help & About":
