@@ -222,13 +222,8 @@ class ManagerDashboard(tk.Frame):
             self.maintenance_page()
         if button == "Edit Data":
             self.mC.maintenanceController(self.bodyFrame)
-            pass
-        if button == "Update Software":
-            # self.mC.updateSoftwareController()
-            pass
         if button == "Backup/Restore":
-            self.mC.backupDatabaseController()
-            pass
+            self.mC.backupDatabaseController(self.bodyFrame)
         if button == "Help & About":
             Functions.destroy_page(self.bodyFrame)
             self._help_and_about()

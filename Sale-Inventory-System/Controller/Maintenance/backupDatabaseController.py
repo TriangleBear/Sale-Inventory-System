@@ -1,9 +1,9 @@
 from View import BackupDatabaseView
 class BackupDatabaseController:
-    def __init__(self, managerConroller, master):
+    def __init__(self, managerController, master):
         self.master = master
         self.mC = managerController
-        self.view = BackupDatabaseView(self,self.master)
+        self.view = BackupDatabaseView(self,master)
 
     def main(self):
         self.view.main()

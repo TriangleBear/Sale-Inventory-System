@@ -8,6 +8,10 @@ class BackupDatabaseView:
         self.master.resizable(False, False)
 
 
+    def main(self):
+        self.createWidgets()
+        self.master.mainloop()
+
     def createWidgets(self):
         self.label = Label(self.master, text="Backup Database")
         self.label.pack()

@@ -74,6 +74,11 @@ class ManagerController:
         report_page = ReportController(self,master)
         report_page.main()
 
+    def backupDatabaseController(self,master):
+        from Controller import BackupDatabaseController
+        backup_page = BackupDatabaseController(self,master)
+        backup_page.main()
+
     def mainController(self):
         self.master.destroy()
         from Controller import MainController

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import CENTER, font, ttk, messagebox
 from Utils import Functions
 from Utils import CustomDialog
-class UserManuelView(tk.Frame):
+class UserManualView(tk.Frame):
     def __init__(self, userManualController, master):
         self.master = master
         self.mainBg = "Gray89"
