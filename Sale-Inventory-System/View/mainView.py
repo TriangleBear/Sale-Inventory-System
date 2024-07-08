@@ -2,7 +2,7 @@
 import tkinter as tk
 from tkinter import font, ttk, messagebox
 
-class MainView(tk.Tk):
+class MainView(tk.Tk): 
     def __init__(self, mainController):
         super().__init__()
         self.mainController = mainController
@@ -48,4 +48,4 @@ class MainView(tk.Tk):
         self.mainController.ingredientRegisterController('R4461')
 
     def staffController(self):
-        self.mainController.staffController(self,'S1451')
+        self.mainController.staffController(self,'S1203') #test user id
