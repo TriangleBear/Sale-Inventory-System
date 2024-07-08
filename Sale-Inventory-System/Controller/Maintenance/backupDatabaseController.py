@@ -1,4 +1,5 @@
 from View import BackupDatabaseView
+from Model import BackupDatabaseModel
 class BackupDatabaseController:
     def __init__(self, managerController, master):
         self.master = master
@@ -10,8 +11,8 @@ class BackupDatabaseController:
 
     def backupDatabase(self):
         backupModel = BackupDatabaseModel()
-        backupModel.backupDatabase('database_backup.db')
+        backupModel.backupDatabase()
 
     def restoreDatabase(self):
         backupModel = BackupDatabaseModel()
-        backupModel.restoreDatabase('database_backup.db')
+        backupModel.restoreDatabase()
