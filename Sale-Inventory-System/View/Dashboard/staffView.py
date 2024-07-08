@@ -1,24 +1,25 @@
-from tkinter import *
-import tkinter as tk
-from tkinter import font,messagebox
-from Utils import Functions, CustomDialog, CustomComboboxDialog
-class StaffDashboard(tk.Frame):
-    def __init__(self,staffController,master,user_id):
+import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
+from Utils import Functions
+class StaffDashboard(ctk.CTkFrame):
+    def __init__(self, staffController, master, user_id):
         self.master = master
         self._main_window_attributes()
-        super().__init__(self.master, background="GhostWhite")
+        super().__init__(self.master)
         self.sC = staffController
         self.user_id = user_id
-        self.pack(fill=tk.BOTH,expand=True)
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")
+        self.pack(fill='both', expand=True)
 
-        #frames attributes
+        # Frames attributes
         self.mainBg = 'Grey90'
 
-        #buttons
-        self.main_btn_lbls = ["Point of Sale","Forget Password"]
+        # Buttons
+        self.main_btn_lbls = ["Point of Sale", "Forget Password"]
         self.btns = []
         self.item_btns = []
-    
+
     def main(self):
         self._header_frame()
         self._body_frame()
@@ -27,10 +28,9 @@ class StaffDashboard(tk.Frame):
     def body(self):
         self._center_frame()
         self._body_buttons()
-        
 
     def _main_window_attributes(self):
-        # main window
+        # Main window
         self.h = 720
         self.w = 900
         screen_width = self.master.winfo_screenwidth()
@@ -43,35 +43,37 @@ class StaffDashboard(tk.Frame):
         self.master.resizable(False, False)
 
     def _header_frame(self):
-        self.headerFrame = tk.Frame(self,background=self.mainBg)
-        self.headerFrame.place(x=0,y=0, width=900,height=45)
+        self.headerFrame = ctk.CTkFrame(self, width=900, height=45)
+        self.headerFrame.place(x=0, y=0)
 
         self._user_label()
         self._home_button()
         self._logout_button()
 
     def _user_label(self):
-        user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
-                              text=f"staff dashboard | user ID: {self.user_id}",background=self.mainBg)
-        user_label.place(x=9,y=9)
+        user_label = ctk.CTkLabel(self.headerFrame, text=f"staff dashboard | user ID: {self.user_id}",
+                                  font=ctk.CTkFont(family='Courier New', size=14, weight='bold'),
+                                  fg_color=self.mainBg)
+        user_label.place(x=9, y=9)
 
     def _home_button(self):
-        home_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
-                               text="Home", command=lambda:self._check_back_command("home page"))
-        home_btn.place(relx=0.88,rely=0.5,anchor='e')
+        home_btn = ctk.CTkButton(self.headerFrame, text="Home", font=ctk.CTkFont(family='Courier New', size=9, weight='bold'),
+                                 command=lambda: self._check_back_command("home page"))
+        home_btn.place(relx=0.88, rely=0.5, anchor='e')
 
     def _logout_button(self):
-        logout_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
-                               text="Logout", command=lambda:self._check_back_command("logout"))
-        logout_btn.place(relx=0.95,rely=0.5,anchor='e')
+        logout_btn = ctk.CTkButton(self.headerFrame, text="Logout",
+                                   font=ctk.CTkFont(family='Courier New', size=9, weight='bold'),
+                                   command=lambda: self._check_back_command("logout"))
+        logout_btn.place(relx=0.95, rely=0.5, anchor='e')
 
     def _body_frame(self):
-        self.bodyFrame = tk.Frame(self, background=self.mainBg)
-        self.bodyFrame.place(x=30,y=75,width=(self.w-60),height=self.h-120)
+        self.bodyFrame = ctk.CTkFrame(self, width=(self.w - 60), height=self.h - 120)
+        self.bodyFrame.place(x=30, y=75)
 
     def _center_frame(self):
-        self.btn_frame = tk.Frame(self.bodyFrame,background=self.mainBg)
-        self.btn_frame.place(relx=0.5,rely=0.5,anchor=CENTER)
+        self.btn_frame = ctk.CTkFrame(self.bodyFrame)
+        self.btn_frame.place(relx=0.5, rely=0.5, anchor='center')
 
     def _body_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
@@ -87,32 +89,16 @@ class StaffDashboard(tk.Frame):
                                             btnxPadding=10,
                                             cmd=self._check_buttons_command)
 
-    def _main_register_buttons(self):
-        Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.registration_btn_lbls,
-                                            entryList=self.btns,
-                                            max_columns=2,
-                                            w=21,
-                                            h=1,
-                                            fontSize=12,
-                                            gridxPadding=10,
-                                            gridyPadding=10,
-                                            btnyPadding=2,
-                                            btnxPadding=5,
-                                            cmd=self._check_buttons_command)
-
-    def _check_back_command(self,string):
+    def _check_back_command(self, string):
         if string == "logout":
-            if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
+            if CTkMessagebox.ask_yes_no('Confirm Logout', 'Proceed with logout?'):
                 self.sC.mainController()
         if string == "home page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
-    def _check_buttons_command(self,string):
+
+    def _check_buttons_command(self, string):
         if string == "Point of Sale":
             self.sC.posController(self.bodyFrame)
         if string == "Forget Password":
             self.sC.forgotPasswordController(self.bodyFrame)
-            
-
-            
