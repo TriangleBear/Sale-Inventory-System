@@ -1,6 +1,7 @@
 from View import *
 from tkinter import *
 from tkinter import font, ttk, messagebox
+import customtkinter as ctk
 from tkcalendar import DateEntry
 from Utils import *
 from email.message import EmailMessage
@@ -23,18 +24,18 @@ class Functions:
             return datetime.now().date()
         if data=="datetime":
             return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        
+
     def create_buttons_using_grid(
             frame,
-            labels:list,
-            entryList:list,
-            max_columns:int,
-            max_rows:int=None,
+            labels: list,
+            entryList: list,
+            max_columns: int,
+            max_rows: int = None,
             fontSize=9,
             current_r=0,
             current_c=0,
-            bgColor:str=None,
-            borderW:int=1,
+            bgColor: str = None,
+            borderW: int = 1,
             w=None,
             h=None,
             columnSpan=None,
@@ -50,41 +51,37 @@ class Functions:
         current_row = current_r
         current_column = current_c
         for string in labels:
-            b = tk.Button(
+            b = ctk.CTkButton(
                     frame,
-                    font=font.Font(family='Courier New',size=fontSize,weight='bold'),
-                    borderwidth=borderW,
-                    background=bgColor,
+                    font=ctk.CTkFont(family='Courier New', size=fontSize, weight='bold'),
                     text=f"{string}",
                     width=w,
                     height=h,
-                    padx=btnxPadding,
-                    pady=btnyPadding,
-                    relief=relf,
-                    activebackground=activeBg,
-                    command=lambda var=string:cmd(f"{var}")
+                    fg_color=bgColor,
+                    corner_radius=borderW,
+                    command=lambda var=string: cmd(f"{var}")
                 )
-            current_column +=1
-            b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
+            current_column += 1
+            b.grid(row=current_row, column=current_column, columnspan=columnSpan, padx=gridxPadding, pady=gridyPadding, sticky=side)
             entryList.append(b)
 
-            if (current_column >= max_columns):
-                current_column =0
-                current_row +=1
+            if current_column >= max_columns:
+                current_column = 0
+                current_row += 1
             else:
-                current_column +=1
+                current_column += 1
 
     def create_table_using_grid(
             frame,
-            labels:list,
-            entryList:list,
-            max_columns:int,
-            max_rows:int=None,
+            labels: list,
+            entryList: list,
+            max_columns: int,
+            max_rows: int = None,
             fontSize=9,
             current_r=0,
             current_c=0,
-            bgColor:str=None,
-            borderW:int=1,
+            bgColor: str = None,
+            borderW: int = 1,
             w=None,
             h=None,
             columnSpan=None,
@@ -98,22 +95,26 @@ class Functions:
         current_row = current_r
         current_column = current_c
         for string in labels:
-            b = ttk.Treeview(frame, 
-                                font=font.Font(family='Courier New',size=fontSize,weight='bold'),
-                                borderwidth=borderW,
-                                background=bgColor,
-                                text=f"{string}", width=w,height=h,
-                                padx=btnxPadding,pady=btnyPadding,
-                                command=lambda var=string:cmd(f"{var}"))
-            current_column +=1
-            b.grid(row=current_row,column=current_column,columnspan=columnSpan,padx=gridxPadding,pady=gridyPadding,sticky=side)
+            b = ctk.CTkLabel(
+                    frame,
+                    font=ctk.CTkFont(family='Courier New', size=fontSize, weight='bold'),
+                    text=f"{string}",
+                    width=w,
+                    height=h,
+                    fg_color=bgColor,
+                    corner_radius=borderW,
+                )
+            current_column += 1
+            b.grid(row=current_row, column=current_column, columnspan=columnSpan, padx=gridxPadding, pady=gridyPadding, sticky=side)
             entryList.append(b)
 
-            if (current_column >= max_columns):
-                current_column =0
-                current_row +=1
+            if current_column >= max_columns:
+                current_column = 0
+                current_row += 1
             else:
-                current_column +=1
+                current_column += 1
+
+
 
 
     def check_password_criteria(password,username,email,fname,lname,old_password=None):

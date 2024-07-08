@@ -1,25 +1,26 @@
-from tkinter import *
-import tkinter as tk
-from tkinter import font,messagebox, simpledialog
+import customtkinter as ctk
 from Utils import Functions, CustomDialog, CustomComboboxDialog
-class ManagerDashboard(tk.Frame):
-    def __init__(self,mC,master,user_id):
+
+class ManagerDashboard(ctk.CTkFrame):
+    def __init__(self, mC, master, user_id):
         self.master = master
         self._main_window_attributes()
-        super().__init__(self.master, background="GhostWhite")
+        super().__init__(self.master, width=900, height=720)  # Set width and height here
         self.mC = mC
         self.user_id = user_id
-        self.pack(fill=tk.BOTH,expand=True)
-
-        #frames attributes
         self.mainBg = 'Grey90'
+        ctk.set_appearance_mode("light")
+        ctk.set_default_color_theme("blue")
+        self.pack(fill='both', expand=True)
 
-        #buttons
-        self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance","Help & About"]
-        self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        # frames attributes
+
+        # buttons
+        self.main_btn_lbls = ["Security", "Registration", "Inventory", "Supplies", "Point of Sale", "Report", "Maintenance", "Help & About"]
+        self.registration_btn_lbls = ["User Registration", "Item Registration", "Product Registration", "Recipe Registration"]
         self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
         self.maintenance_btn_lbls = ["Edit Data", "Backup/Restore"]
-        self.help_about_btn_lbls = ["User Manual","About Us"]
+        self.help_about_btn_lbls = ["User Manual", "About Us"]
         self.btns = []
         self.item_btns = []
     
@@ -34,7 +35,7 @@ class ManagerDashboard(tk.Frame):
 
     def register_page(self):
         self._center_frame()
-        self._main_register_buttons() # load buttons
+        self._main_register_buttons()  # load buttons
         self._back_button("register_page")
 
     def _item_register_page(self):
@@ -66,35 +67,35 @@ class ManagerDashboard(tk.Frame):
         self.master.resizable(False, False)
 
     def _header_frame(self):
-        self.headerFrame = tk.Frame(self,background=self.mainBg)
-        self.headerFrame.place(x=0,y=0, width=900,height=45)
+        self.headerFrame = ctk.CTkFrame(self, width=900, height=45)  # Set width and height here
+        self.headerFrame.place(x=0, y=0)
 
         self._user_label()
         self._home_button()
         self._logout_button()
 
     def _user_label(self):
-        user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
-                              text=f"manager dashboard | user ID: {self.user_id}",background=self.mainBg)
-        user_label.place(x=9,y=9)
+        user_label = ctk.CTkLabel(self.headerFrame, font=ctk.CTkFont(family='Courier New', size=14, weight='bold'),
+                                  text=f"manager dashboard | user ID: {self.user_id}")
+        user_label.place(x=9, y=9)
 
     def _home_button(self):
-        home_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
-                               text="Home", command=lambda:self._check_back_command("home page"))
-        home_btn.place(relx=0.88,rely=0.5,anchor='e')
+        home_btn = ctk.CTkButton(self.headerFrame, font=ctk.CTkFont(family='Courier New', size=9, weight='bold'),
+                                 text="Home", command=lambda: self._check_back_command("home page"))
+        home_btn.place(relx=0.88, rely=0.5, anchor='e')
 
     def _logout_button(self):
-        logout_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
-                               text="Logout", command=lambda:self._check_back_command("logout"))
-        logout_btn.place(relx=0.95,rely=0.5,anchor='e')
+        logout_btn = ctk.CTkButton(self.headerFrame, font=ctk.CTkFont(family='Courier New', size=9, weight='bold'),
+                                   text="Logout", command=lambda: self._check_back_command("logout"))
+        logout_btn.place(relx=0.95, rely=0.5, anchor='e')
 
     def _body_frame(self):
-        self.bodyFrame = tk.Frame(self, background=self.mainBg)
-        self.bodyFrame.place(x=30,y=75,width=(self.w-60),height=self.h-120)
+        self.bodyFrame = ctk.CTkFrame(self, width=(self.w-60), height=self.h-120)  # Set width and height here
+        self.bodyFrame.place(x=30, y=75)
 
     def _center_frame(self):
-        self.btn_frame = tk.Frame(self.bodyFrame,background=self.mainBg)
-        self.btn_frame.place(relx=0.5,rely=0.5,anchor=CENTER)
+        self.btn_frame = ctk.CTkFrame(self.bodyFrame)
+        self.btn_frame.place(relx=0.5, rely=0.5, anchor='center')
 
     def _body_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
@@ -165,14 +166,14 @@ class ManagerDashboard(tk.Frame):
                                             btnxPadding=5,
                                             cmd=self._check_buttons_command)
 
-    def _back_button(self,state:str):
-        self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
-                                  text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
-        self.back_btn.place(relx=0.5,rely=0.9,anchor='s')
+    def _back_button(self, state: str):
+        self.back_btn = ctk.CTkButton(self.bodyFrame, font=ctk.CTkFont(family='Courier New', size=9, weight='bold'),
+                                      text="Back", command=lambda: self._check_back_command(f"{state}"))
+        self.back_btn.place(relx=0.5, rely=0.9, anchor='s')
 
-    def _check_back_command(self,button:str):
+    def _check_back_command(self, button: str):
         if button == "logout":
-            if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
+            if messagebox.askyesno('Confirm Logout', 'Proceed with logout?'):
                 self.mC.mainController()
         if button == "home page":
             Functions.destroy_page(self.bodyFrame)
@@ -190,8 +191,8 @@ class ManagerDashboard(tk.Frame):
             Functions.destroy_page(self.bodyFrame)
             self._help_and_about()
 
-    def _check_buttons_command(self,button:str):
-        if button == "Security": 
+    def _check_buttons_command(self, button: str):
+        if button == "Security":
             self.mC.securityController(self.bodyFrame)
         if button == "Registration":
             Functions.destroy_page(self.bodyFrame)
@@ -236,12 +237,9 @@ class ManagerDashboard(tk.Frame):
         if user_choice == "Home Made":
             rid_rname = Functions.convert_dicc_data(self.mC.get_rid_rname())
             formatted_values = [f"{rid} | {rname}" for rid, rname in rid_rname]
-            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC,state=user_choice).main()
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name", controller=self.mC, state=user_choice).main()
             return
         if user_choice == "Pre Made":
             sid_sname = Functions.convert_dicc_data(self.mC.get_sid_sname())
-            formatted_values = [f"{sid} | {sname}" for sid,sname in sid_sname]
-            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name",controller=self.mC,state=user_choice).main()
-            
-
-            
+            formatted_values = [f"{sid} | {sname}" for sid, sname in sid_sname]
+            CustomComboboxDialog(values=formatted_values, title="Recipe ID | Recipe Name", prompt="Choose Recipe Name", controller=self.mC, state=user_choice).main()
