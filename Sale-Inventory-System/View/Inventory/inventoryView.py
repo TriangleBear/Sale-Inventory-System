@@ -45,6 +45,7 @@ class InventoryView(tk.Frame):
         self._search_entry()
 
     def _tree_dropdown(self):
+        Functions.treeview_style(self.mainBg)
         self.selectTable = ttk.Combobox(self.navBarFrame,values=self.menus)
         self.selectTable.place(relx=0.355,rely=0.5,anchor=CENTER)
         self.selectTable.set(self.menus[0])

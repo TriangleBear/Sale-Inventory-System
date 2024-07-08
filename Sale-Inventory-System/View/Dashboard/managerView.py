@@ -229,13 +229,8 @@ class ManagerDashboard(tk.Frame):
             self._help_and_about()
         if button == "User Manual":
             Functions.destroy_page(self.bodyFrame)
-            self.manual_page()
-
-    def manual_page(self):
-        self._center_frame()
-        self._manual_buttons()
-        self._back_button("Manual")
-
+            self.mC.userManualController(self.bodyFrame)
+            
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
         if user_choice == "Home Made":

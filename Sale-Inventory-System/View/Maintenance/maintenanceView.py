@@ -45,6 +45,7 @@ class MaintenanceView(tk.Frame):
             self.tree.column(col, anchor='center')
 
     def _display_table(self):
+        Functions.treeview_style(self.mainBg)
         self.tree = ttk.Treeview(
             self,
             show="headings",

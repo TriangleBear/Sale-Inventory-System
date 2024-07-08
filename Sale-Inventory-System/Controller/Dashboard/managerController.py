@@ -90,6 +90,12 @@ class ManagerController:
         product_register_page = ProductRegisterController(self,id,name)
         product_register_page.main()
 
+    def userManualController(self,master):
+        Functions.destroy_page(master)
+        from Controller import UserManualController
+        user_manual_page = UserManualController(self,master)
+        user_manual_page.main()
+
     def get_rid_rname(self):
         from Model import ManagerModel
         model = ManagerModel()
