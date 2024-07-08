@@ -386,7 +386,7 @@ class Functions:
 
             temp.append(inner_dict)
         return temp
-    
+
     def filter_product_columns(data:list[dict]):
         temp = []
         for inner_dict in data:
