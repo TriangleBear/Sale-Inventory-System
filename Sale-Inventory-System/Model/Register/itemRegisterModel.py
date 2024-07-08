@@ -1,6 +1,7 @@
 from Utils import Functions
 from Controller.Dashboard import managerController
 from Utils import Database
+from icecream import ic
 class ItemRegisterModel:
     def __init__(self,data:list=None,user_id=None,status=None):
         #item name,quantity,price,supplier,expiry date, category, flooring, ceiling, stock_level
@@ -148,30 +149,79 @@ class ItemRegisterModel:
             return "Danger"
         if self.quantity >= self.ceiling:
             return "Maximum"
-        
-    def subtract_item_stock(self,ingredient_total:dict):
+
+    def subtract_item_stock(self, ingredient_total: dict):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                for ingredient_name, required_quantity in ingredient_total.items():
-                    cursor.execute("SELECT quantity,flooring,ceiling FROM Items WHERE item_name = %s", (ingredient_name,))
-                    result = cursor.fetchall()
-                    if result is None:
-                        return f"Error: Ingredient {ingredient_name} not found in stock."
-                    self.quantity = float(result['quantity'])
-                    self.flooring = float(result['flooring'])
-                    self.ceiling = float(result['ceiling'])
-                    if required_quantity > self.quantity:
-                        return f"Error: Not enough stock for {ingredient_name}. Required: {required_quantity}, Available: {self.quantity}"
-                    self.quantity -= required_quantity
-                    cursor.execute("UPDATE Items SET quantity = %s, stock_level = %s WHERE item_name = %s", (self.quantity, self.checkStockLevel(), ingredient_name))
-                connection.commit()
-            cursor.close()
+                try:
+                    # Start transaction
+                    connection.autocommit = False
+                    for ingredient_name, required_quantity in ingredient_total.items():
+                        remaining_quantity = required_quantity
+                        cursor.execute("SELECT item_id, quantity FROM Items WHERE item_name = %s AND quantity > 0 ORDER BY exp_date ASC", (ingredient_name,))
+                        items = cursor.fetchall()
+                        for item in items:
+                            item_id, item_quantity = item['item_id'], item['quantity']
+                            if item_quantity >= remaining_quantity:
+                                new_quantity = item_quantity - remaining_quantity
+                                cursor.execute("UPDATE Items SET quantity = %s WHERE item_id = %s", (new_quantity, item_id))
+                                remaining_quantity = 0
+                            else:
+                                remaining_quantity -= item_quantity
+                                item_quantity = 0
+                                cursor.execute("UPDATE Items SET quantity = %s WHERE item_id = %s", (item_quantity, item_id,))
+                            if remaining_quantity <= 0:
+                                break
+                        if remaining_quantity > 0:
+                            raise ValueError(f"Not enough stock for {ingredient_name}.")
+                    connection.commit()
+                except Exception as e:
+                    connection.rollback()
+                    raise e
+                finally:
+                    connection.autocommit = True
         return 0
     
-    def subtract_supply_stock(self,quantity:int):
+
+    def subtract_supply_stock(self, supply_total: list):
         with Database.get_db_connection() as connection:
-            with connection.cursor() as connection:
-                pass
+            with connection.cursor() as cursor:
+                try:
+                    # Start transaction
+                    print("debug 3")
+                    ic(supply_total)
+                    connection.autocommit = False
+                    supply_id, supply_name, required_quantity = supply_total
+                    remaining_quantity = required_quantity
+                    cursor.execute("SELECT supply_id, quantity FROM Supply WHERE item_name = %s AND quantity > 0 ORDER BY exp_date ASC", (supply_name,))
+                    items = cursor.fetchall()
+                    for item in items:
+                        supply_id, supply_quantity = item['supply_id'], item['quantity']
+                        if supply_quantity >= remaining_quantity:
+                            new_quantity = supply_quantity - remaining_quantity
+                            cursor.execute("UPDATE Supply SET quantity = %s WHERE supply_id = %s", (new_quantity, supply_id))
+                            remaining_quantity = 0
+                        else:
+                            remaining_quantity -= item_quantity
+                            item_quantity = 0
+                            cursor.execute("UPDATE Supply SET quantity = %s WHERE supply_id = %s", (item_quantity, supply_id,))
+                        if remaining_quantity <= 0:
+                            print("debug 4")
+                            ic(remaining_quantity)
+                            break
+                    print("debug 5")
+                    ic(remaining_quantity)
+                    if remaining_quantity > 0:
+                        raise ValueError(f"Not enough stock for {supply_name}.")
+                    connection.commit()
+                except Exception as e:
+                    connection.rollback()
+                    raise e
+                finally:
+                    connection.autocommit = True
+        return 0
+
+
     
     def update_item_in_database(self, item_id, new_quantity):
         with Database.get_db_connection() as connection:

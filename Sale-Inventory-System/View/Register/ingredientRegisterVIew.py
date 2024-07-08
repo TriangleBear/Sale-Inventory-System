@@ -222,5 +222,6 @@ class IngredientRegisterView(tk.Toplevel):
         self.ingredientRegisterController.logUserActivity()
         if not messagebox.askyesno("Continue?", "Add more Ingredients?"):
             self.destroy()
+            self.mC.view.register_page()
         else:
             return

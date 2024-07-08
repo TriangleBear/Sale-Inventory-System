@@ -26,12 +26,14 @@ class PosView(tk.Frame):
     @property
     def all_products(self):
         return copy.deepcopy(self._all_products)
+    
 
     def main(self):
         self._button_add_remove_frame()
         self._add_remove_buttons()
         self._search_entry()
         self._search_button()
+        self._refresh_button()
         self._display_product_table()
         self._category_frame()
         self._category_buttons()
@@ -94,12 +96,17 @@ class PosView(tk.Frame):
 
     def _search_entry(self):
         self.search_entry = tk.Entry(self, borderwidth=0, width=27,font=font.Font(size=12))
-        self.search_entry.place(relx=0.45, rely=0.17,anchor='e')  # Place the entry at the top with some paddin
+        self.search_entry.place(relx=0.23, rely=0.17,anchor='w')  # Place the entry at the top with some paddin
 
     def _search_button(self):
         search_button = tk.Button(self, font=font.Font(family='Courier New', size=9, weight='bold'), text="Search",
                                     command=lambda: self._search_data(self.search_entry.get(),self.menu_status), padx=7, pady=2)
-        search_button.place(relx=0.12,rely=0.17, anchor='e')  # Place the button at the bottom with some padding
+        search_button.place(relx=0.12,rely=0.17, anchor='w')  # Place the button at the bottom with some padding
+
+    def _refresh_button(self):
+        refresh_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Refresh", 
+                                   command=lambda:self._category_commands(button=self.menu_status),padx=7, pady=3)
+        refresh_button.place(relx=0.02,rely=0.17,anchor='w')
 
     def _category_frame(self):
         self.category_frame = tk.Frame(self,background=self.mainBg,padx=1,pady=3)
@@ -123,25 +130,28 @@ class PosView(tk.Frame):
         self.tree_product.delete(*self.tree_product.get_children())
         if button == "Breakfast":
             self.menu_status = button
-            print(self.menu_status)
             breakfast = self.all_products
             self._insert_data(self.tree_product, self.get_breakfast_products(breakfast))
         if button == "Lunch":
             self.menu_status = button
-            print(self.menu_status)
             lunch = self.all_products
             self._insert_data(self.tree_product, self.get_lunch_products(lunch))
         if button == "Dinner":
             self.menu_status = button
-            print(self.menu_status)
             dinner = self.all_products
-            self._insert_data(self.tree_product, self.get_dinner_products(self.all_products))
+            self._insert_data(self.tree_product, self.get_dinner_products(dinner))
         if button == "Desert":
-            self.menu_status == "Desert"
+            self.menu_status == button
+            desert = self.all_products
+            self._insert_data(self.tree_product, self.get_desert_products(desert))
         if button == "Drinks":
-            self.menu_status == "Drinks"
+            self.menu_status == button
+            drinks = self.all_products
+            self._insert_data(self.tree_product, self.get_drinks_products(drinks))
         if button == "Snacks":
-            self.menu_status == "Snacks"
+            self.menu_status == button
+            snacks = self.all_products
+            self._insert_data(self.tree_product, self.get_desert_products(snacks))
 
     def _cart_label(self):
         self.cart = tk.Label(self,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"Cart",background=self.mainBg)
@@ -186,7 +196,6 @@ class PosView(tk.Frame):
 
     def _search_data(self, search_query,menu):
         result = self.posController.search_data(search_query)
-        print(result)
         search_results = Functions.convert_dicc_data(Functions.filter_product_columns(result))
 
         self.tree_product.delete(*self.tree_product.get_children())

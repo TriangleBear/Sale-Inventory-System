@@ -64,24 +64,25 @@ class MaintenanceView(tk.Frame):
 
     def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
         if table_name == "Items":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+            self.navBarLabel.config(text=f"{table_name}")
             Functions.change_column(tree,self.maintenanceController.get_items_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Products":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+            self.navBarLabel.config(text=f"{table_name}")
             product_labels = self.maintenanceController.get_product_column_names()
             Functions.change_column(tree,product_labels)
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Supplies":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+            self.navBarLabel.config(text=f"{table_name}")
             Functions.change_column(tree,self.maintenanceController.get_supply_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         if table_name == "Recipes":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+            self.navBarLabel.config(text=f"{table_name}")
             Functions.change_column(tree,self.maintenanceController.get_recipe_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
-        if table_name == "User":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+        if table_name == "Users":
+            self.navBarLabel.config(text=f"{table_name}")
+            users = Functions.convert_dicc_data(self.maintenanceController.fetch_data_from_user_activity())
             Functions.change_column(tree,self.maintenanceController.get_users_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         return

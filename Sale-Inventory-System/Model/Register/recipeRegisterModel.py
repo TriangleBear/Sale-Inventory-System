@@ -34,29 +34,15 @@ class RecipeRegisterModel:
             connection.close()
         return recipe_id['recipe_id'] if recipe_id else None
 
-    def create_recipe(self, user_id):
+    def register_recipe_name(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
                 if not self.recipe_existence_check():
-                    sql = """INSERT INTO Recipe (user_id, recipe_id, recipe_name, category, ingredients, details) 
-                    VALUES (%s, %s, %s, %s, %s, %s)"""
-                    # user_id should pass inside cursor.execute
-                    cursor.execute(sql, (user_id, self.get_recipe_id(), self.recipe_name, self.category, self.ingredients, self.details))
+                    sql = """INSERT INTO Recipes (recipe_id, recipe_name, user_id) VALUES (%s, %s, %s)"""
+                    cursor.execute(sql, (self.recipe_id, self.recipe_name, self.user_id))
                     connection.commit()
                 else:
                     return ValueError("Recipe already exists")
-            connection.close()
-        return 0
-    
-    def register_recipe_name(self):
-        if self.recipe_name == '':
-            return ValueError("Recipe Name cannot be empty")
-        with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                # user_id should be inside the database for tracking
-                sql = """INSERT INTO Recipes (recipe_id, recipe_name, user_id) VALUES (%s, %s, %s)"""
-                cursor.execute(sql, (self.recipe_id, self.recipe_name, self.user_id))
-                connection.commit()
             connection.close()
         return [self.recipe_id, self.recipe_name, self.user_id]
     

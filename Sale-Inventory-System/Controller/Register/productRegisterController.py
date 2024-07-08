@@ -1,5 +1,6 @@
 from View import ProductRegisterView
 from Utils import Functions
+from icecream import ic
 class ProductRegisterController:
     def __init__(self, managerController,id,name):
         self.id = id
@@ -31,10 +32,10 @@ class ProductRegisterController:
         item_model = ItemRegisterModel()
         return item_model.subtract_item_stock(ingredient_model.get_total_quantity())
     
-    def subtract_supply_stock_level(self, supply_id, quantity):
+    def subtract_supply_stock_level(self, supply_id, supply_name,quantity):
         from Model import ItemRegisterModel
         item_model = ItemRegisterModel()
-        return item_model.subtract_stock(ingredient_model.get_total_quantity())
+        return item_model.subtract_supply_stock([supply_id,supply_name,quantity])
         
     def verify_product_inputs(self, data:list):
         print(f"prodcut inputs: {data}")

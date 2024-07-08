@@ -19,8 +19,8 @@ class PosModel:
         return data[0] if data else None
 
     def search_product(self, search_query):
-        with Database.get_db_connection() as conn:
-            with conn.cursor() as cursor:
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
                 # Adjust the query to select only the product_id
                 query = """SELECT * FROM Product 
                         WHERE product_name LIKE %s 
@@ -29,7 +29,7 @@ class PosModel:
                         OR price LIKE %s 
                         OR exp_date LIKE %s"""
                 cursor.execute(query, (search_query, search_query,search_query,search_query,search_query,))
-                data = cursor.fetchone()
+                data = cursor.fetchall()
         return data if data else None
 
     def fetch_all_products(self):
