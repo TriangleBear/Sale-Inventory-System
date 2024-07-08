@@ -107,7 +107,6 @@ class MaintenanceView(tk.Frame):
         if not selected_items:
             messagebox.showwarning("No selection", "Please select a row to update.")
             return
-
         if table_name == "Items":
             print(list(self.tree.item(self.tree.selection()[0],'values')))
             self._update_item_data()
@@ -128,9 +127,9 @@ class MaintenanceView(tk.Frame):
     def _delete_or_update_recipe_name(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Update Name", "Delete Recipe"]).result
         if user_choice == "Update Name":
-            self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.maintenanceController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         if user_choice == "Delete Recipe":
-            self.maintenanceController.userDelete(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.maintenanceController.recipeIngredientDelete(list(self.tree.item(self.tree.selection()[0],'values')))
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
             return
 

@@ -32,7 +32,7 @@ class InventoryView(tk.Frame):
         self._display_table()
         self._back_button()
         self._refresh_button()
-        self._update_button()
+        # self._update_button()
 
     def _nav_bar_frame(self):
         w = self.master.winfo_width()
@@ -117,7 +117,7 @@ class InventoryView(tk.Frame):
     def _refresh_button(self):
         refresh_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Refresh", 
                                    command=lambda:self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
-        refresh_button.place(relx=0.8,rely=0.9,anchor='se')
+        refresh_button.place(relx=0.9,rely=0.9,anchor='se')
 
     def _update_item_data(self):
         self.inventoryController.itemUpdate(list(self.tree.item(self.tree.selection()[0],'values')))

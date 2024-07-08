@@ -18,5 +18,8 @@ class UserRegisterController():
         pass_model = UserRegisterModel(data)
         return pass_model.check_password_criteria()
     
+    def logUserActivity(self):
+        Functions.logUserActivity([self.mC.user_id,"User Registered",Functions.get_current_date("datetime")])
+    
 
     

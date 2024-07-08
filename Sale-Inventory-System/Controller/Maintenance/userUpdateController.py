@@ -1,24 +1,28 @@
 from View import UserUpdateView
+from Model import UserRegisterModel
 from Utils import Functions
-class UserUpdateController:
-    def __init__(self,managerController, current_user_data, master):
+
+class UserUpdateController():
+    def __init__(self,managerController,maintenanceController,user_data):
         self.mC = managerController
-        self.master = master
-        self.current_user_data = current_user_data
-        self.view = UserUpdateView(self, self.master, user_data=self.current_user_data)
+        self.maintenanceController = maintenanceController
+        self.user_data = user_data
+        self.view = UserUpdateView(self,self.user_data)
+        self.editor_id = self.mC.user_id
 
     def main(self):
         self.view.main()
 
-    def checkInput(self,data:list) -> int: 
-        from Model import UserRegisterModel
-        noUser = UserRegisterModel(data)
-        return noUser.checkInput()
+    def updateUserData(self, data:list,user_id:str):
+        update_model = UserRegisterModel(data)
+        return update_model.update_user(user_id)
 
-    def update_user(self,data:list) -> None:
-        from Model import UserRegisterModel
-        user = UserRegisterModel(self,data)
-        user.updateUserData()
-
+    def check_password_criteria(self, data:list):
+        pass_model = UserRegisterModel(data)
+        return pass_model.check_password_criteria()
+    
     def logUserActivity(self):
-        Functions.logUserActivity([self.mC.user_id,"User Registered",Functions.get_current_date("datetime")])
+        Functions.logUserActivity([self.mC.user_id,"User Updated",Functions.get_current_date("datetime")])
+    
+
+    

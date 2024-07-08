@@ -2,9 +2,9 @@ from View import MaintenanceView
 from Model import MaintenanceModel
 from Utils import Functions
 class MaintenanceController:
-    def __init__(self,controller, master):
+    def __init__(self,managerController, master):
         self.master = master
-        self.controller = controller
+        self.mC = managerController
         self.view = MaintenanceView(self, master)
 
     def main(self):
@@ -61,41 +61,41 @@ class MaintenanceController:
     
     def manager_view(self):
         Functions.destroy_page(self.master)
-        self.controller.view.body()
+        self.mC.view.body()
 
     def recipeUpdate(self,current_recipe_data):
         from Controller import RecipeUpdateController
-        recipe_update = RecipeUpdateController(self.controller,self,current_recipe_data)
+        recipe_update = RecipeUpdateController(self.mC,self,current_recipe_data)
         recipe_update.main()
 
     def recipeIngredientUpdate(self,current_recipe_data):
         #current_recipe_data = [ingd_name, description,quantity,unit]
         from Controller import IngredientUpdateController
-        ingredient_update = IngredientUpdateController(self.controller,recipeDetails=current_recipe_data)
+        ingredient_update = IngredientUpdateController(self.mC,recipeDetails=current_recipe_data)
         ingredient_update.main()
 
     def itemUpdate(self,current_item_data):
         from Controller import ItemUpdateController
-        item_update = ItemUpdateController(self.controller,self,current_item_data)
+        item_update = ItemUpdateController(self.mC,self,current_item_data)
         item_update.main()
 
     def supplyUpdate(self,current_item_data):
         from Controller import SupplyUpdateController
-        supply_update = SupplyUpdateController(self.controller,self,current_item_data)
+        supply_update = SupplyUpdateController(self.mC,self,current_item_data)
         supply_update.main()
 
     def recipeIngredientDelete(self,current_recipe_data):
         recipe_id,recipe_name,user_id= current_recipe_data
         from Controller import IngredientUpdateController, RecipeUpdateController
-        ingredient_update = IngredientUpdateController(self.controller)
+        ingredient_update = IngredientUpdateController(self.mC)
         ingredient_update.delete_recipe_ingredients(recipe_id)
-        recipe_update = RecipeUpdateController(self.controller,self)
+        recipe_update = RecipeUpdateController(self.mC,self)
         recipe_update.delete_recipe(recipe_id)
         return
     
     def userUpdate(self,current_user_data):
         from Controller import UserUpdateController
-        user_update = UserUpdateController(self,current_user_data, self.master)
+        user_update = UserUpdateController(self.mC,self,current_user_data)
         user_update.main()
 
     def search_data(self,table_name,search_query):
