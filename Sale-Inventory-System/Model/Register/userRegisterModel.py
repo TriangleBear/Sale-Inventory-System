@@ -41,6 +41,15 @@ class UserRegisterModel:
                 connection.commit()
             connection.close()
         return 0
+    
+    def updateUserData(self,user_id):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                sql = """UPDATE User SET fname = %s, lname = %s, user_type = %s, birthdate = %s, contact_num = %s, email = %s, address = %s, username = %s WHERE user_id = %s"""
+                cursor.execute(sql, (self.fname, self.lname, self.user_type, self.birthdate, self.contact_num, self.email, self.address, self.username, user_id))
+                connection.commit()
+            connection.close()
+        return 0
 
 
     

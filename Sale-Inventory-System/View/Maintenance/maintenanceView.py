@@ -9,13 +9,14 @@ class MaintenanceView(tk.Frame):
         self.navBarBg = "Gray84"
         super().__init__(self.master, background=self.mainBg)
         self.maintenanceController = maintenanceController
-        self.menu = ["Items","Supplies","Products","Recipes","Users"]
+        self.menu = ["Items","Supplies","Products","Recipes","User"]
         self.pack(fill=tk.BOTH, expand=True)
 
     def main(self):
         self._nav_bar_frame()
         self._display_table()
         self._back_button()
+        self._refresh_button()
         self._update_button()
         
     def _nav_bar_frame(self):
@@ -79,7 +80,7 @@ class MaintenanceView(tk.Frame):
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_recipe_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
-        if table_name == "Users":
+        if table_name == "User":
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.maintenanceController.get_users_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
@@ -102,6 +103,11 @@ class MaintenanceView(tk.Frame):
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
 
     def _update_row_data(self,table_name):
+        selected_items = self.tree.selection()
+        if not selected_items:
+            messagebox.showwarning("No selection", "Please select a row to update.")
+            return
+
         if table_name == "Items":
             print(list(self.tree.item(self.tree.selection()[0],'values')))
             self._update_item_data()
@@ -114,7 +120,7 @@ class MaintenanceView(tk.Frame):
             print(list(self.tree.item(self.tree.selection()[0],'values')))
             self._update_reg_ingd()
             self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
-        if table_name == "Users":
+        if table_name == "User":
             print(self.tree.item(self.tree.selection()[0],'values'))
             self._update_user_data()
             self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
@@ -122,9 +128,9 @@ class MaintenanceView(tk.Frame):
     def _delete_or_update_recipe_name(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Update Name", "Delete Recipe"]).result
         if user_choice == "Update Name":
-            self.maintenanceController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         if user_choice == "Delete Recipe":
-            self.maintenanceController.recipeIngredientDelete(list(self.tree.item(self.tree.selection()[0],'values')))
+            self.maintenanceController.userDelete(list(self.tree.item(self.tree.selection()[0],'values')))
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
             return
 
@@ -141,6 +147,7 @@ class MaintenanceView(tk.Frame):
         user_choice = CustomDialog(self.master,title="User",buttons=["Update User", "Delete User"]).result
         if user_choice == "Update User":
             self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+            messagebox.showinfo('Update', 'Update Successful! Please Refresh')
         if user_choice == "Delete User":
             self.maintenanceController.userDelete(list(self.tree.item(self.tree.selection()[0],'values')))
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
@@ -157,6 +164,11 @@ class MaintenanceView(tk.Frame):
             self._delete_or_update_recipe_name()
         if user_choice == "Recipe Ingredients":
             self.maintenanceController.recipeIngredientUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+
+    def _refresh_button(self):
+        refresh_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Refresh", 
+                                   command=lambda:self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
+        refresh_button.place(relx=0.8,rely=0.9,anchor='se')
 
 
     def _update_button(self):

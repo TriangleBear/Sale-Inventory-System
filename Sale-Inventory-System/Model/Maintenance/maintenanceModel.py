@@ -1,4 +1,5 @@
 from Utils import Database
+import pymysql
 class MaintenanceModel:
     def __init__(self,data:list=None,search_entry=None,table_name=None):
         self.search_query = search_entry
@@ -14,12 +15,12 @@ class MaintenanceModel:
             self.category = data[7]
 
     def search_data(self):
-        with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                try:
+        result = []
+        try:
+            with Database.get_db_connection() as connection:
+                with connection.cursor() as cursor:
+                    search_pattern = f"%{self.search_query}%"
                     if self.table_name == "Items":
-                        # Modify the SQL query to search in relevant fields. Here, it searches in the 'user_log' field.
-                        # Use '%' wildcards for partial matches. Adjust the field name as per your database schema.
                         sql = """SELECT * FROM Items 
                                 WHERE item_id LIKE %s 
                                 OR user_id LIKE %s 
@@ -32,9 +33,8 @@ class MaintenanceModel:
                                 OR flooring LIKE %s 
                                 OR ceiling LIKE %s 
                                 OR stock_level LIKE %s"""
-                        search_pattern = f"%{self.search_query}%"
-                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
-                    if self.table_name == "Supply":
+                        cursor.execute(sql, (search_pattern,) * 11)
+                    elif self.table_name == "Supply":
                         sql = """SELECT * FROM Supply 
                                 WHERE supply_id LIKE %s 
                                 OR user_id LIKE %s 
@@ -47,9 +47,8 @@ class MaintenanceModel:
                                 OR flooring LIKE %s 
                                 OR ceiling LIKE %s 
                                 OR stock_level LIKE %s"""
-                        search_pattern = f"%{self.search_query}%"
-                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,))
-                    if self.table_name == "Product":
+                        cursor.execute(sql, (search_pattern,) * 11)
+                    elif self.table_name == "Product":
                         sql = """SELECT * FROM Product 
                                 WHERE product_id LIKE %s 
                                 OR user_id LIKE %s
@@ -61,16 +60,14 @@ class MaintenanceModel:
                                 OR flooring LIKE %s
                                 OR ceiling LIKE %s
                                 OR stock_level LIKE %s"""
-                        search_pattern = f"%{self.search_query}%"
-                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern,search_pattern))
-                    if self.table_name == "Recipes":
+                        cursor.execute(sql, (search_pattern,) * 10)
+                    elif self.table_name == "Recipes":
                         sql = """SELECT * FROM Recipes 
                                 WHERE recipe_id LIKE %s 
                                 OR recipe_name LIKE %s 
                                 OR user_id LIKE %s"""
-                        search_pattern = f"%{self.search_query}%"
-                        cursor.execute(sql, (search_pattern,search_pattern,search_pattern))
-                    if self.table_name == "Users":
+                        cursor.execute(sql, (search_pattern,) * 3)
+                    elif self.table_name == "User":
                         sql = """SELECT * FROM User
                                 WHERE user_id LIKE %s 
                                 OR fname LIKE %s
@@ -82,11 +79,16 @@ class MaintenanceModel:
                                 OR address LIKE %s
                                 OR username LIKE %s
                                 OR created_on LIKE %s"""
-                        search_pattern = f"%{self.search_query}%"
-                        cursor.execute(sql, (search_pattern,search_pattern))
+                        cursor.execute(sql, (search_pattern,) * 10)
+                    else:
+                        raise ValueError("Invalid table name")
                     result = cursor.fetchall()
-                finally:
-                    connection.close()
+        except pymysql.MySQLError as e:
+            print(f"Error executing query: {e}")
+        except ValueError as e:
+            print(e)
+        finally:
+            connection.close()
         return result
     
     def fetch_data_from_user_activity(self):
@@ -211,3 +213,4 @@ class MaintenanceModel:
                 column_names = [desc[0] for desc in cursor.description]
             connection.close()
         return column_names
+    

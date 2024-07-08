@@ -14,11 +14,11 @@ class UserUpdateController:
         from Model import UserRegisterModel
         noUser = UserRegisterModel(data)
         return noUser.checkInput()
-    
-    def registerUser(self,data:list) -> None:
+
+    def update_user(self,data:list) -> None:
         from Model import UserRegisterModel
-        user = UserRegisterModel(data)
-        user.registerUserData()
+        user = UserRegisterModel(self,data)
+        user.updateUserData()
 
     def logUserActivity(self):
         Functions.logUserActivity([self.mC.user_id,"User Registered",Functions.get_current_date("datetime")])

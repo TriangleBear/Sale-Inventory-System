@@ -95,7 +95,7 @@ class MaintenanceController:
     
     def userUpdate(self,current_user_data):
         from Controller import UserUpdateController
-        user_update = UserUpdateController(self,current_user_data)
+        user_update = UserUpdateController(self,current_user_data, self.master)
         user_update.main()
 
     def search_data(self,table_name,search_query):
