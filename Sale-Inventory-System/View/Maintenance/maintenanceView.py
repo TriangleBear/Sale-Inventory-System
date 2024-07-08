@@ -80,9 +80,8 @@ class MaintenanceView(tk.Frame):
             self.navBarLabel.config(text=f"{table_name}")
             Functions.change_column(tree,self.maintenanceController.get_recipe_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
-        if table_name == "Users":
-            self.navBarLabel.config(text=f"{table_name}")
-            users = Functions.convert_dicc_data(self.maintenanceController.fetch_data_from_user_activity())
+        if table_name == "User":
+            self.navBarLabel.config(text=f"{table_name}")   
             Functions.change_column(tree,self.maintenanceController.get_users_column_names())
             self._insert_data(self.maintenanceController.search_data(table_name,data))
         return

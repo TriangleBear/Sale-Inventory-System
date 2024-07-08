@@ -149,10 +149,11 @@ class UserUpdateView(tk.Toplevel):
             try:
                 entry_data = entry_box.get()
                 # Skip the empty check for the password field (assuming it's at index 1)
-                if entry_data == '' and index[9] != '':
-                    messagebox.showerror("Error", "Please fill up all fields.")
+                if index == 9 or entry_data != '':
+                    self.action_order.append(entry_data)
+                else:
+                    messagebox.showerror("Error", "Please fill up all fields except the password.")
                     break
-                self.action_order.append(entry_data)
             except AttributeError:
                 print(f"Error: The widget {type(entry_box)} does not support get method.")
         self._update_user()
