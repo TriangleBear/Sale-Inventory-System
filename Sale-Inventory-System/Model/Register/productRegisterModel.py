@@ -108,18 +108,45 @@ class ProductRegisterModel:
     def register_product(self):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
-                    sql = """UPDATE INTO Product (product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s) WHERE product_id = %s;"""
-                    #supply_id should pass from supply module
-                    cursor.execute(sql, (self.product_name, 
+                if not self.product_existence_check():
+                    sql = """INSERT INTO Product (product_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+                    cursor.execute(sql, (self.product_id, 
+                                        self.user_id, 
+                                        self.product_name, 
                                         self.product_quantity, 
                                         self.product_price, 
                                         self.expiry_date, 
                                         self.category, 
                                         self.flooring, 
                                         self.ceiling,
-                                        self.stock_level,
-                                        self.product_id))
+                                        self.stock_level))
+                    connection.commit()
+                else:
+                    current_quantity = self.fetch_existing_product_quantity()
+                    self.product_quantity += current_quantity  
+                    self.stock_level = self.checkStockLevel()
+                    sql = """UPDATE Product SET 
+                            product_name = %s,
+                            quantity = %s,
+                            price = %s,
+                            exp_date = %s,
+                            category = %s,
+                            flooring = %s,
+                            ceiling = %s,
+                            stock_level = %s
+                            WHERE product_id = %s;"""
+                    cursor.execute(sql,(
+                        self.product_name,
+                        self.product_quantity,
+                        self.product_price,
+                        self.expiry_date,
+                        self.category,
+                        self.flooring,
+                        self.ceiling,
+                        self.stock_level,
+                        self.product_id
+                        ))
                     connection.commit()
             connection.close()
         return 0

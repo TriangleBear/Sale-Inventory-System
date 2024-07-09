@@ -4,6 +4,7 @@ class ProductUpdateController:
     def __init__(self, maintenanceController, current_product_data):
         self.maintenanceController = maintenanceController
         self.current_product_data = current_product_data
+        self.user_id = maintenanceController.user_id
         self.view = ProductUpdateView(self, self.current_product_data)
     
     def main(self):
@@ -40,7 +41,7 @@ class ProductUpdateController:
     #     product = ProductRegisterModel(data,self.user_id,status)
     #     product.update_product()
     
-    # def logUserActivity(self):
-    #     Functions.logUserActivity([self.user_id,
-    #                                "Product Updated",
-    #                                Functions.get_current_date("datetime")])
+    def logUserActivity(self):
+        Functions.logUserActivity([self.user_id,
+                                   "Product Updated",
+                                   Functions.get_current_date("datetime")])

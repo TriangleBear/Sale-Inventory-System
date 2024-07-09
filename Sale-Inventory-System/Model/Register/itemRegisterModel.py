@@ -217,6 +217,7 @@ class ItemRegisterModel:
     #             finally:
     #                 connection.autocommit = True
     #     return 0
+    
     def subtract_supply_stock(self, supply_total: list):
         with Database.get_db_connection() as connection:
             with connection.cursor() as cursor:
