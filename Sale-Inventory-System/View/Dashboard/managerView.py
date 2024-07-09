@@ -81,7 +81,7 @@ class ManagerDashboard(tk.Frame):
 
     def _user_label(self):
         user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
-                              text=f"manager dashboard | user ID: {self.user_id}",background=self.mainBg)
+                              text=f"MANAGER DASHBOARD | user ID: {self.user_id}",background=self.mainBg)
         user_label.place(x=9,y=9)
 
     def _home_button(self):
@@ -193,6 +193,7 @@ class ManagerDashboard(tk.Frame):
     def _check_back_command(self,button:str):
         if button == "logout":
             if messagebox.askyesno('Confirm Logout','Proceed with logout?'):
+                self.mC.logUserActivity()
                 self.mC.mainController()
         if button == "home page":
             Functions.destroy_page(self.bodyFrame)

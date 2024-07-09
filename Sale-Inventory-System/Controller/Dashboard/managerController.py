@@ -116,3 +116,6 @@ class ManagerController:
         from Model import IngredientRegisterModel
         model = IngredientRegisterModel()
         return model.get_ingd_id()
+    
+    def logUserActivity(self):
+        Functions.logUserActivity([self.user_id,"Logged Out",Functions.get_current_date("datetime")])

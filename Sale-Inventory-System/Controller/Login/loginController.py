@@ -21,10 +21,10 @@ class LoginController:
         staff_dashboard = StaffController(master, user_id)
         staff_dashboard.main()
     
-    def forgotPasswordController(self,master):
+    def forgotPasswordController(self,master,session):
         Functions.destroy_page(master)
         from Controller import ForgotPasswordController
-        forgot_password = ForgotPasswordController(self,master)
+        forgot_password = ForgotPasswordController(controller=self,master=master,session=session)
         forgot_password.main()
 
     def logUserActivity(self,user_id):

@@ -67,7 +67,7 @@ class LoginView(tk.Frame):
     def _forgot_password_button(self):
         forgot_password_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
                                         text="Forgot Password",borderwidth=0,background=self.mainBg,
-                                        command=lambda:self.loginController.forgotPasswordController(self.master))
+                                        command=lambda:self.loginController.forgotPasswordController(master=self.master,session=False))
         forgot_password_btn.grid(row=2,columnspan=2,sticky='e',padx=5,pady=5)        
         
     def _login_button(self):
