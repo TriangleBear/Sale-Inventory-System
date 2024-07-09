@@ -23,6 +23,7 @@ from Controller.Maintenance.userUpdateController import UserUpdateController
 from Controller.Maintenance.backupDatabaseController import BackupDatabaseController
 from Controller.HelpAbout.userManualController import UserManualController
 from Controller.Supply.recieveSuppliesController import RecieveSuppliesController
+from Controller.Supply.reorderSuppliesController import ReorderSuppliesController
 
 __all__ = ["MainController", 
            "LoginController",
@@ -48,4 +49,5 @@ __all__ = ["MainController",
            "UserUpdateController",
            "BackupDatabaseController",
            "UserManualController",
-           "RecieveSuppliesController"]
+           "RecieveSuppliesController",
+           "ReorderSuppliesController"]

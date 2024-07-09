@@ -2,20 +2,22 @@ from View import SuppliesView
 from Model import SuppliesModel
 from Utils import Functions
 class SuppliesController:
-    def __init__(self,controller,master):
+    def __init__(self,managerController,master):
         self.master = master
-        self.controller = controller
+        self.mC = managerController
         self.view = SuppliesView(self,master)
 
     def main(self):
         self.view.main()
 
-    def managerController(self):
-        from Controller import ManagerController
-        manager_page = ManagerController()
-        manager_page.main()
+    def suppliesPage(self):
+        Functions.destroy_page(self.master)
+        self.mC.view.supplies_page()
 
-    # def fetch_data_from_
+    def reorderController(self,item_reorder):
+        from Controller import ReorderSuppliesController
+        reorder = ReorderSuppliesController(self,item_reorder)
+        reorder.main()
 
     def fetch_items_quantity(self, item_name, new_quantity):
         model = SuppliesModel()

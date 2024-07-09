@@ -12,11 +12,11 @@ class SuppliesView(tk.Frame):
         self.mainBg = "Grey89"
         super().__init__(self.master, background=self.mainBg)
         self.suppliesController = suppliesController
-        self.supplies_btn_lbls = ["Reorder", "Order Supplies"]
+        self.supplies_btn_lbls = ["Refresh", "Reorder","Order Supplies"]
         self.btns = []  # Initialize btns before calling self.main()
         self.pack(fill=tk.BOTH, expand=True)
         self.table_product = ['ID', 'Product Name', 'Current Quantity', 'Stock Level']
-        self.table_cart = ['ID', 'Product Name', 'Quantity to Add', 'Expected Payment']
+        self.table_cart = ['ID', 'Product Name', 'Quantity Order', 'Payment','Arrival']
         self.entry_lbls = {'ID': 1,
                            'Product Name': 1,
                            'Current Quantity': 1,
@@ -28,37 +28,46 @@ class SuppliesView(tk.Frame):
     def main(self):
         self._button_reorder_frame()
         self._supplies_buttons()
-        self._fetch_button()
+        self._items_label()
         self._cart_label()
+        self._back_btn()
         self._display_cart_table()
         self._display_product_table()
 
     def _button_reorder_frame(self):
-        self.headerFrame = tk.Frame(self, background=self.mainBg)
-        self.headerFrame.place(relx=0.01, rely=0.05, anchor='nw')
+        self.btnFrame = tk.Frame(self, background=self.mainBg,width=800)
+        self.btnFrame.place(relx=0.99, rely=0.96, anchor='se')
 
     def _supplies_buttons(self):
         Functions.create_buttons_using_grid(
-            self.headerFrame,
+            self.btnFrame,
             labels=self.supplies_btn_lbls,
             entryList=self.btns,
-            max_columns=2,
-            w=21,
+            max_columns=4,
+            w=15,
             h=1,
             fontSize=12,
-            gridxPadding=2,
+            gridxPadding=6,
             gridyPadding=3,
             btnyPadding=2,
-            btnxPadding=2,
             cmd=self._supplies_button_commands
         )
+    def _items_label(self):
+        self.items = tk.Label(self,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"Low Stock Items",background=self.mainBg)
+        self.items.place(relx=0.23,rely=0.06,anchor='n')
 
     def _cart_label(self):
-        self.cart = tk.Label(self, font=font.Font(family='Courier New', size=14, weight='bold'),
-                             text="Reorder Items", background=self.mainBg)
-        self.cart.place(relx=0.75, rely=0.06, anchor=CENTER)
+        self.cart = tk.Label(self,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"Cart",background=self.mainBg)
+        self.cart.place(relx=0.73,rely=0.06,anchor='n')
+
+    def _back_btn(self):
+        self.back_btn = tk.Button(self,font=font.Font(family='Courier New',size=9,weight='bold'), 
+                                  text="Back", background="Grey89",command=lambda:self.suppliesController.suppliesPage())
+        self.back_btn.place(relx=0.09,rely=0.954,anchor='s')
+
 
     def _display_product_table(self):
+        Functions.treeview_style(self.mainBg)
         self.tree_product = ttk.Treeview(self, 
                                          columns=self.table_product, 
                                          show='headings', 
@@ -66,13 +75,11 @@ class SuppliesView(tk.Frame):
         for col in self.table_product:
             self.tree_product.heading(col, text=col)
             self.tree_product.column(col, anchor='e')
-
         self.tree_product.bind("<Configure>", Functions.adjust_column_widths)
-        self.tree_product.place(relx=0.01, rely=0.52, anchor='w', width=350, height=450)
+        self.tree_product.place(relx=0.015, rely=0.49, anchor='w', width=350, height=450)
         self._load_reorder_items()
 
     def _display_cart_table(self):
-        Functions.treeview_style(self.mainBg)
         self.tree_cart = ttk.Treeview(
             self, columns=self.table_cart,
             show='headings',
@@ -83,54 +90,29 @@ class SuppliesView(tk.Frame):
             self.tree_cart.heading(col, text=col)
             self.tree_cart.column(col, anchor='e')
         self.tree_cart.bind("<Configure>", Functions.adjust_column_widths)
-        self.tree_cart.place(relx=0.975, rely=0.53, anchor='e', width=440, height=450)
-
-    def _load_reorder_items(self):
-        self.tree_product.delete(*self.tree_product.get_children())
-        reorder_items = Functions.convert_dicc_data(self.suppliesController.fetch_items_below_or_equal_flooring())
-        print(reorder_items)
-        self._insert_data(self.tree_product, reorder_items)
-        reorder_supplies = Functions.convert_dicc_data(self.suppliesController.fetch_supply_below_or_equal_flooring())
-        print("Reorder Supplies:", reorder_supplies)
-        self._insert_data(self.tree_product, reorder_supplies)
-
-    def _insert_data(self, tree: ttk.Treeview, data: list):
-        for item in data:
-            tree.insert('', 0, values=item)
-
-    def _reorder_button(self):
-        reorder_btn = tk.Button(self, font=font.Font(family='Courier New', size=12, weight='bold'),
-                                padx=100, pady=2, text="Reorder", command=self._reorder)
-        reorder_btn.place(relx=0.95, rely=0.97, anchor='se')
-
-    def _fetch_button(self):
-        fetch_btn = tk.Button(self, font=font.Font(family='Courier New', size=12, weight='bold'),
-                              padx=100, pady=2, text="Fetch", command=self._load_reorder_items)
-        fetch_btn.place(relx=0.60, rely=0.97, anchor='se')
+        self.tree_cart.place(relx=0.98, rely=0.49, anchor='e', width=440, height=450)    
 
     def _supplies_button_commands(self, btn):
         if btn == "Reorder":
-            selected_item = self.tree_product.selection()
-            print(f"Selected item: {selected_item}")  # Debugging statement
+            selected_item = self.tree_product.item(self.tree_product.selection()[0],'values'); ic(selected_item)
             if not selected_item:
                 return messagebox.showerror("Error", "Please select an item to reorder")
-            self._add_to_cart(selected_item)
-        if btn == "Order Supplies":
+            # self._add_to_cart(selected_item)
+            self.suppliesController.reorderController(selected_item)
+        if btn == "Refresh":
+            self._load_reorder_items()
+        if btn == "Checkout":
             self._reorder()
 
-    def _add_to_cart(self, selected_item):
-        for i in selected_item:
-            item = self.tree_product.item(i)['values']
-            print(f'Item: {item}')  # Debugging statement
-            item_id = item[0]
-            product_name = item[1]
-            quantity_to_add = simpledialog.askinteger("Add Quantity", f"How much of {product_name} to add?", parent=self, minvalue=1)
-            expected_payment = simpledialog.askfloat("Expected Payment", f"Enter the expected payment for {product_name}", parent=self, minvalue=0.0)
+    def _load_reorder_items(self):
+        self.tree_product.delete(*self.tree_product.get_children())
+        reorder_items = Functions.convert_dicc_data(self.suppliesController.fetch_items_below_or_equal_flooring()); ic(reorder_items)
+        reorder_supplies = Functions.convert_dicc_data(self.suppliesController.fetch_supply_below_or_equal_flooring()); ic(reorder_supplies)
+        self._insert_data(self.tree_product, reorder_items)
+        self._insert_data(self.tree_product, reorder_supplies)
 
-            if quantity_to_add is not None and expected_payment is not None:
-                new_values = (item_id, product_name, quantity_to_add, expected_payment)
-                self.tree_cart.insert('', 'end', values=new_values)
-                self.reorder_items.append((item_id, product_name, quantity_to_add, expected_payment))
+    def add_to_cart(self, selected_item):
+        self._insert_data(self.tree_cart,[selected_item[3],selected_item[4],*selected_item[0:3]])
 
     def _reorder(self):
         if not self.reorder_items:
@@ -151,6 +133,10 @@ class SuppliesView(tk.Frame):
             self.tree_cart.delete(*self.tree_cart.get_children())
             self.reorder_items.clear()
             self._load_reorder_items()
+
+    def _insert_data(self, tree: ttk.Treeview, data: list):
+        for item in data:
+            tree.insert('', 0, values=item)
 
     # def fetch_data_from_supplies(self):
     #     suppliesData = []

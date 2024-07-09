@@ -292,6 +292,11 @@ class Functions:
                 float_func(data[6]),
                 float_func(data[7])]
     
+    def format_reorder_item_data(data:list,str_func=format_str,float_func=format_float):
+        return [float_func(data[0]),
+                float_func(data[1]),
+                str_func(data[2])]
+    
     def format_product_data(data:list,str_func=format_str,float_func=format_float,str_list_func=format_str_list):
         return [float_func(data[0]),
                 float_func(data[1]),
