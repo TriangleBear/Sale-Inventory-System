@@ -105,6 +105,25 @@ class ProductRegisterModel:
             connection.close()
         return 0
     
+    def register_product(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                    sql = """UPDATE INTO Product (product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s) WHERE product_id = %s;"""
+                    #supply_id should pass from supply module
+                    cursor.execute(sql, (self.product_name, 
+                                        self.product_quantity, 
+                                        self.product_price, 
+                                        self.expiry_date, 
+                                        self.category, 
+                                        self.flooring, 
+                                        self.ceiling,
+                                        self.stock_level,
+                                        self.product_id))
+                    connection.commit()
+            connection.close()
+        return 0
+    
     def checkStockLevel(self):
         if self.product_quantity > self.flooring and self.product_quantity < self.ceiling:
             return "Average"

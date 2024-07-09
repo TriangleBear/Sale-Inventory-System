@@ -13,11 +13,14 @@ class ProductUpdateView(tk.Toplevel):
         self.product_id = product_data[0]
         self.product_name = product_data[2]
         self.current_quantity = product_data[3]
+        ic(self.product_id)
         if self.product_id[1] == 'R':
-            self.state = 'receipe'
+            self.state = 'Recipe'
         if self.product_id[1] == 'S':
-            self.status = "supply"
+            self.status = "Supply"
+        ic(self.state)
         self._window_attributes()
+
 
         self.product_lbls_with_colspan = {
             "Product Name": 1,
@@ -132,8 +135,8 @@ class ProductUpdateView(tk.Toplevel):
 
     def update_item(self,insufficientStock,product_inputs):
         if insufficientStock == 0:
-            self.productRegisterController.register_product(product_inputs,self.product_id,self.name)
-            self.productRegisterController.logUserActivity()
+            self.productUpdateController.update_product(data=product_inputs,id=self.product_id,name=self.product_name)
+            self.productUpdateController.logUserActivity()
             messagebox.showinfo('Product Register', 'Product has been registered successfully!')
             self.destroy()
         else:
@@ -162,7 +165,7 @@ class ProductUpdateView(tk.Toplevel):
         ic(self.state)
         if incorrectInput == 0 and self.state == "Recipe":
             subtract_quantity = self.productUpdateController.added_subtracted_new_quantity(self.product_name,product_inputs[0],self.current_quantity)
-            insufficientItem = self.productRegisterController.subtract_item_stock_level(self.product_name,subtract_quantity)
+            insufficientItem = self.productUpdateController.subtract_item_stock_level(self.product_name,subtract_quantity)
             print(f'Insufficient Item: {insufficientItem}')
             self.update_item(insufficientItem,product_inputs)
             return
@@ -175,7 +178,7 @@ class ProductUpdateView(tk.Toplevel):
 
     def _update_product_button(self, current_r=0, current_c=0):
         updateBtn = tk.Button(self.entryFrame, font=font.Font(family='Courier New', size=9, weight='bold'),
-                              text="Update", command=lambda: self._checkInput(self.product_entry_boxes))
+                              text="Update", command=lambda: self._checkInput(self.product_entry_boxes,self.state))
         updateBtn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)
 
     def _back_button(self,current_r=0,current_c=0):

@@ -92,7 +92,7 @@ class IngredientRegisterModel():
         with Database.get_db_connection() as connection:  # Assuming you have a method to get DB connection
             with connection.cursor() as cursor:
                 # Query to retrieve ingredients for the given recipe_id
-                cursor.execute("SELECT ingd_name, quantity FROM Ingredients WHERE recipe_name = %s", (recipe_name,))
+                cursor.execute("SELECT ingd_name, quantity FROM Ingredients WHERE ingd_name = %s", (recipe_name,))
                 ingredients = cursor.fetchall()
                 ingredients = Functions.convert_dicc_data(ingredients)
                 
