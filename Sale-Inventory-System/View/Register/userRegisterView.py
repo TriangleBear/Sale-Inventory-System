@@ -120,7 +120,7 @@ class UserRegisterView(tk.Toplevel):
         check_pass = self.userRegisterController.check_password_criteria(entryData)
         if check_pass == 0:
             self.userRegisterController.register(entryData)
-            self.uderRegisterController.logUserActivity()
+            self.userRegisterController.logUserActivity()
             messagebox.showinfo('Registration', 'Registration Successful!')
             self.destroy()
             self.userRegisterController.mC.view.register_page()
