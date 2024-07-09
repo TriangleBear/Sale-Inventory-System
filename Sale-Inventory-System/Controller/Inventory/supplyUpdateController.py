@@ -2,9 +2,8 @@ from View import SupplyUpdateView
 from Utils import Functions
 
 class SupplyUpdateController:
-    def __init__(self,managerController,inventoryController,item_data):
+    def __init__(self,managerController,item_data):
         self.mC = managerController
-        self.inventoryController = inventoryController
         self.item_data = item_data
         self.view = SupplyUpdateView(self,self.item_data)
         self.user_id = self.mC.user_id

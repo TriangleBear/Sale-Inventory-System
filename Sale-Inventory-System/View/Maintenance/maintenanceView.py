@@ -99,7 +99,7 @@ class MaintenanceView(tk.Frame):
         self.maintenanceController.itemUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectedTable.get()[0])
 
-    def _update_supply_data(self) -> None:
+    def _update_supply_data(self):
         self.maintenanceController.supplyUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
 
@@ -116,6 +116,7 @@ class MaintenanceView(tk.Frame):
             self._update_supply_data()
         if table_name == "Products":
             print(self.tree.item(self.tree.selection()[0],'values'))
+            self._update_product_data()
         if table_name == "Recipes":
             print(list(self.tree.item(self.tree.selection()[0],'values')))
             self._update_reg_ingd()

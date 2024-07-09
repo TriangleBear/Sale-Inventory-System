@@ -84,6 +84,11 @@ class MaintenanceController:
         supply_update = SupplyUpdateController(self.mC,self,current_item_data)
         supply_update.main()
 
+    def productUpdate(self, current_product_data):
+        from Controller import ProductUpdateController
+        product_update = ProductUpdateController(self.mC, self.master, current_product_data)
+        product_update.main()
+
     def recipeIngredientDelete(self,current_recipe_data):
         recipe_id,recipe_name,user_id= current_recipe_data
         from Controller import IngredientUpdateController, RecipeUpdateController

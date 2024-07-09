@@ -13,6 +13,8 @@ class ProductRegisterModel:
             self.flooring = data[4]
             self.ceiling = data[5]
             self.stock_level = self.checkStockLevel()
+
+    
         
     def set_product_id(self):
         return Functions.generate_unique_id("Product")
