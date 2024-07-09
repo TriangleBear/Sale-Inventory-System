@@ -37,6 +37,12 @@ class MainController:
         ingredientRegister = IngredientRegisterController(self,recipe_id)
         ingredientRegister.main()
 
+    def backupDatabaseController(self,master):
+        Functions.destroy_page(master)
+        from Controller import BackupDatabaseController
+        backup_page = BackupDatabaseController(self,master)
+        backup_page.main()
+
 
     
     

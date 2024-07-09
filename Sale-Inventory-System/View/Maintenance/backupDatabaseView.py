@@ -57,14 +57,15 @@ class BackupDatabaseView(tk.Toplevel):
                                             h=2,
                                             cmd=self._backup_restore)
 
+
     def _backup_restore(self, btn_name):
         if btn_name == "Backup":
-            self.backupDatabaseController.backupDatabase()
-            messagebox.showinfo("Backup Database", f"Database backup successful.")
+            if self.backupDatabaseController.backupDatabase():
+                messagebox.showinfo("Backup Database", f"Database backup successful.")
         elif btn_name == "Restore":
             # Restore logic here (unchanged)
-            self.backupDatabaseController.restoreDatabase()
-            messagebox.showinfo("Restore Database", "Database restore successful.")
-        else:
-            messagebox.showerror("Error", "Invalid operation.")
+            if self.backupDatabaseController.restoreDatabase():
+                messagebox.showinfo("Restore Database", "Database restore successful.")
+            else:
+                messagebox.showerror("Restore Error", "Database restore failed.")
         

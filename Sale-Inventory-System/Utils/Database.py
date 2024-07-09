@@ -12,7 +12,7 @@ class Database:
             host=Credentials.host,
             user=Credentials.user,
             password=Credentials.password,
-            db="viviandbTEST",
+            db="vivandbTEST2",
             port=22577,
             cursorclass=pymysql.cursors.DictCursor,
         )
