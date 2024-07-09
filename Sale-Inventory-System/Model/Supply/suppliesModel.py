@@ -123,7 +123,7 @@ class SuppliesModel:
     def fetch_items_below_or_equal_flooring(self):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                query = "SELECT item_id, item_name, quantity FROM Items WHERE quantity <= flooring"
+                query = "SELECT item_id, item_name, quantity, stock_level FROM Items WHERE quantity <= flooring"
                 cursor.execute(query)
                 data = cursor.fetchall()
             cursor.close()
@@ -132,7 +132,7 @@ class SuppliesModel:
     def fetch_supply_below_or_equal_flooring(self):
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
-                query = "SELECT supply_id, item_name, quantity FROM Supply WHERE quantity <= flooring"
+                query = "SELECT supply_id, item_name, quantity, stock_level FROM Supply WHERE quantity <= flooring"
                 cursor.execute(query)
                 data = cursor.fetchall()
             cursor.close()

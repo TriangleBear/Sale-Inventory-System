@@ -23,6 +23,7 @@ from View.Maintenance.userUpdateView import UserUpdateView
 from View.Maintenance.backupDatabaseView import BackupDatabaseView
 from View.HelpAbout.userManualView import UserManualView
 from View.Supply.receiveSuppliesView import ReceiveSuppliesView
+from View.Supply.reorderSuppliesView import ReorderSuppliesView
 
 __all__ = ["MainView",
            "LoginView",
@@ -49,4 +50,5 @@ __all__ = ["MainView",
            "UserUpdateView",
            "BackupDatabaseView",
            "UserManualView",
-           "ReceiveSuppliesView"]
+           "ReceiveSuppliesView",
+           "ReorderSuppliesView"]

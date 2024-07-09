@@ -63,7 +63,7 @@ class BackupDatabaseModel:
                     cursor.execute("SHOW TABLES")
                     tables = cursor.fetchall()
                     for table in tables:
-                        table_name = table['Tables_in_nameit']
+                        table_name = table['Tables_in_viviandbTEST']
                         cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
 
                     # Restore from backup

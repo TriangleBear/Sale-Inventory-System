@@ -44,7 +44,7 @@ class LoginView(tk.Frame):
         # userData = [userId,userType, email,otp]
 
         if type(userData) == list:
-            #self.loginController.user_otp_verification(userData)
+            self.loginController.user_otp_verification(userData)
             messagebox.showinfo('OTP Sent', 'Check Email for OTP')
             print(f"from _checkLoginInput;loginView|userData:{userData}")
             self._askOTP(userData)

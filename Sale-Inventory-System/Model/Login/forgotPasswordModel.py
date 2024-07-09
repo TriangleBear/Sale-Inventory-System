@@ -39,6 +39,8 @@ class ForgotPasswordModel:
         if self.new_password=='':
             return ValueError('No provided Password')
         if self.confirm_password=='':
+            return ValueError('No provided confirm Password')
+        if self.confirm_password != self.new_password:
             return ValueError('Please confirm Password')
         return
 
