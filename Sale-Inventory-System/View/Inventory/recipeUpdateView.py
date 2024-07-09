@@ -34,7 +34,6 @@ class RecipeUpdateView(tk.Toplevel):
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()
-        self.protocol("WM_DELETE_WINDOW", self.quit())
 
     def _entry_frame(self):
         self.entryFrame = tk.Frame(self,background=self.mainBg,padx=40,pady=80)

@@ -15,6 +15,8 @@ class SuppliesController:
         manager_page = ManagerController()
         manager_page.main()
 
+    # def fetch_data_from_
+
     def fetch_items_quantity(self, item_name, new_quantity):
         model = SuppliesModel()
         return model.fetch_items_quantity(item_name, new_quantity)
