@@ -28,7 +28,7 @@ class ItemRegisterModel:
         #check error if error return ValueError else return 0
         if not self.item_name:
             return ValueError("Item name cannot be empty")
-        if not self.quantity:
+        if not self.quantity or self.quantity <=0:
             return ValueError("Quantity cannot be empty")
         if not self.supplier:
             return ValueError("Supplier cannot be empty")

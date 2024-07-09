@@ -160,9 +160,12 @@ class Functions:
                     elif access_level == "Ingredient":
                         sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = %s'
                         letter = "C"
-                    elif access_level == "Product":
+                    elif access_level == "ProductR":
                         sql = 'SELECT product_id FROM Product WHERE product_id = %s'
-                        letter = "P"
+                        letter = "PR"
+                    elif access_level == "ProductS":
+                        sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                        letter = "PS"
                     elif access_level == "Sales":
                         sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
                         letter = "SL"

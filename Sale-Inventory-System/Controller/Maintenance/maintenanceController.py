@@ -86,7 +86,7 @@ class MaintenanceController:
 
     def productUpdate(self, current_product_data):
         from Controller import ProductUpdateController
-        product_update = ProductUpdateController(self.mC, self.master, current_product_data)
+        product_update = ProductUpdateController(self.mC, current_product_data)
         product_update.main()
 
     def recipeIngredientDelete(self,current_recipe_data):

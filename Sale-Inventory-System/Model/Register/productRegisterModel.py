@@ -16,8 +16,11 @@ class ProductRegisterModel:
 
     
         
-    def set_product_id(self):
-        return Functions.generate_unique_id("Product")
+    def set_product_id(self,state):
+        if state == "Recipe":
+            return Functions.generate_unique_id("ProductR")
+        if state == "Supply":
+            return Functions.generate_unique_id("ProductS")
 
     def get_product_details(self, product_id):
         with Database.get_db_connection() as connection:
@@ -120,7 +123,23 @@ class ProductRegisterModel:
 
     def checkInput(self):
         #check error if error return ValueError else return 0
-        if not self.product_quantity:
+        if not self.product_quantity or self.product_quantity <= 0:
+            return ValueError("Quantity cannot be empty")
+        if not self.product_price:
+            return ValueError("price/unit cannot be empty")
+        if self.category == "Select Category":
+            return ValueError("Category cannot be empty")
+        if not self.flooring:
+            return ValueError("Flooring cannot be empty")
+        if not self.ceiling:
+            return ValueError("Ceiling cannot be empty")
+        if not self.stock_level:
+            return ValueError("Stock level cannot be empty")
+        return 0
+    
+    def verifyQuantityInput(self):
+        #check error if error return ValueError else return 0
+        if not self.product_quantity or self.product_quantity <= 0:
             return ValueError("Quantity cannot be empty")
         if not self.product_price:
             return ValueError("price/unit cannot be empty")

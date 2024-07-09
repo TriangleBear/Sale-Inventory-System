@@ -187,10 +187,6 @@ class ItemUpdateView(tk.Toplevel):
         category.grid(row=current_r,column=current_c+1,padx=5,pady=5)
         self.item_entry_boxes.append(category)
 
-    def _update_button(self,current_r=0,current_c=0,status=None):#4,3 item #5,3 Supply
-        register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
-                                 text="Update", command=lambda:self._checkInput(self.item_entry_boxes))
-        register_btn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)
 
     def _checkInput(self, entries:list): 
         ic(entries)
@@ -207,6 +203,11 @@ class ItemUpdateView(tk.Toplevel):
             self.destroy()
         else:
             messagebox.showerror('Item Update Error', check_input)
+            
+    def _update_button(self,current_r=0,current_c=0,status=None):#4,3 item #5,3 Supply
+        register_btn = tk.Button(self.entryFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
+                                 text="Update", command=lambda:self._checkInput(self.item_entry_boxes))
+        register_btn.grid(row=current_r,column=current_c,sticky='w',padx=5,pady=5)
     
     def _back_button(self,current_r,current_c):#4,2 item #5,2 supply
         back_btn = tk.Button(self.entryFrame, text="Back",font=font.Font(family='Courier New',size=9,weight='bold'), command=lambda: self.destroy())

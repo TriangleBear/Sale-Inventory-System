@@ -35,7 +35,7 @@ class MaintenanceView(tk.Frame):
 
     def _tree_dropdown(self):
         self.selectTable = ttk.Combobox(self.navBarFrame,values=self.menu)
-        self.selectTable.place(relx=0.355,rely=0.5,anchor=CENTER)
+        self.selectTable.place(relx=0.365,rely=0.5,anchor=CENTER)
         self.selectTable.set(self.menu[0])
         self.selectTable.bind('<<ComboboxSelected>>', lambda event: self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0]))
 
@@ -95,6 +95,14 @@ class MaintenanceView(tk.Frame):
         self.searchButton = tk.Button(self.navBarFrame, text="Search",font=font.Font(family='Courier New', size=9, weight='bold'),command=lambda: self._change_column_labels(self.tree,self.selectTable.get(),self.searchEntry.get()))
         self.searchButton.place(relx=0.64,rely=0.5,anchor='e')
 
+    def _update_product_data(self):
+        self.maintenanceController.productUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        self._change_column_labels(self.tree,self.selectTable.get(),self.selectedTable.get()[0])
+
+    def _update_user_data(self):
+        self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+        self._change_column_labels(self.tree,self.selectTable.get(),self.selectedTable.get()[0])
+
     def _update_item_data(self):
         self.maintenanceController.itemUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectedTable.get()[0])
@@ -134,30 +142,10 @@ class MaintenanceView(tk.Frame):
             self.maintenanceController.recipeIngredientDelete(list(self.tree.item(self.tree.selection()[0],'values')))
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
             return
-
-    def _update_product_data(self):
-        user_choice = CustomDialog(self.master,title="Product or Supply",buttons=["Update Product", "Delete Product"]).result
-        if user_choice == "Update Product":
-            self.maintenanceController.productUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
-        if user_choice == "Delete Product":
-            self.maintenanceController.productDelete(list(self.tree.item(self.tree.selection()[0],'values')))
-            messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
-            return
-
-    def _update_user_data(self):
-        user_choice = CustomDialog(self.master,title="User",buttons=["Update User", "Delete User"]).result
-        if user_choice == "Update User":
-            self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
-            messagebox.showinfo('Update', 'Update Successful! Please Refresh')
-        if user_choice == "Delete User":
-            self.maintenanceController.userDelete(list(self.tree.item(self.tree.selection()[0],'values')))
-            messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
-            return
         
     def userUpdate(self):
         self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
-        
 
     def _update_reg_ingd(self):
         user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Recipe Name", "Recipe Ingredients"]).result

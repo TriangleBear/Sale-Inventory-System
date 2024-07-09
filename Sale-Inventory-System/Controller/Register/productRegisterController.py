@@ -43,10 +43,10 @@ class ProductRegisterController:
         product_model = ProductRegisterModel(data)
         return product_model.checkInput()
     
-    def get_product_id(self):
+    def get_product_id(self,state):
         from Model import ProductRegisterModel
         product = ProductRegisterModel()
-        return product.set_product_id()
+        return product.set_product_id(state)
     
     def logUserActivity(self):
         Functions.logUserActivity(

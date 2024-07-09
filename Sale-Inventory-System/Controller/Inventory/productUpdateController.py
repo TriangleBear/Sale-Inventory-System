@@ -1,25 +1,41 @@
 from View import ProductUpdateView
 from Utils import Functions
 class ProductUpdateController:
-    def __init__(self, managerController, current_product_data):
-        self.mC = managerController
+    def __init__(self, maintenanceController, current_product_data):
+        self.maintenanceController = maintenanceController
         self.current_product_data = current_product_data
         self.view = ProductUpdateView(self, self.current_product_data)
     
     def main(self):
         self.view.main()
 
-    def checkInput(self,data:list,status:str) -> int: 
+    def verify_product_inputs(self, data:list):
+        print(f"prodcut inputs: {data}")
         from Model import ProductRegisterModel
-        noItem = ProductRegisterModel(data,status)
-        return noItem.checkInput()
+        product_model = ProductRegisterModel(data)
+        return product_model.checkInput()
     
-    def update_product(self,data:list,status:str) -> None:
-        from Model import ProductRegisterModel
-        product = ProductRegisterModel(data,self.user_id,status)
-        product.update_product()
+    def added_subtracted_new_quantity(self,recipe_name, new_quantity,current_quantity):
+        return current_quantity - new_quantity
     
-    def logUserActivity(self):
-        Functions.logUserActivity([self.user_id,
-                                   "Product Updated",
-                                   Functions.get_current_date("datetime")])
+    def subtract_item_stock_level(self, recipe_name, quantity):
+        from Model import ItemRegisterModel, IngredientRegisterModel
+        ingredient_model = IngredientRegisterModel()
+        item_model = ItemRegisterModel()
+        return item_model.subtract_item_stock(ingredient_model.get_total_quantity_for_update([recipe_name,quantity]))
+        
+
+    # def checkInput(self,data:list,status:str) -> int: 
+    #     from Model import ProductRegisterModel
+    #     noItem = ProductRegisterModel(data,status)
+    #     return noItem.checkInput()
+    
+    # def update_product(self,data:list,status:str) -> None:
+    #     from Model import ProductRegisterModel
+    #     product = ProductRegisterModel(data,self.user_id,status)
+    #     product.update_product()
+    
+    # def logUserActivity(self):
+    #     Functions.logUserActivity([self.user_id,
+    #                                "Product Updated",
+    #                                Functions.get_current_date("datetime")])

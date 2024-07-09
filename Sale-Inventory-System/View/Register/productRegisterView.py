@@ -14,7 +14,7 @@ class ProductRegisterView(tk.Toplevel):
         if id[0] =="I":
             self.state = "Supply"
         self._windows_attributes()
-        self.product_id = self.create_product_id()
+        self.product_id = self.create_product_id(self.state)
 
         #product_id, image_id, user_id, product_name, quantity, price, exp_date, category, flooring, ceiling, stock_level
         self.product_labels_with_colspan = {
@@ -31,10 +31,10 @@ class ProductRegisterView(tk.Toplevel):
         self.product_categories = ["Breakfast","Lunch","Dinner","Desert","Drinks","Snacks"] # Please change, this is just a placeholder
         self.mainBg = "Gray89"
 
-    def create_product_id(self):
+    def create_product_id(self,state):
         id = self.productRegisterController.check_existing_product(self.name)
         if not id:
-            return self.productRegisterController.get_product_id()
+            return self.productRegisterController.get_product_id(state)
         else:
             return id
     def main(self):
@@ -80,7 +80,7 @@ class ProductRegisterView(tk.Toplevel):
         self.itemIdLbl = tk.Label(
             self.idFrame,
             font=font.Font(family='Courier New',size=14,weight='bold'),
-            text=f"Product ID: {self.product_id} | Product Name: {self.name}",
+            text=f"Product ID:{self.product_id} | Product Name:{self.name}",
             background=self.mainBg
         )
         self.itemIdLbl.place(relx=0.5,rely=0.5,anchor=CENTER)
@@ -161,9 +161,6 @@ class ProductRegisterView(tk.Toplevel):
         #"""product_id""", """image_id""", """user_id""", """product_name""", quantity, price, exp_date, category, flooring, ceiling, stock_level
         print(f'Product Inputs: {product_inputs}')
         incorrectInput = self.productRegisterController.verify_product_inputs(product_inputs)
-        print("debug 1")
-        ic(incorrectInput)
-        ic(self.state)
         if incorrectInput == 0 and self.state == "Recipe":
             insufficientItem = self.productRegisterController.subtract_item_stock_level(self.id,product_inputs[0])
             print(f'Insufficient Item: {insufficientItem}')
