@@ -63,9 +63,18 @@ class BackupDatabaseView(tk.Toplevel):
             if self.backupDatabaseController.backupDatabase():
                 messagebox.showinfo("Backup Database", f"Database backup successful.")
         elif btn_name == "Restore":
+<<<<<<< Updated upstream
             # Restore logic here (unchanged)
             if self.backupDatabaseController.restoreDatabase():
                 messagebox.showinfo("Restore Database", "Database restore successful.")
             else:
                 messagebox.showerror("Restore Error", "Database restore failed.")
+=======
+            if messagebox.askokcancel('Restore Database','You are about to overwrite all data. Are you sure?'):
+                self.backupDatabaseController.restoreDatabase()
+                messagebox.showinfo("Restore Database", "Database restore successful.")
+                return
+        else:
+            messagebox.showerror("Error", "Invalid operation.")
+>>>>>>> Stashed changes
         
