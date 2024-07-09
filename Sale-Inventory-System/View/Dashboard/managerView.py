@@ -17,6 +17,7 @@ class ManagerDashboard(tk.Frame):
         #buttons
         self.main_btn_lbls = ["Security", "Registration","Inventory", "Supplies", "Point of Sale", "Report", "Maintenance","Help & About"]
         self.registration_btn_lbls = ["User Registration","Item Registration","Product Registration","Recipe Registration"]
+        self.reorder_receive_btn_lbls = ["Reorder", "Receive Order"]
         self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
         self.maintenance_btn_lbls = ["Edit Data", "Backup/Restore"]
         self.help_about_btn_lbls = ["User Manual","About Us"]
@@ -41,6 +42,11 @@ class ManagerDashboard(tk.Frame):
         self._center_frame()
         self._item_register_buttons()
         self._back_button("item_register_page")
+
+    def supplies_page(self):
+        self._center_frame()
+        self._reorder_receive_buttons()
+        self._back_button("supplies_page")
 
     def maintenance_page(self):
         self._center_frame()
@@ -136,6 +142,20 @@ class ManagerDashboard(tk.Frame):
                                             btnyPadding=2,
                                             btnxPadding=5,
                                             cmd=self._check_buttons_command)
+        
+    def _reorder_receive_buttons(self):
+        Functions.create_buttons_using_grid(self.btn_frame,
+                                            labels=self.reorder_receive_btn_lbls,
+                                            entryList=self.btns,
+                                            max_columns=2,
+                                            w=21,
+                                            h=1,
+                                            fontSize=12,
+                                            gridxPadding=10,
+                                            gridyPadding=10,
+                                            btnyPadding=2,
+                                            btnxPadding=5,
+                                            cmd=self._check_buttons_command)
 
     def _maintenance_buttons(self):
         Functions.create_buttons_using_grid(self.btn_frame,
@@ -183,6 +203,9 @@ class ManagerDashboard(tk.Frame):
         if button == "item_register_page":
             Functions.destroy_page(self.bodyFrame)
             self.register_page()
+        if button == "supplies_page":
+            Functions.destroy_page(self.bodyFrame)
+            self.body()
         if button == "maintenance_page":
             Functions.destroy_page(self.bodyFrame)
             self.body()
@@ -214,7 +237,12 @@ class ManagerDashboard(tk.Frame):
         if button == "Report":
             self.mC.reportController(self.bodyFrame)
         if button == "Supplies":
+            Functions.destroy_page(self.bodyFrame)
+            self.supplies_page()
+        if button == "Reorder":
             self.mC.suppliesController(self.bodyFrame)
+        if button == "Receive Order":
+            self.mC.receiveSuppliesController(self.bodyFrame)
         if button == "Point of Sale":
             self.mC.posController(self.bodyFrame)
         if button == "Maintenance":
@@ -230,7 +258,7 @@ class ManagerDashboard(tk.Frame):
         if button == "User Manual":
             Functions.destroy_page(self.bodyFrame)
             self.mC.userManualController(self.bodyFrame)
-            
+
     def show_hm_or_pm(self):
         user_choice = CustomDialog(self.master, title="Home Made or Pre Made", buttons=["Home Made", "Pre Made"]).result
         if user_choice == "Home Made":

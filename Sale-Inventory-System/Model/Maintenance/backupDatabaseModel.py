@@ -28,7 +28,7 @@ class BackupDatabaseModel:
                 with open(backup_file_name, 'w') as f:
                     for table in tables:
                         if table:  # Check if the tuple is not empty
-                            table_name = table['Tables_in_nameit']  # Adjust the index if necessary
+                            table_name = table['Tables_in_viviandbTEST']  # Adjust the index if necessary
                             
                             # Fetch and write CREATE TABLE statement
                             cursor.execute(f"SHOW CREATE TABLE {table_name}")

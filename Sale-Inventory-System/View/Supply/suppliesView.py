@@ -3,6 +3,8 @@ from tkinter import ttk, messagebox, simpledialog
 from tkinter import font, CENTER
 from Utils import Functions
 from textwrap import dedent
+import os
+from icecream import ic
 
 class SuppliesView(tk.Frame):
     def __init__(self, suppliesController, master):
@@ -57,7 +59,10 @@ class SuppliesView(tk.Frame):
         self.cart.place(relx=0.75, rely=0.06, anchor=CENTER)
 
     def _display_product_table(self):
-        self.tree_product = ttk.Treeview(self, columns=self.table_product, show='headings', selectmode='browse')
+        self.tree_product = ttk.Treeview(self, 
+                                         columns=self.table_product, 
+                                         show='headings', 
+                                         selectmode='browse')
         for col in self.table_product:
             self.tree_product.heading(col, text=col)
             self.tree_product.column(col, anchor='e')
@@ -140,8 +145,62 @@ class SuppliesView(tk.Frame):
                 self.suppliesController.update_supply_quantity_in_database(item_name, quantity_to_add)
             elif table_name_or_type == "Items":
                 self.suppliesController.update_item_quantity_in_database(item_name, quantity_to_add)
+
+        if self.generate_invoice(supply_items=self.reorder_items, refNo=self.reorder_items[0], datetime=Functions.get_current_date('datetime'), total_sales=sum([item[3] for item in self.reorder_items])):
+            messagebox.showinfo("Reorder", "Reorder successful. Inventory updated.")
+            self.tree_cart.delete(*self.tree_cart.get_children())
+            self.reorder_items.clear()
+            self._load_reorder_items()
+
+    # def fetch_data_from_supplies(self):
+    #     suppliesData = []
+    #     for items in self.tree_cart.get_children():
+    #         suppliesData.append(self.tree_cart.item(items)['values'])
+    #     return suppliesData
+
+    def generate_invoice(self, supply_items, refNo, datetime, total_sales):
+        ic(supply_items)
+        if not supply_items:
+            messagebox.showwarning("No Items", "No items to generate invoice.")
+            return
+        width = 35
+        currency = 'Php'
+        shop_name = "TAPSI NI VIVIAN"
+        disclaimer = "THIS DOCUMENT IS NOT VALID \nFOR CALIM OF INPUT TAX"
+
+        items = [
+            shop_name.center(width),
+            str(refNo).center(width),
+            str(datetime).center(width),
+            currency.rjust(width)
+        ]
+        for supply_id, name, count, price in supply_items:
+            price /= count
+            all_price = str(round(price*count,2))
+            msg = f'{name}'.ljust(width-len(all_price))+all_price
+
+            if type(count) is int and count >=2:
+                msg += f'\n     {count} x {price}'
+            elif type(count) is float:
+                msg += f'\n     {count} x {price}'
+            items.append(msg)
+
+        total= str(round(total_sales,2))
+        items.append(("-"*width).center(width))
+        items.append("TOTAL:".ljust(width-len(total))+total)
+        items.append(("-"*width).center(width))
+        items.append(disclaimer.center(width))
+        receipt_text = '\n'.join(items)
         
-        messagebox.showinfo("Reorder", "Reorder successful. Inventory updated.")
-        self.tree_cart.delete(*self.tree_cart.get_children())
-        self.reorder_items.clear()
-        self._load_reorder_items()
+
+        if not os.path.exists("Sale-Inventory-System/Receipts"):
+            os.makedirs("Sale-Inventory-System/Receipts")
+
+        path = os.path.join("Sale-Inventory-System/Receipts", f"{refNo}.txt")
+
+        with open(path, "w") as file:
+            file.write(receipt_text)
+
+        messagebox.showinfo("Invoice Generated", receipt_text)
+        return
+
