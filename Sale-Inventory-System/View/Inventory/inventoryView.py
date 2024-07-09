@@ -79,15 +79,18 @@ class InventoryView(tk.Frame):
 
     def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
         if table_name == "Items":
+            self.recipe_view_ingd.destroy()
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.inventoryController.get_items_column_names())
             self._insert_data(self.inventoryController.search_data(table_name,data))
         if table_name == "Products":
+            self.recipe_view_ingd.destroy()
             self.navBarLabel.config(text=f"{table_name} Inventory")
             product_labels = self.inventoryController.get_product_column_names()
             Functions.change_column(tree,product_labels)
             self._insert_data(self.inventoryController.search_data(table_name,data))
         if table_name == "Supplies":
+            self.recipe_view_ingd.destroy()
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.inventoryController.get_supply_column_names())
             self._insert_data(self.inventoryController.search_data(table_name,data))
@@ -95,7 +98,13 @@ class InventoryView(tk.Frame):
             self.navBarLabel.config(text=f"{table_name} Inventory")
             Functions.change_column(tree,self.inventoryController.get_recipe_column_names())
             self._insert_data(self.inventoryController.search_data(table_name,data))
+            self._recipe_view_ingd()
         return
+    
+    def _recipe_view_ingd(self):
+        self.recipe_view_ingd = tk.Button(self,font=font.Font(family='Courier New',size=9,weight='bold'),text="View Ingredient",background=self.mainBg)
+        self.recipe_view_ingd.place(relx=0.9,rely=0.9,anchor='se')
+        pass
 
     def _nav_bar_label(self):
         self.navBarLabel =tk.Label(self.navBarFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"{self.menus[0]} Inventory",background=self.navBarBg)
