@@ -103,6 +103,7 @@ class UserUpdateView(tk.Toplevel):
             longEntryWidth=55,
             side='e'
         )
+        self.update_entry_boxes[-1].config(show="*")
     
     def _update_birthdate_widget(self,current_r=0,current_c=0):
         self.birthdate_lbl = tk.Label(self.entryFrame,text="Birthdate",background=self.mainBg)

@@ -135,13 +135,7 @@ class MaintenanceView(tk.Frame):
             self._change_column_labels(self.tree,self.selectTable.get(),self.selectTable.get()[0])
 
     def _delete_or_update_recipe_name(self):
-        user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Update Name", "Delete Recipe"]).result
-        if user_choice == "Update Name":
-            self.maintenanceController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
-        if user_choice == "Delete Recipe":
-            self.maintenanceController.recipeIngredientDelete(list(self.tree.item(self.tree.selection()[0],'values')))
-            messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
-            return
+        self.maintenanceController.recipeUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
         
     def userUpdate(self):
         self.maintenanceController.userUpdate(list(self.tree.item(self.tree.selection()[0],'values')))

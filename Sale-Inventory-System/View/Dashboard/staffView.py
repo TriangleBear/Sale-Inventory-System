@@ -113,7 +113,7 @@ class StaffDashboard(tk.Frame):
         if string == "Point of Sale":
             self.sC.posController(self.bodyFrame)
         if string == "Change Password":
-            self.sC.forgotPasswordController(self.master,self.session)
+            self.sC.forgotPasswordController(self.master,self.session,self.user_id)
             
 
             
