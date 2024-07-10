@@ -53,7 +53,7 @@ class ForgotPasswordModel:
                 vivdb.close()
                 if sha256(self.new_password.encode()).hexdigest() == stored_password.get('passwordHash')  :
                     return ValueError('New password must be different from old password')
-                return 0
+                return
 
     def update_password(self):
         with Database.get_db_connection() as vivdb:
