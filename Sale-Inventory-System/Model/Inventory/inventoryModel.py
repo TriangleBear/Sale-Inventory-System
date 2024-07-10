@@ -72,6 +72,21 @@ class InventoryModel:
                 result = cursor.fetchall()
             connection.close()
         return result
+
+    def get_recipe_ingredients(self, recipe_name):
+        # This is a placeholder. Implement the actual database query here.
+        # It should return a list of tuples, each containing (ingredient_name, quantity)
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                query = """
+                SELECT Ingredients.ingd_name, Ingredients.quantity 
+                FROM Ingredients 
+                JOIN Recipes ON Ingredients.recipe_id = Recipes.recipe_id 
+                WHERE Recipes.recipe_name = %s
+                """
+                cursor.execute(query, (recipe_name,))
+                return cursor.fetchall()
+    
     
     def get_recipe_on_database(self):
         with Database.get_db_connection() as connection:
