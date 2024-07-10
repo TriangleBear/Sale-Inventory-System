@@ -109,7 +109,7 @@ class InventoryView(tk.Frame):
             font=font.Font(family='Courier New', size=9, weight='bold'),
             text="View Ingredients",
             background=self.mainBg,
-            command=self._view_recipe_ingredients
+            command=lambda: self._view_recipe_ingredients()
         )
         self.recipe_view_ingd.place(relx=0.9, rely=0.9, anchor='se')
 
@@ -183,26 +183,28 @@ class InventoryView(tk.Frame):
             return
 
         recipe_values = self.tree.item(selected_items[0], 'values')
-        recipe_name = recipe_values[0]  # Assuming the recipe name is the first column
-        ic(recipe_name)
-        ingredients = self.inventoryController.get_recipe_ingredients(recipe_name)
+        recipe_id = recipe_values[0]  # Assuming the recipe ID is the first column
+        ic(recipe_id)
+        ingredients = self.inventoryController.get_recipe_ingredients(recipe_id)
         ic(ingredients)
         
         if not ingredients:
-            messagebox.showinfo("No Ingredients", f"No ingredients found for recipe: {recipe_name}")
+            messagebox.showinfo("No Ingredients", f"No ingredients found for recipe: {recipe_id}")
             return
 
         # Create a new window to display ingredients
         ingredients_window = tk.Toplevel(self)
-        ingredients_window.title(f"Ingredients for {recipe_name}")
+        ingredients_window.title(f"Ingredients for {recipe_id}")
         
         # Create a treeview to display ingredients
-        ingredients_tree = ttk.Treeview(ingredients_window, columns=("Ingredient", "Quantity"), show="headings")
+        ingredients_tree = ttk.Treeview(ingredients_window, columns=("Ingredient", "Description", "Quantity", "Unit"), show="headings")
         ingredients_tree.heading("Ingredient", text="Ingredient")
+        ingredients_tree.heading("Description", text="Description")
         ingredients_tree.heading("Quantity", text="Quantity")
+        ingredients_tree.heading("Unit", text="Unit")
         
-        for ingredient, quantity in ingredients:
-            ingredients_tree.insert("", "end", values=(ingredient, quantity))
+        for ingredient, description, quantity, unit in ingredients:
+            ingredients_tree.insert("", "end", values=(ingredient, description, quantity, unit))
         
         ingredients_tree.pack(expand=True, fill="both")
 
