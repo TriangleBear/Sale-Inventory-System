@@ -82,7 +82,7 @@ class ManagerDashboard(tk.Frame):
     def _user_label(self):
         user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
                               text=f"MANAGER DASHBOARD | user ID: {self.user_id}",background=self.mainBg)
-        user_label.place(x=9,y=9)
+        user_label.place(x=20,y=9)
 
     def _home_button(self):
         home_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),

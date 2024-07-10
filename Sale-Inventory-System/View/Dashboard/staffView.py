@@ -3,19 +3,20 @@ import tkinter as tk
 from tkinter import font,messagebox
 from Utils import Functions, CustomDialog, CustomComboboxDialog
 class StaffDashboard(tk.Frame):
-    def __init__(self,staffController,master,user_id):
+    def __init__(self,staffController,master,user_id,session):
         self.master = master
         self._main_window_attributes()
         super().__init__(self.master, background="GhostWhite")
         self.sC = staffController
         self.user_id = user_id
+        self.session= session
         self.pack(fill=tk.BOTH,expand=True)
 
         #frames attributes
         self.mainBg = 'Grey90'
 
         #buttons
-        self.main_btn_lbls = ["Point of Sale","Forget Password"]
+        self.main_btn_lbls = ["Point of Sale","Change Password"]
         self.btns = []
         self.item_btns = []
     
@@ -52,8 +53,8 @@ class StaffDashboard(tk.Frame):
 
     def _user_label(self):
         user_label = tk.Label(self.headerFrame,font=font.Font(family='Courier New',size=14,weight='bold'),
-                              text=f"staff dashboard | user ID: {self.user_id}",background=self.mainBg)
-        user_label.place(x=9,y=9)
+                              text=f"STAFF DASHBOARD | user ID: {self.user_id}",background=self.mainBg)
+        user_label.place(x=20,y=9)
 
     def _home_button(self):
         home_btn = tk.Button(self.headerFrame,font=font.Font(family='Courier New',size=9,weight='bold'),
@@ -111,8 +112,8 @@ class StaffDashboard(tk.Frame):
     def _check_buttons_command(self,string):
         if string == "Point of Sale":
             self.sC.posController(self.bodyFrame)
-        if string == "Forget Password":
-            self.sC.forgotPasswordController(self.bodyFrame)
+        if string == "Change Password":
+            self.sC.forgotPasswordController(self.master,self.session)
             
 
             

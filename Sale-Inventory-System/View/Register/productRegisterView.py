@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import ttk,font,messagebox,CENTER
 from Utils import Functions
 from tkcalendar import DateEntry
+from PIL import Image,ImageTk
 from icecream import ic
+
 class ProductRegisterView(tk.Toplevel):
     def __init__(self, productRegisterController, id=None,name=None):
         super().__init__(background="GhostWhite")
@@ -62,7 +64,7 @@ class ProductRegisterView(tk.Toplevel):
             print(f'{self.id}')
             self.title(f'Product Registration | Supply ID: {self.id}')
 
-
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()

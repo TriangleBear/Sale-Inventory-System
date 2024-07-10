@@ -63,7 +63,7 @@ class PosView(tk.Frame):
 
     def _button_add_remove_frame(self):
         self.headerFrame = tk.Frame(self,background=self.mainBg)
-        self.headerFrame.place(relx=0.01,rely=0.05,anchor='nw')
+        self.headerFrame.place(relx=0.03,rely=0.97,anchor='sw')
 
     def _add_remove_buttons(self):
         Functions.create_buttons_using_grid(
@@ -91,26 +91,26 @@ class PosView(tk.Frame):
             self.tree_product.heading(col, text=col)
             self.tree_product.column(col, anchor='e')
         self.tree_product.bind("<Configure>", Functions.adjust_column_widths)
-        self.tree_product.place(relx=0.12,rely=0.59,anchor='w',width=350,height=450)
+        self.tree_product.place(relx=0.12,rely=0.48,anchor='w',width=350,height=450)
         self._insert_data(self.tree_product, self.get_breakfast_products(self.posController.fetch_all_products()))
 
     def _search_entry(self):
         self.search_entry = tk.Entry(self, borderwidth=0, width=27,font=font.Font(size=12))
-        self.search_entry.place(relx=0.23, rely=0.17,anchor='w')  # Place the entry at the top with some paddin
+        self.search_entry.place(relx=0.23, rely=0.06,anchor='w')  # Place the entry at the top with some paddin
 
     def _search_button(self):
         search_button = tk.Button(self, font=font.Font(family='Courier New', size=9, weight='bold'), text="Search",
-                                    command=lambda: self._search_data(self.search_entry.get(),self.menu_status), padx=7, pady=2)
-        search_button.place(relx=0.12,rely=0.17, anchor='w')  # Place the button at the bottom with some padding
+                                    command=lambda: self._search_data(self.search_entry.get(),self.menu_status), padx=7, pady=3)
+        search_button.place(relx=0.12,rely=0.06, anchor='w')  # Place the button at the bottom with some padding
 
     def _refresh_button(self):
         refresh_button = tk.Button(self, font=font.Font(family='Courier New',size=9,weight='bold'),text="Refresh", 
                                    command=lambda:self._category_commands(button=self.menu_status),padx=7, pady=3)
-        refresh_button.place(relx=0.02,rely=0.17,anchor='w')
+        refresh_button.place(relx=0.02,rely=0.06,anchor='w')
 
     def _category_frame(self):
         self.category_frame = tk.Frame(self,background=self.mainBg,padx=1,pady=3)
-        self.category_frame.place(relx=0,rely=0.5,anchor='w')
+        self.category_frame.place(relx=0,rely=0.42,anchor='w')
 
     def _category_buttons(self):
         Functions.create_buttons_using_grid(

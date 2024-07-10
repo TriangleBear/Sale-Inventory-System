@@ -101,7 +101,7 @@ class SuppliesView(tk.Frame):
             self.suppliesController.reorderController(selected_item)
         if btn == "Refresh":
             self._load_reorder_items()
-        if btn == "Checkout":
+        if btn == "Order Supplies":
             self._reorder()
 
     def _load_reorder_items(self):
@@ -112,7 +112,7 @@ class SuppliesView(tk.Frame):
         self._insert_data(self.tree_product, reorder_supplies)
 
     def add_to_cart(self, selected_item):
-        self._insert_data(self.tree_cart,[selected_item[3],selected_item[4],*selected_item[0:3]])
+        self._insert_data(self.tree_cart,[[selected_item[3],selected_item[4],*selected_item[0:3]]])
 
     def _reorder(self):
         if not self.reorder_items:

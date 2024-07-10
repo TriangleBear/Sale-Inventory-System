@@ -32,7 +32,7 @@ class LoginView(tk.Frame):
                 self.loginController.managerController(self.master,verifiedUserData[0])
             if verifiedUserData[1] == "Staff":
                 self.loginController.logUserActivity([verifiedUserData[0]])
-                self.loginController.staffController(self.master,verifiedUserData[0])
+                self.loginController.staffController(self.master,verifiedUserData[0],session=True)
         else:
             messagebox.showerror('Invalid OTP', 'Incorrect OTP')
             return

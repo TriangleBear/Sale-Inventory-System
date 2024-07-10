@@ -1,6 +1,7 @@
 # mainView.py adjustment
 import tkinter as tk
 from tkinter import font, ttk, messagebox
+from PIL import Image, ImageTk
 
 class MainView(tk.Tk): 
     def __init__(self, mainController):
@@ -22,7 +23,9 @@ class MainView(tk.Tk):
         x = int((screen_width / 2) - (w / 2)) - 12
         y = int((screen_height / 2) - (h / 2)) - 40
 
-        self.title('S.I.M.S')
+        # Set the window icon
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
+        self.title('Tapsi Ni Vivian at Bulaluhan')
         self.geometry(f"{w}x{h}+{x}+{y}")
         self.resizable(False, False)
 

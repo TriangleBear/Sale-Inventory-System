@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk, font, messagebox, simpledialog
 from Utils import Functions
+from PIL import Image,ImageTk
+
 class IngredientUpdateView(tk.Toplevel):
     def __init__(self,ingredientUpdateController,recipeDetails:list=None):
         super().__init__(background="GhostWhite")
@@ -57,6 +59,7 @@ class IngredientUpdateView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title('Ingredients Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)

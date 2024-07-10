@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk,font,messagebox
 from tkcalendar import DateEntry
 from Utils import Functions
+from PIL import Image,ImageTk
 
 class SupplyUpdateView(tk.Toplevel):
     def __init__(self,itemUpdateController,item_data):
@@ -81,7 +82,7 @@ class SupplyUpdateView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
-        
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title(f'Item Update')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)

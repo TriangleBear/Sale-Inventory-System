@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk,font,messagebox
 from tkcalendar import DateEntry
 from Utils import Functions
-
+from PIL import Image,ImageTk
 
 class ItemRegisterView(tk.Toplevel):
     def __init__(self,itemRegisterController,status):
@@ -89,6 +89,7 @@ class ItemRegisterView(tk.Toplevel):
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
         
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title(f'{self.status} Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)

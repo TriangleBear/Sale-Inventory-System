@@ -3,6 +3,7 @@ from tkinter import ttk, messagebox, font, CENTER
 from tkcalendar import DateEntry
 from Utils import Functions
 from icecream import ic
+from PIL import Image,ImageTk
 
 class ProductUpdateView(tk.Toplevel):
     def __init__(self, productUpdateController, product_data):
@@ -52,6 +53,7 @@ class ProductUpdateView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title('Update Recipe')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)

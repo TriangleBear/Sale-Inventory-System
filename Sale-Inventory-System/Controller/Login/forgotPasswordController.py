@@ -43,10 +43,10 @@ class ForgotPasswordController:
         login_page = LoginController(master)
         login_page.main()
 
-    def staffView(self,master):
+    def staffView(self,master,session):
         Functions.destroy_page(master)
         from Controller import StaffController
-        staff_dashboard = StaffController(master,self.user_id)
+        staff_dashboard = StaffController(master,self.user_id,session)
         staff_dashboard.main()
 
     def user_otp_verification(self, user_data:list):

@@ -60,7 +60,10 @@ class ForgotPasswordView(tk.Frame):
         if update_pass == 0:
             self.forgotPasswordController.update_password(data)
             messagebox.showinfo('Process', 'Password successfully updated!')
-            self.forgotPasswordController.loginController(self.master)
+            if self.session:
+                self.forgotPasswordController.staffView(self.master,self.session)
+            else:
+                self.forgotPasswordController.loginController(self.master)
         else:
             messagebox.showerror('Invalid Input', update_pass)
 
@@ -92,7 +95,7 @@ class ForgotPasswordView(tk.Frame):
         if state == "email" and not self.session:
             self.forgotPasswordController.loginController(self.master)
         if state == "email" and self.session:
-            self.forgotPasswordController.staffView(self.master)
+            self.forgotPasswordController.staffView(self.master,self.session)
         if state == "password":
             Functions.destroy_page(self)
             self.main()

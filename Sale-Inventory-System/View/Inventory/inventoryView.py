@@ -104,7 +104,6 @@ class InventoryView(tk.Frame):
     def _recipe_view_ingd(self):
         self.recipe_view_ingd = tk.Button(self,font=font.Font(family='Courier New',size=9,weight='bold'),text="View Ingredient",background=self.mainBg)
         self.recipe_view_ingd.place(relx=0.9,rely=0.9,anchor='se')
-        pass
 
     def _nav_bar_label(self):
         self.navBarLabel =tk.Label(self.navBarFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"{self.menus[0]} Inventory",background=self.navBarBg)

@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import font, ttk, CENTER
 from Utils import Functions
+from PIL import Image,ImageTk
+
 class ReceiveSuppliesView(tk.Toplevel):
     def __init__(self, managerController, receiveSuppliesController, reorder_items=None):
         self.mC = managerController
@@ -28,6 +30,7 @@ class ReceiveSuppliesView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title('Recieve Supplies')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)

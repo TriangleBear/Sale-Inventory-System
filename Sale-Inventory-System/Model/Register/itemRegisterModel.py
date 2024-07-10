@@ -177,7 +177,7 @@ class ItemRegisterModel:
                             if remaining_quantity <= 0:
                                 break
                         if remaining_quantity > 0 and required_quantity > 0:
-                            raise ValueError(f"Not enough stock for {ingredient_name}.")
+                            return ValueError(f"Not enough stock for {ingredient_name}.")
                     connection.commit()
                 except Exception as e:
                     connection.rollback()

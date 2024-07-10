@@ -4,6 +4,7 @@ from Utils import Functions
 from tkinter import font, messagebox, ttk
 from tkcalendar import DateEntry
 from icecream import ic
+from PIL import Image,ImageTk
 
 class UserUpdateView(tk.Toplevel):
     def __init__(self,userUpdateController,user_data):
@@ -48,6 +49,7 @@ class UserUpdateView(tk.Toplevel):
         x = int((screen_width / 2) - (self.w / 2)) - 12
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
+        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
         self.title('User Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
