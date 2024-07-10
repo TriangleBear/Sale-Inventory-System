@@ -47,10 +47,10 @@ class SuppliesController:
         model = SuppliesModel()
         return model.reorder(cart_items)
 
-    def logUserActivity(self,items_id):
+    def logUserActivity(self):
         Functions.logUserActivity([
             self.mC.user_id,
-            f"{items_id}|Supply Ordered", 
+            "Supply Ordered", 
             Functions.get_current_date("datetime")
             ]
         )

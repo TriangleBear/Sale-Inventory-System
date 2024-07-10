@@ -76,7 +76,7 @@ class ReceiveSuppliesView(tk.Toplevel):
 
     def _refresh_button(self):
         refresh_button = tk.Button(self,font=font.Font(family='Courier New', size=9, weight='bold'),
-                                   text="Receive Order", command=lambda: self.refresh_table())
+                                   text="Refresh", command=lambda: self.refresh_table())
         refresh_button.place(relx=0.7,rely=0.9,anchor='se')
         
     def refresh_table(self):

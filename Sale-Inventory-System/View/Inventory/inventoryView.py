@@ -182,10 +182,11 @@ class InventoryView(tk.Frame):
             messagebox.showwarning("No Selection", "Please select a recipe first.")
             return
 
-        recipe_values = self.tree.item(selected_items[0], 'values')
+        recipe_values = Functions.convert_dicc_data(self.tree.item(selected_items[0], 'values'))
+        ic(recipe_values)
         recipe_id = recipe_values[0]  # Assuming the recipe ID is the first column
         ic(recipe_id)
-        ingredients = self.inventoryController.get_recipe_ingredients(recipe_id)
+        ingredients = Functions.convert_dicc_data(self.inventoryController.get_recipe_ingredients(recipe_id))
         ic(ingredients)
         
         if not ingredients:
@@ -195,6 +196,13 @@ class InventoryView(tk.Frame):
         # Create a new window to display ingredients
         ingredients_window = tk.Toplevel(self)
         ingredients_window.title(f"Ingredients for {recipe_id}")
+        self.h = 300
+        self.w = 600
+        screen_width = self.winfo_screenwidth()
+        screen_height = self.winfo_screenheight()
+        x = int((screen_width / 2) - (self.w / 2)) - 12
+        y = int((screen_height / 2) - (self.h / 2)) - 40
+        ingredients_window.geometry(f"{self.w}x{self.h}+{x}+{y}")
         
         # Create a treeview to display ingredients
         ingredients_tree = ttk.Treeview(ingredients_window, columns=("Ingredient", "Description", "Quantity", "Unit"), show="headings")

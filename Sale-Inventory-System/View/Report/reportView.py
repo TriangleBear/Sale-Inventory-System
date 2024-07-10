@@ -25,7 +25,7 @@ class ReportView(tk.Frame):
 
     def _report_frame(self):
         self.reportFrame = tk.Frame(self,background=self.mainBg)
-        self.reportFrame.place(relx=0.855,rely=0.035,anchor='ne')
+        self.reportFrame.place(relx=0.5,rely=0.035,anchor='n')
 
     def _date_report(self):
         date_label = tk.Label(self.reportFrame, text="Date Report", font=('Courier', 12))
@@ -42,17 +42,17 @@ class ReportView(tk.Frame):
         Functions.create_buttons_using_grid(self.reportFrame,
                                             labels=self.report_btn_lbls,
                                             entryList=self.btns,
-                                            max_columns=3,
+                                            max_columns=4,
                                             w=21,
                                             h=1,
                                             fontSize=12,
-                                            gridxPadding=10,
+                                            gridxPadding=3,
                                             gridyPadding=10,
-                                            btnyPadding=2,
-                                            btnxPadding=5,
+                                            btnyPadding=3,
+                                            btnxPadding=0,
                                             cmd=self._report_button_commands,
                                             )
-        self._back_button()
+        #self._back_button()
 
     def on_fetch_report_clicked(self):
         date = self.get_selected_date()  # Method to get the date from the UI
@@ -60,7 +60,7 @@ class ReportView(tk.Frame):
      
     def _back_button(self): 
         back_btn = tk.Button(self, text="Back", font=('Courier', 12), command=self.reportController.manager_view)
-        back_btn.place(relx=0.05,rely=0.05,anchor='nw')
+        back_btn.place(relx=0.05,rely=0.15,anchor='nw')
 
     def _report_button_commands(self,string):
         if string == "Stock Level Report":
@@ -68,7 +68,7 @@ class ReportView(tk.Frame):
         if string == "Sales Report":
             self._ask_for_date_and_display_sales_report() 
         if string == "Supply Histroy":
-            self._ask_for_date_and_display_supply_history()
+            self._ask_for_date_and_display_reorder_history()
 
     def _ask_for_date_and_display_reorder_history(self):
         def on_date_selected():
@@ -130,4 +130,4 @@ class ReportView(tk.Frame):
     def embed_graph(self, fig):
         canvas = FigureCanvasTkAgg(fig, master=self)
         canvas.draw()
-        canvas.get_tk_widget().place(relx=0.49,rely=0.96,anchor='s')
+        canvas.get_tk_widget().place(relx=0.5,rely=0.97,anchor='s')

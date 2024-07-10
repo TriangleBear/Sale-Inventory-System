@@ -125,24 +125,24 @@ class ReportModel:
         with Database.get_db_connection() as conn:
             with conn.cursor() as cursor:
                 # Use the date parameter in the WHERE clause to filter supply history for the specific date
-                query = "SELECT * FROM Reordered WHERE ordered_on = %s"
+                query = "SELECT * FROM Reordered WHERE ordered_on LIKE %s"
                 _date = f"%{date}%"
                 cursor.execute(query, (_date,))
                 data = cursor.fetchall()
                 cursor.close()
         return data
     
-    def display_supply_history(self, date):
-        data = self.fetch_supply_history(date)
+    def display_reorder_history(self, date):
+        data = self.fetch_reorder_history(date)
         print(f'Supply data for {date} model: {data}')
 
         # Process data for plotting
-        order_dates = [row['ordered_on'] for row in data]
-        arrival_dates = [row['supplied_on'] for row in data]
+        order_dates = [row['ordered_on'].strftime('%H:%M') for row in data]
+        arrival_dates = [row['arrival_date'].strftime('%H:%M') for row in data]
         quantities = [row['quantity'] for row in data]
 
         # Plotting
-        fig, ax = plt.subplots(figsize=(10, 6))
+        fig, ax = plt.subplots(figsize=(8, 5))
 
         ax.plot(order_dates, quantities, label='Ordered Quantity', marker='o', linestyle='--', color='blue')
         ax.plot(arrival_dates, quantities, label='Arrived Quantity', marker='s', linestyle='-', color='green')
