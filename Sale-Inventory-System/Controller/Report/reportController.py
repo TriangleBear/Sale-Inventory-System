@@ -21,3 +21,8 @@ class ReportController():
         model = ReportModel()
         fig = model.display_sales_report(date)
         self.view.embed_graph(fig)
+
+    def display_reorder_history(self,date):
+        model = ReportModel()
+        fig = model.display_supply_history(date)
+        self.view.embed_graph(fig)

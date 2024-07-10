@@ -30,7 +30,7 @@ class BackupDatabaseModel:
                     user_table = None
                     other_tables = []
                     for table in tables:
-                        table_name = table['Tables_in_vivandbTEST2']  # Adjust the index if necessary
+                        table_name = table['Tables_in_vivandbTEST']  # Adjust the index if necessary
                         if table_name.lower() == 'user':
                             user_table = table_name
                         else:

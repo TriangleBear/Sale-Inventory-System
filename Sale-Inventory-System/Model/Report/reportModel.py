@@ -119,30 +119,38 @@ class ReportModel:
         ax2.yaxis.set_major_locator(MaxNLocator(integer=True))
 
         return fig
-    # def display_sales_report(self, date):
-    #     # Fetch sales data for the given date
-    #     sales_data = self.fetch_sales_report(date)  # Hypothetical method to fetch data
-    #     print(f'Sales data for {date}: {sales_data}')
-    #     if not sales_data:
-    #         print("No sales data found for the given date.")
-    #         return
+    
 
-    #     # Process data for plotting
-    #     dates = [data['date'] for data in sales_data]
-    #     sales = [data['sales'] for data in sales_data]
+    def fetch_reorder_history(self, date):
+        with Database.get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                # Use the date parameter in the WHERE clause to filter supply history for the specific date
+                query = "SELECT * FROM Reordered WHERE ordered_on = %s"
+                _date = f"%{date}%"
+                cursor.execute(query, (_date,))
+                data = cursor.fetchall()
+                cursor.close()
+        return data
+    
+    def display_supply_history(self, date):
+        data = self.fetch_supply_history(date)
+        print(f'Supply data for {date} model: {data}')
 
-    #     # Plotting
-    #     plt.figure(figsize=(10, 6))
-    #     plt.plot(dates, sales, marker='o', linestyle='-', color='b')
-    #     plt.title('Sales Report')
-    #     plt.xlabel('Date')
-    #     plt.ylabel('Sales')
-    #     plt.grid(True)
-    #     plt.xticks(rotation=45)
-    #     plt.tight_layout()
+        # Process data for plotting
+        order_dates = [row['ordered_on'] for row in data]
+        arrival_dates = [row['supplied_on'] for row in data]
+        quantities = [row['quantity'] for row in data]
 
-    #     # Check if there's data to plot
-    #     if dates and sales:
-    #         plt.show()
-    #     else:
-    #         print("No data to plot.")
+        # Plotting
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        ax.plot(order_dates, quantities, label='Ordered Quantity', marker='o', linestyle='--', color='blue')
+        ax.plot(arrival_dates, quantities, label='Arrived Quantity', marker='s', linestyle='-', color='green')
+
+        ax.set_xlabel('Date')
+        ax.set_ylabel('Quantity')
+        ax.set_title(f'Supply History for {date}')
+        ax.legend()
+
+        return fig
+

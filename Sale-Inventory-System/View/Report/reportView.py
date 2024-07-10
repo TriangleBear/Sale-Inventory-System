@@ -12,7 +12,7 @@ class ReportView(tk.Frame):
         self.reportController = reportController
         self.fetch_report_button = tk.Button(text="Fetch Report", command=self.on_fetch_report_clicked)
         self.pack(fill=tk.BOTH,expand=True)
-        self.report_btn_lbls = ["Stock Level Report","Sales Report"]
+        self.report_btn_lbls = ["Stock Level Report","Sales Report","Supply Histroy"]
         self.btns = []
 
         
@@ -42,7 +42,7 @@ class ReportView(tk.Frame):
         Functions.create_buttons_using_grid(self.reportFrame,
                                             labels=self.report_btn_lbls,
                                             entryList=self.btns,
-                                            max_columns=2,
+                                            max_columns=3,
                                             w=21,
                                             h=1,
                                             fontSize=12,
@@ -67,6 +67,36 @@ class ReportView(tk.Frame):
             self.reportController.display_stock_level()
         if string == "Sales Report":
             self._ask_for_date_and_display_sales_report() 
+        if string == "Supply Histroy":
+            self._ask_for_date_and_display_supply_history()
+
+    def _ask_for_date_and_display_reorder_history(self):
+        def on_date_selected():
+            # Assuming date_entry.get() returns a date string, e.g., "MM/DD/YYYY"
+            date_str = date_entry.get()
+
+            # Parse the date string into a datetime object
+            date_obj = datetime.strptime(date_str, "%m/%d/%y")  # Use '%y' for two-digit year
+
+            # Format the datetime object for MySQL
+            mysql_date_str = date_obj.strftime('%Y-%m-%d')  
+            print(f"Selected date view: {mysql_date_str}")
+            try:
+                self.reportController.display_reorder_history(mysql_date_str).show()
+            except Exception as e:
+                print(f"Error in displaying supply history: {e}")                                     
+            dialog.destroy()  # Destroy the dialog after selection
+
+        dialog = tk.Toplevel(self)  # Use the existing root window
+        dialog.title("Select Date")
+        date_entry = DateEntry(dialog)  # Create a DateEntry widget
+        date_entry.pack(pady=10)
+        select_button = tk.Button(dialog, text="Select", command=on_date_selected)
+        select_button.pack(pady=5)
+        print(f"date_entry: {date_entry.get()}")
+        dialog.transient(self)  # Make the dialog transient to the root window
+        dialog.grab_set()  # Optional: Make the dialog modal
+        self.wait_window(dialog)
     
     def _ask_for_date_and_display_sales_report(self):
         # Create a simple dialog to ask for the date
