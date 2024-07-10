@@ -4,6 +4,7 @@ from tkinter import ttk
 from Utils import Functions,  CustomDialog
 from tkinter import font, messagebox
 from tkcalendar import DateEntry
+from icecream import ic
 class InventoryView(tk.Frame):
     def __init__(self,inventoryController,master):
         self.inventoryController = inventoryController
@@ -77,34 +78,40 @@ class InventoryView(tk.Frame):
         for item in converted_data:
             self.tree.insert('', 'end', values=item)
 
-    def _change_column_labels(self,tree:ttk.Treeview, table_name:str, data=None):
+    def _destroy_recipe_view_ingd(self):
+        if hasattr(self, 'recipe_view_ingd') and self.recipe_view_ingd is not None:
+            self.recipe_view_ingd.destroy()
+            self.recipe_view_ingd = None
+
+    def _change_column_labels(self, tree: ttk.Treeview, table_name: str, data=None):
+        # Always destroy the button at the start
+        self._destroy_recipe_view_ingd()
+        
+        self.navBarLabel.config(text=f"{table_name} Inventory")
+        
         if table_name == "Items":
-            self.recipe_view_ingd.destroy()
-            self.navBarLabel.config(text=f"{table_name} Inventory")
-            Functions.change_column(tree,self.inventoryController.get_items_column_names())
-            self._insert_data(self.inventoryController.search_data(table_name,data))
-        if table_name == "Products":
-            self.recipe_view_ingd.destroy()
-            self.navBarLabel.config(text=f"{table_name} Inventory")
+            Functions.change_column(tree, self.inventoryController.get_items_column_names())
+        elif table_name == "Products":
             product_labels = self.inventoryController.get_product_column_names()
-            Functions.change_column(tree,product_labels)
-            self._insert_data(self.inventoryController.search_data(table_name,data))
-        if table_name == "Supplies":
-            self.recipe_view_ingd.destroy()
-            self.navBarLabel.config(text=f"{table_name} Inventory")
-            Functions.change_column(tree,self.inventoryController.get_supply_column_names())
-            self._insert_data(self.inventoryController.search_data(table_name,data))
-        if table_name == "Recipes":
-            self.navBarLabel.config(text=f"{table_name} Inventory")
-            Functions.change_column(tree,self.inventoryController.get_recipe_column_names())
-            self._insert_data(self.inventoryController.search_data(table_name,data))
-            self._recipe_view_ingd()
+            Functions.change_column(tree, product_labels)
+        elif table_name == "Supplies":
+            Functions.change_column(tree, self.inventoryController.get_supply_column_names())
+        elif table_name == "Recipes":
+            Functions.change_column(tree, self.inventoryController.get_recipe_column_names())
+            self._create_recipe_view_ingd()
+        
+        self._insert_data(self.inventoryController.search_data(table_name, data))
         return
-    
-    def _recipe_view_ingd(self):
-        self.recipe_view_ingd = tk.Button(self,font=font.Font(family='Courier New',size=9,weight='bold'),text="View Ingredient",background=self.mainBg)
-        self.recipe_view_ingd.place(relx=0.9,rely=0.9,anchor='se')
-        pass
+
+    def _create_recipe_view_ingd(self):
+        self.recipe_view_ingd = tk.Button(
+            self,
+            font=font.Font(family='Courier New', size=9, weight='bold'),
+            text="View Ingredients",
+            background=self.mainBg,
+            command=self._view_recipe_ingredients
+        )
+        self.recipe_view_ingd.place(relx=0.9, rely=0.9, anchor='se')
 
     def _nav_bar_label(self):
         self.navBarLabel =tk.Label(self.navBarFrame,font=font.Font(family='Courier New',size=14,weight='bold'),text=f"{self.menus[0]} Inventory",background=self.navBarBg)
@@ -169,12 +176,35 @@ class InventoryView(tk.Frame):
             messagebox.showinfo('Deletion', 'Deletion Successful! Please Refresh')
             return
 
-    def _update_reg_ingd(self):
-        user_choice = CustomDialog(self.master,title="Recipe or Ingredient",buttons=["Recipe Name", "Recipe Ingredients"]).result
-        if user_choice == "Recipe Name":
-            self._delete_or_update_recipe_name()
-        if user_choice == "Recipe Ingredients":
-            self.inventoryController.recipeIngredientUpdate(list(self.tree.item(self.tree.selection()[0],'values')))
+    def _view_recipe_ingredients(self):
+        selected_items = self.tree.selection()
+        if not selected_items:
+            messagebox.showwarning("No Selection", "Please select a recipe first.")
+            return
+
+        recipe_values = self.tree.item(selected_items[0], 'values')
+        recipe_name = recipe_values[0]  # Assuming the recipe name is the first column
+        ic(recipe_name)
+        ingredients = self.inventoryController.get_recipe_ingredients(recipe_name)
+        ic(ingredients)
+        
+        if not ingredients:
+            messagebox.showinfo("No Ingredients", f"No ingredients found for recipe: {recipe_name}")
+            return
+
+        # Create a new window to display ingredients
+        ingredients_window = tk.Toplevel(self)
+        ingredients_window.title(f"Ingredients for {recipe_name}")
+        
+        # Create a treeview to display ingredients
+        ingredients_tree = ttk.Treeview(ingredients_window, columns=("Ingredient", "Quantity"), show="headings")
+        ingredients_tree.heading("Ingredient", text="Ingredient")
+        ingredients_tree.heading("Quantity", text="Quantity")
+        
+        for ingredient, quantity in ingredients:
+            ingredients_tree.insert("", "end", values=(ingredient, quantity))
+        
+        ingredients_tree.pack(expand=True, fill="both")
 
 
     def _update_button(self):

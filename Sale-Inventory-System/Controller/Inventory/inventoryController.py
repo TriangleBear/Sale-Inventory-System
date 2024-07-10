@@ -14,6 +14,10 @@ class InventoryController:
         model = InventoryModel()
         return model.get_recipe_on_database()
     
+    def get_recipe_ingredients(self,recipe_id):
+        model = InventoryModel()
+        return model.get_recipe_ingredients(recipe_id) 
+    
     def get_recipe_column_names(self):
         model = InventoryModel()
         return model.get_recipe_column_names()
