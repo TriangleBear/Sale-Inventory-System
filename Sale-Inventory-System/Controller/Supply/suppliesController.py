@@ -42,11 +42,15 @@ class SuppliesController:
     def update_supply_quantity_in_database(self, item_name, new_quantity):
         model = SuppliesModel()
         return model.update_supply_quantity_in_database(item_name, new_quantity)
+    
+    def reorder(self,cart_items):
+        model = SuppliesModel()
+        return model.reorder(cart_items)
 
     def logUserActivity(self,items_id):
         Functions.logUserActivity([
             self.mC.user_id,
-            f"{items_id}|Supply Purchased", 
+            f"{items_id}|Supply Ordered", 
             Functions.get_current_date("datetime")
             ]
         )

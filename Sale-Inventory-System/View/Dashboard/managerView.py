@@ -243,7 +243,7 @@ class ManagerDashboard(tk.Frame):
         if button == "Reorder":
             self.mC.suppliesController(self.bodyFrame)
         if button == "Receive Order":
-            self.mC.receiveSuppliesController(self.bodyFrame)
+            self.mC.receiveSuppliesController()
         if button == "Point of Sale":
             self.mC.posController(self.bodyFrame)
         if button == "Maintenance":

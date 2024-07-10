@@ -63,10 +63,9 @@ class ManagerController:
         supplies_page = SuppliesController(self,master)
         supplies_page.main()
 
-    def receiveSuppliesController(self,master):
-        Functions.destroy_page(master)
+    def receiveSuppliesController(self):
         from Controller import RecieveSuppliesController
-        receive_supplies_page = RecieveSuppliesController(self,master,)
+        receive_supplies_page = RecieveSuppliesController(self)
         receive_supplies_page.main()
 
     def posController(self,master):

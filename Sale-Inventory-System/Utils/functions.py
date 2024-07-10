@@ -9,7 +9,7 @@ import tkinter as tk
 import random, string
 from datetime import datetime
 from hashlib import sha256
-
+from icecream import ic
 
 class Functions:
     def logUserActivity(userActivityData:list):
@@ -315,6 +315,10 @@ class Functions:
 
     def format_cart_item(product, quantity, price):
         return [product, int(quantity), float(price)]
+    
+    def format_item_order(item_id,item_name,quantity,payment,arrival):
+        return [item_id, str(item_name), quantity,float(payment),str(arrival)]
+
 
     
     def check_existing_data(insertData,insertedData):
@@ -329,6 +333,7 @@ class Functions:
         else:
             return
 
+    #pos
     def check_existing_cart_item(insertData,insertedData,quantity_available):
         product_name,quantity,price = insertData
         existing_name,existing_quantity = insertedData[0:2]
@@ -339,6 +344,19 @@ class Functions:
             return [product_name,new_quantity,float(price*new_quantity)]
         else:
             return ValueError("Quantity is greater than available stock.")
+    
+    #supplies
+    def check_cart_item(insertData,insertedData):
+        quantity,payment,arrival,item_id,item_name = insertData
+        current_item_id,current_item_name,existing_quantity,existing_payment,curr_arrival = insertedData
+        print(type(existing_quantity))
+        print(type(quantity))
+        if item_id == current_item_id and item_name == current_item_name:
+            new_quantity = float(existing_quantity) + quantity
+            new_payment = float(payment) + float(existing_payment)
+            return [item_id,item_name,new_quantity,new_payment,arrival]
+        else:
+            return
         
         # if product_name == self.tree_cart.item(iid, 'values')[0]:
         #         current_quantity = int(self.tree_cart.item(iid, 'values')[1])

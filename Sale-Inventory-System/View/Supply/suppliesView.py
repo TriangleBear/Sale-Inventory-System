@@ -94,58 +94,59 @@ class SuppliesView(tk.Frame):
 
     def _supplies_button_commands(self, btn):
         if btn == "Reorder":
-            selected_item = self.tree_product.item(self.tree_product.selection()[0],'values'); ic(selected_item)
+            selected_item = self.tree_product.item(self.tree_product.selection()[0],'values')
             if not selected_item:
                 return messagebox.showerror("Error", "Please select an item to reorder")
             # self._add_to_cart(selected_item)
             self.suppliesController.reorderController(selected_item)
         if btn == "Refresh":
             self._load_reorder_items()
-        if btn == "Order Supplies":
+        if btn == "Order Supplies" and not self.tree_cart.get_children():
+            return messagebox.showerror("Error", "Please select an item to reorder")
+        if btn == "Order Supplies" and self.tree_cart.get_children():
             self._reorder()
 
     def _load_reorder_items(self):
         self.tree_product.delete(*self.tree_product.get_children())
-        reorder_items = Functions.convert_dicc_data(self.suppliesController.fetch_items_below_or_equal_flooring()); ic(reorder_items)
-        reorder_supplies = Functions.convert_dicc_data(self.suppliesController.fetch_supply_below_or_equal_flooring()); ic(reorder_supplies)
+        reorder_items = Functions.convert_dicc_data(self.suppliesController.fetch_items_below_or_equal_flooring())
+        reorder_supplies = Functions.convert_dicc_data(self.suppliesController.fetch_supply_below_or_equal_flooring())
         self._insert_data(self.tree_product, reorder_items)
         self._insert_data(self.tree_product, reorder_supplies)
 
     def add_to_cart(self, selected_item):
+        for iid in self.tree_cart.get_children():
+            existingItem = Functions.check_cart_item(
+                insertData=selected_item,
+                insertedData=self.tree_cart.item(iid,'values')
+            )
+            if existingItem == None:
+                continue
+            if type(existingItem) == list:
+                self.tree_cart.item(iid,values=existingItem)
+                return
         self._insert_data(self.tree_cart,[[selected_item[3],selected_item[4],*selected_item[0:3]]])
+        
 
     def _reorder(self):
-        if not self.reorder_items:
-            return messagebox.showerror("Reorder Error", "No items selected for reorder.")
-        
-        for item in self.reorder_items:
-            item_id, item_name, quantity_to_add, expected_payment = item
-            table_name_or_type = self.suppliesController.get_item_type_by_id(item_id)
-            print(f'Table name or type: {table_name_or_type}')
-
-            if table_name_or_type == "Supply":
-                self.suppliesController.update_supply_quantity_in_database(item_name, quantity_to_add)
-            elif table_name_or_type == "Items":
-                self.suppliesController.update_item_quantity_in_database(item_name, quantity_to_add)
-
-        if self.generate_invoice(supply_items=self.reorder_items, refNo=self.reorder_items[0], datetime=Functions.get_current_date('datetime'), total_sales=sum([item[3] for item in self.reorder_items])):
-            messagebox.showinfo("Reorder", "Reorder successful. Inventory updated.")
-            self.tree_cart.delete(*self.tree_cart.get_children())
-            self.reorder_items.clear()
-            self._load_reorder_items()
+        datetime = Functions.get_current_date("datetime")
+        if self.tree_cart.get_children():
+            cart_items = []
+            for child in self.tree_cart.get_children():
+                formattedData = [*Functions.format_item_order(*self.tree_cart.item(child, 'values'))]
+                formattedData.append(datetime)
+                formattedData.append("Pending")
+                cart_items.append(formattedData)
+        self.suppliesController.reorder(cart_items)
+        self.suppliesController.logUserActivity()
+        self.generate_invoice(supply_items=cart_items,refNo="1",datetime=datetime)
+        self.tree_cart.delete(*self.tree_cart.get_children())
+        return
 
     def _insert_data(self, tree: ttk.Treeview, data: list):
         for item in data:
             tree.insert('', 0, values=item)
 
-    # def fetch_data_from_supplies(self):
-    #     suppliesData = []
-    #     for items in self.tree_cart.get_children():
-    #         suppliesData.append(self.tree_cart.item(items)['values'])
-    #     return suppliesData
-
-    def generate_invoice(self, supply_items, refNo, datetime, total_sales):
-        ic(supply_items)
+    def generate_invoice(self, supply_items, refNo, datetime):
         if not supply_items:
             messagebox.showwarning("No Items", "No items to generate invoice.")
             return
@@ -154,24 +155,26 @@ class SuppliesView(tk.Frame):
         shop_name = "TAPSI NI VIVIAN"
         disclaimer = "THIS DOCUMENT IS NOT VALID \nFOR CALIM OF INPUT TAX"
 
+        total = 0
         items = [
             shop_name.center(width),
             str(refNo).center(width),
             str(datetime).center(width),
             currency.rjust(width)
         ]
-        for supply_id, name, count, price in supply_items:
-            price /= count
-            all_price = str(round(price*count,2))
+        ic(supply_items)
+        for id,name,count,price,arrival,ordered_on,status in supply_items:
+            total += price*float(count)
+            all_price = str(round(price*float(count),2))
             msg = f'{name}'.ljust(width-len(all_price))+all_price
 
             if type(count) is int and count >=2:
                 msg += f'\n     {count} x {price}'
             elif type(count) is float:
-                msg += f'\n     {count} x {price}'
+                msg += f'\n     {count} kg x {price}'
             items.append(msg)
 
-        total= str(round(total_sales,2))
+        total= str(round(total,2))
         items.append(("-"*width).center(width))
         items.append("TOTAL:".ljust(width-len(total))+total)
         items.append(("-"*width).center(width))
@@ -190,3 +193,26 @@ class SuppliesView(tk.Frame):
         messagebox.showinfo("Invoice Generated", receipt_text)
         return
 
+
+
+    # for item in self.reorder_items:
+    #     item_id, item_name, quantity_to_add, expected_payment = item
+    #     table_name_or_type = self.suppliesController.get_item_type_by_id(item_id)
+    #     print(f'Table name or type: {table_name_or_type}')
+
+    #     if table_name_or_type == "Supply":
+    #         self.suppliesController.update_supply_quantity_in_database(item_name, quantity_to_add)
+    #     elif table_name_or_type == "Items":
+    #         self.suppliesController.update_item_quantity_in_database(item_name, quantity_to_add)
+
+    # if self.generate_invoice(supply_items=self.reorder_items, refNo=self.reorder_items[0], datetime=Functions.get_current_date('datetime'), total_sales=sum([item[3] for item in self.reorder_items])):
+    #     messagebox.showinfo("Reorder", "Reorder successful. Inventory updated.")
+    #     self.tree_cart.delete(*self.tree_cart.get_children())
+    #     self.reorder_items.clear()
+    #     self._load_reorder_items()
+
+    # def fetch_data_from_supplies(self):
+    #     suppliesData = []
+    #     for items in self.tree_cart.get_children():
+    #         suppliesData.append(self.tree_cart.item(items)['values'])
+    #     return suppliesData

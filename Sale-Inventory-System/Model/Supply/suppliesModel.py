@@ -1,4 +1,5 @@
 from Utils import Database
+from icecream import ic
 from Utils import Functions
 class SuppliesModel:
     def __init__(self, cart_items:list=None,total_price:float=None,amount_tendered=None,user_id=None,datetime=None):
@@ -167,7 +168,39 @@ class SuppliesModel:
                 data = cursor.fetchall()
             cursor.close()
         return data
-
+    
+    def reorder(self,cart_items):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                for item in cart_items:
+                    query = "INSERT INTO Reordered (item_id,item_name,amount_to_pay,quantity,arrival_date,ordered_on,Status) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+                    cursor.execute(query, (item[0],item[1],item[2],item[3],item[4],item[5],item[6],)) 
+                connection.commit()
+            cursor.close()
+        return
+    
+    def fetch_all_pending_orders(self):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM Reordered WHERE Status = %s",("Pending",)) 
+                    data = cursor.fetchall()
+            cursor.close()
+        return data
+    
+    def add_to_items(self,data):
+        with Database.get_db_connection() as connection:
+            with connection.cursor() as cursor:
+                    sql0 = """SELECT quantity FROM Items WHERE item_id = %s"""
+                    cursor.execute(sql0, (data[1]))
+                    current_item_quantity = cursor.fetchone()
+                    new_item_quantity = current_item_quantity['quantity'] + float(data[3])
+                    sql1 = """UPDATE Items SET quantity = %s WHERE item_id = %s"""
+                    cursor.execute(sql1, (new_item_quantity,data[1],)) 
+                    sql2 = """UPDATE Reordered SET Status = %s WHERE item_id = %s"""
+                    cursor.execute(sql2, ("Order Received", data[1]))
+                    connection.commit()
+            cursor.close()
+        return
 
     
 
