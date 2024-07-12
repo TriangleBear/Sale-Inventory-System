@@ -20,7 +20,6 @@ class ManagerDashboard(tk.Frame):
         self.reorder_receive_btn_lbls = ["Reorder", "Receive Order"]
         self.item_register_btn_lbls = ["Supply Item", "Raw Item"]
         self.maintenance_btn_lbls = ["Edit Data", "Backup/Restore"]
-        self.help_about_btn_lbls = ["User Manual","About Us"]
         self.btns = []
         self.item_btns = []
     
@@ -51,11 +50,6 @@ class ManagerDashboard(tk.Frame):
     def maintenance_page(self):
         self._center_frame()
         self._maintenance_buttons()
-        self._back_button("maintenance_page")
-
-    def _help_and_about(self):
-        self._center_frame()
-        self._help_and_about_buttons()
         self._back_button("maintenance_page")
 
     def _main_window_attributes(self):
@@ -171,20 +165,6 @@ class ManagerDashboard(tk.Frame):
                                             btnxPadding=5,
                                             cmd=self._check_buttons_command)
 
-    def _help_and_about_buttons(self):
-        Functions.create_buttons_using_grid(self.btn_frame,
-                                            labels=self.help_about_btn_lbls,
-                                            entryList=self.btns,
-                                            max_columns=2,
-                                            w=21,
-                                            h=1,
-                                            fontSize=12,
-                                            gridxPadding=10,
-                                            gridyPadding=10,
-                                            btnyPadding=2,
-                                            btnxPadding=5,
-                                            cmd=self._check_buttons_command)
-
     def _back_button(self,state:str):
         self.back_btn = tk.Button(self.bodyFrame,font=font.Font(family='Courier New',size=9,weight='bold'), 
                                   text="Back", background="Grey89",command=lambda:self._check_back_command(f"{state}"))
@@ -254,9 +234,6 @@ class ManagerDashboard(tk.Frame):
         if button == "Backup/Restore":
             self.mC.backupDatabaseController(self.bodyFrame)
         if button == "Help & About":
-            Functions.destroy_page(self.bodyFrame)
-            self._help_and_about()
-        if button == "User Manual":
             Functions.destroy_page(self.bodyFrame)
             self.mC.userManualController(self.bodyFrame)
 

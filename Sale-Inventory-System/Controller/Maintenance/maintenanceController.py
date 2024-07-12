@@ -81,7 +81,7 @@ class MaintenanceController:
 
     def supplyUpdate(self,current_item_data):
         from Controller import SupplyUpdateController
-        supply_update = SupplyUpdateController(self.mC,self,current_item_data)
+        supply_update = SupplyUpdateController(self.mC,current_item_data)
         supply_update.main()
 
     def productUpdate(self, current_product_data):

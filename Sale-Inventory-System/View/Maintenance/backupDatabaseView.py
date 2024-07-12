@@ -26,7 +26,9 @@ class BackupDatabaseView(tk.Toplevel):
     def _window_attributes(self):
         self.h = 100
         self.w = 300
-        self.iconphoto(False, ImageTk.PhotoImage(Image.open("Sale-Inventory-System\Assets\icon.jpg")))
+        image = Image.open('Assets\\icon.jpg')
+        photo_image = ImageTk.PhotoImage(image)
+        self.iconphoto(False, photo_image)
         screen_width = self.master.winfo_screenwidth()
         screen_height = self.master.winfo_screenheight()
         x = int((screen_width / 2) - (self.w / 2)) - 12
@@ -66,9 +68,6 @@ class BackupDatabaseView(tk.Toplevel):
             if self.backupDatabaseController.backupDatabase():
                 messagebox.showinfo("Backup Database", f"Database backup successful.")
         elif btn_name == "Restore":
-            # Restore logic here (unchanged)
-            if self.backupDatabaseController.restoreDatabase():
-                messagebox.showinfo("Restore Database", "Database restore successful.")
-            else:
-                messagebox.showerror("Restore Error", "Database restore failed.")
+            self.backupDatabaseController.restoreDatabase()
+            messagebox.showinfo("Restore Database", "Database restore successful.")
         
