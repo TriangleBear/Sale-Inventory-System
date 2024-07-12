@@ -152,3 +152,7 @@ cython_debug/
 #.idea/
 Sale-Inventory-System/Utils/credentials.py
 Sale-Inventory-System/.vscode
+/Sale-Inventory-System/Backups
+/Sale-Inventory-System/Receipts
+/Sale-Inventory-System/Scripts
+/Sale-Inventory-System
