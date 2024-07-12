@@ -2,9 +2,11 @@ from Utils import Functions
 from View import ForgotPasswordView
 from Model import ForgotPasswordModel
 class ForgotPasswordController:
-    def __init__(self,master):
+    def __init__(self,controller,master,session:bool,user_id=None):
+        self.user_id = user_id
         self.master = master
-        self.view = ForgotPasswordView(self,self.master)
+        self.controller = controller
+        self.view = ForgotPasswordView(self,self.master,session)
     
     def main(self):
         self.view.main()
@@ -41,6 +43,11 @@ class ForgotPasswordController:
         login_page = LoginController(master)
         login_page.main()
 
+    def staffView(self,master,session):
+        Functions.destroy_page(master)
+        from Controller import StaffController
+        staff_dashboard = StaffController(master,self.user_id,session)
+        staff_dashboard.main()
 
     def user_otp_verification(self, user_data:list):
         Functions.send_otp_email(user_data[2], user_data[3])

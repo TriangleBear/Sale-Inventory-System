@@ -39,6 +39,8 @@ class ForgotPasswordModel:
         if self.new_password=='':
             return ValueError('No provided Password')
         if self.confirm_password=='':
+            return ValueError('No provided confirm Password')
+        if self.confirm_password != self.new_password:
             return ValueError('Please confirm Password')
         return
 
@@ -51,7 +53,7 @@ class ForgotPasswordModel:
                 vivdb.close()
                 if sha256(self.new_password.encode()).hexdigest() == stored_password.get('passwordHash')  :
                     return ValueError('New password must be different from old password')
-                return 0
+                return
 
     def update_password(self):
         with Database.get_db_connection() as vivdb:

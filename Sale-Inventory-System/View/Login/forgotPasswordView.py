@@ -4,7 +4,8 @@ from tkinter import messagebox
 from tkinter.simpledialog import askstring
 import tkinter as tk
 class ForgotPasswordView(tk.Frame):
-    def __init__(self,forgotPasswordController, master):
+    def __init__(self,forgotPasswordController, master,session):
+        self.session = session # should be true if logged to staff else false
         self.master = master
         super().__init__(self.master, background="GhostWhite")
         self.forgotPasswordController = forgotPasswordController
@@ -14,7 +15,8 @@ class ForgotPasswordView(tk.Frame):
         self.userId = None
         self.username = None
         self.email = None
-
+        
+        self.mainBg = "Gray89"
         self.forgot_password_entry_boxes = []
         self.pack(fill=tk.BOTH,expand=True)
     
@@ -31,8 +33,8 @@ class ForgotPasswordView(tk.Frame):
         self._confirm_button("password")
 
     def _center_frame(self):
-        self.entryFrame = tk.Frame(self,background="Gray82")
-        self.entryFrame.place(relx =0.5,rely=0.4,anchor=CENTER)
+        self.entryFrame = tk.Frame(self,background=self.mainBg,pady=10,padx=10)
+        self.entryFrame.place(relx=0.5,rely=0.5,anchor=CENTER)
     
     def _email_entry_widgets(self):
         Functions.create_entry_box_using_grid(frame=self.entryFrame,labels=self.email_label_with_colspan,entryList=self.forgot_password_entry_boxes,max_columns=1)
@@ -58,7 +60,10 @@ class ForgotPasswordView(tk.Frame):
         if update_pass == 0:
             self.forgotPasswordController.update_password(data)
             messagebox.showinfo('Process', 'Password successfully updated!')
-            self.forgotPasswordController.loginController(self.master)
+            if self.session:
+                self.forgotPasswordController.staffView(self.master,self.session)
+            else:
+                self.forgotPasswordController.loginController(self.master)
         else:
             messagebox.showerror('Invalid Input', update_pass)
 
@@ -87,8 +92,10 @@ class ForgotPasswordView(tk.Frame):
         
         
     def _checkBackInput(self,state:str):
-        if state == "email":
+        if state == "email" and not self.session:
             self.forgotPasswordController.loginController(self.master)
+        if state == "email" and self.session:
+            self.forgotPasswordController.staffView(self.master,self.session)
         if state == "password":
             Functions.destroy_page(self)
             self.main()

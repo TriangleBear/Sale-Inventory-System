@@ -1,16 +1,30 @@
 from View import StaffDashboard
 from Model import ManagerModel
+from Utils import Functions
 
 class StaffController:
-    def __init__(self, master,user_id):
+    def __init__(self, master,user_id,session):
         self.master = master
-        self.id =user_id
-        self.view = StaffDashboard(self,self.master,self.id)
+        self.user_id = user_id
+        self.session = session
+        self.view = StaffDashboard(self,self.master,self.user_id,self.session)
     
     def main(self):
         self.view.main()
 
-    def posController(self):
+    def posController(self,master):
         from Controller import PosController
-        pos_page = PosController(self.master)
+        pos_page = PosController(self,master)
         pos_page.main()
+
+    def forgotPasswordController(self,master,session):
+        Functions.destroy_page(master)
+        from Controller import ForgotPasswordController
+        forgot_password = ForgotPasswordController(controller=self,master=master,session=session)
+        forgot_password.main()
+
+    def mainController(self):
+        self.master.destroy()
+        from Controller import MainController
+        logout = MainController()
+        logout.main()    
