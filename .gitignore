@@ -160,3 +160,5 @@ receipt.txt
 receipt.txt
 backup.sql
 *.sql
+/Sale-Inventory-System/Scripts
+Sale-Inventory-System/pyvenv.cfg
