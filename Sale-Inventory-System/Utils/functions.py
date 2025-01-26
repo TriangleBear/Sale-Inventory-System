@@ -142,41 +142,41 @@ class Functions:
 
     def generate_unique_id(access_level:str):
         with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                while TRUE:
-                    digits = ''.join(random.choices(string.digits, k=4))
-                    if access_level == "Staff":
-                        sql = 'SELECT user_id FROM User WHERE user_id = %s'
-                        letter = "S"
-                    elif access_level == "Manager":
-                        sql = 'SELECT user_id FROM User WHERE user_id = %s'
-                        letter = "M"
-                    elif access_level == "Item":
-                        sql = 'SELECT item_id FROM Items WHERE item_id = %s'
-                        letter = "I"
-                    elif access_level == "Recipe":
-                        sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = %s'
-                        letter = "R"
-                    elif access_level == "Ingredient":
-                        sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = %s'
-                        letter = "C"
-                    elif access_level == "ProductR":
-                        sql = 'SELECT product_id FROM Product WHERE product_id = %s'
-                        letter = "PR"
-                    elif access_level == "ProductS":
-                        sql = 'SELECT product_id FROM Product WHERE product_id = %s'
-                        letter = "PS"
-                    elif access_level == "Sales":
-                        sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
-                        letter = "SL"
-                    elif access_level == "Invoice":
-                        sql = 'SELECT invoice_id FROM Invoice WHERE invoice_id = %s'
-                        letter = "INV"
-                    unique_id = letter + digits
-                    cursor.execute(sql, (unique_id,))
-                    if not cursor.fetchone():
-                        vivdb.close()
-                        return unique_id
+            cursor = vivdb.cursor()
+            while TRUE:
+                digits = ''.join(random.choices(string.digits, k=4))
+                if access_level == "Staff":
+                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
+                    letter = "S"
+                elif access_level == "Manager":
+                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
+                    letter = "M"
+                elif access_level == "Item":
+                    sql = 'SELECT item_id FROM Items WHERE item_id = %s'
+                    letter = "I"
+                elif access_level == "Recipe":
+                    sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = %s'
+                    letter = "R"
+                elif access_level == "Ingredient":
+                    sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = %s'
+                    letter = "C"
+                elif access_level == "ProductR":
+                    sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                    letter = "PR"
+                elif access_level == "ProductS":
+                    sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                    letter = "PS"
+                elif access_level == "Sales":
+                    sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
+                    letter = "SL"
+                elif access_level == "Invoice":
+                    sql = 'SELECT invoice_id FROM Invoice WHERE invoice_id = %s'
+                    letter = "INV"
+                unique_id = letter + digits
+                cursor.execute(sql, (unique_id,))
+                if not cursor.fetchone():
+                    vivdb.close()
+                    return unique_id
                 vivdb.close()
 
     def send_otp_email(email, otp):

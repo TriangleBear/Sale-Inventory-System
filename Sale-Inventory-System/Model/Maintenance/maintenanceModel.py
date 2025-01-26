@@ -1,5 +1,5 @@
 from Utils import Database
-import pymysql
+import sqlite3
 class MaintenanceModel:
     def __init__(self,data:list=None,search_entry=None,table_name=None):
         self.search_query = search_entry
@@ -83,7 +83,7 @@ class MaintenanceModel:
                     else:
                         raise ValueError("Invalid table name")
                     result = cursor.fetchall()
-        except pymysql.MySQLError as e:
+        except sqlite3.Error as e:
             print(f"Error executing query: {e}")
         except ValueError as e:
             print(e)

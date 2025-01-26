@@ -64,9 +64,9 @@ class ProductRegisterView(tk.Toplevel):
             print(f'{self.id}')
             self.title(f'Product Registration | Supply ID: {self.id}')
 
-        image = Image.open('Assets\\icon.jpg')
-        photo_image = ImageTk.PhotoImage(image)
-        self.iconphoto(False, photo_image)
+        # image = Image.open('Assets\\icon.jpg')
+        # photo_image = ImageTk.PhotoImage(image)
+        # self.iconphoto(False, photo_image)
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
         self.grab_set()
