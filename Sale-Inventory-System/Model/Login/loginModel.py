@@ -1,6 +1,6 @@
 # user.py
 from hashlib import sha256
-from Utils import Database,Credentials,Functions
+from Utils import Database,Functions
 from email.message import EmailMessage
 import smtplib
 

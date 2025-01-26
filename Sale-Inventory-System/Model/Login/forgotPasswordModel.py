@@ -1,5 +1,5 @@
 from hashlib import sha256
-from Utils import Database, Credentials,Functions
+from Utils import Database, Functions
 import smtplib
 
 class ForgotPasswordModel:

@@ -24,10 +24,10 @@ class MainView(tk.Tk):
         y = int((screen_height / 2) - (h / 2)) - 40
 
         # Set the window icon
-        image = Image.open('Assets\\icon.jpg')
-        photo_image = ImageTk.PhotoImage(image)
-        self.iconphoto(False, photo_image)
-        self.title('Tapsi Ni Vivian at Bulaluhan')
+        # image = Image.open('Assets\\icon.jpg')
+        # photo_image = ImageTk.PhotoImage(image)
+        # self.iconphoto(False, photo_image)
+        self.title("Ilar's Kitchen")
         self.geometry(f"{w}x{h}+{x}+{y}")
         self.resizable(False, False)
 

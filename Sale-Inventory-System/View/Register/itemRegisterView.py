@@ -89,9 +89,9 @@ class ItemRegisterView(tk.Toplevel):
         y = int((screen_height / 2) - (self.h / 2)) - 40
 
         
-        image = Image.open('Assets\\icon.jpg')
-        photo_image = ImageTk.PhotoImage(image)
-        self.iconphoto(False, photo_image)
+        # image = Image.open('Assets\\icon.jpg')
+        # photo_image = ImageTk.PhotoImage(image)
+        # self.iconphoto(False, photo_image)
         self.title(f'{self.status} Registration')
         self.geometry(f"{self.w}x{self.h}+{x}+{y}")
         self.resizable(False, False)
