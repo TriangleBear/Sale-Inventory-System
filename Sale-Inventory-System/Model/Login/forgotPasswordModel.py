@@ -45,24 +45,24 @@ class ForgotPasswordModel:
         return
 
     def _check_old_password(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT passwordHash FROM User WHERE username=%s'
-                cursor.execute(sql, (self.provided_username,))
-                stored_password = cursor.fetchone()
-                vivdb.close()
-                if sha256(self.new_password.encode()).hexdigest() == stored_password.get('passwordHash')  :
-                    return ValueError('New password must be different from old password')
-                return
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT passwordHash FROM User WHERE username=%s'
+            cursor.execute(sql, (self.provided_username,))
+            stored_password = cursor.fetchone()
+            conn.close()
+            if sha256(self.new_password.encode()).hexdigest() == stored_password.get('passwordHash')  :
+                return ValueError('New password must be different from old password')
+            return
 
     def update_password(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'UPDATE User SET passwordHash=%s WHERE user_id=%s'
-                cursor.execute(sql, (sha256(self.new_password.encode()).hexdigest(), self.user_id))
-                vivdb.commit()
-                vivdb.close()
-                return
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'UPDATE User SET passwordHash=%s WHERE user_id=%s'
+            cursor.execute(sql, (sha256(self.new_password.encode()).hexdigest(), self.user_id))
+            conn.commit()
+            conn.close()
+            return
 
     def checkEmailInput(self):
         if self.provided_username == '' and self.provided_email == '':
@@ -77,53 +77,53 @@ class ForgotPasswordModel:
         error = self.checkEmailInput()
         if error != None:
             return error
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT user_id FROM User WHERE username=%s AND email=%s'
-                cursor.execute(sql, (self.provided_username,self.provided_email))
-                userID = cursor.fetchone()
-                vivdb.close()
-                if userID:
-                    return 0
-                else:
-                    return ValueError('No account found with provided Username or Email')
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT user_id FROM User WHERE username=%s AND email=%s'
+            cursor.execute(sql, (self.provided_username,self.provided_email))
+            userID = cursor.fetchone()
+            conn.close()
+            if userID:
+                return 0
+            else:
+                return ValueError('No account found with provided Username or Email')
 
     """GETTERS"""            
     def get_forgot_password_otp(self):
         return self.otp
     
     def get_user_fname(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT fname FROM User WHERE user_id=%s'
-                cursor.execute(sql, (self.user_id))
-                fname = cursor.fetchone()
-                vivdb.close()
-                return fname.get('fname')
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT fname FROM User WHERE user_id=%s'
+            cursor.execute(sql, (self.user_id))
+            fname = cursor.fetchone()
+            conn.close()
+            return fname.get('fname')
                     
     def get_user_lname(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT lname FROM User WHERE user_id=%s'
-                cursor.execute(sql, (self.user_id))
-                lname = cursor.fetchone()
-                vivdb.close()
-                return lname.get('lname')
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT lname FROM User WHERE user_id=%s'
+            cursor.execute(sql, (self.user_id))
+            lname = cursor.fetchone()
+            conn.close()
+            return lname.get('lname')
     
     def get_user_password(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT passwordHash FROM User WHERE user_id=%s'
-                cursor.execute(sql, (self.user_id,))
-                password = cursor.fetchone()
-                vivdb.close()
-                return password.get('passwordHash')
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT passwordHash FROM User WHERE user_id=%s'
+            cursor.execute(sql, (self.user_id,))
+            password = cursor.fetchone()
+            conn.close()
+            return password.get('passwordHash')
             
     def get_user_id(self):
-        with Database.get_db_connection() as vivdb:
-            with vivdb.cursor() as cursor:
-                sql = 'SELECT user_id FROM User WHERE username=%s AND email=%s'
-                cursor.execute(sql, (self.provided_username,self.provided_email))
-                userID = cursor.fetchone()
-                vivdb.close()
-                return userID.get('user_id')
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = 'SELECT user_id FROM User WHERE username=%s AND email=%s'
+            cursor.execute(sql, (self.provided_username,self.provided_email))
+            userID = cursor.fetchone()
+            conn.close()
+            return userID.get('user_id')
