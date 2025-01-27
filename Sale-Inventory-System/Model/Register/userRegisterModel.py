@@ -31,24 +31,24 @@ class UserRegisterModel:
     def create_user(self):
         user_id = Functions.generate_unique_id(self.user_type)
         with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                hash_password = self.hash_pass(self.password)
-                created_on = datetime.datetime.now()
-                sql = """INSERT INTO User (user_id, fname, lname, user_type,birthdate,contact_num, email, address, username, passwordHash,created_on) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )"""
-                #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
-                cursor.execute(sql, (user_id, self.fname, self.lname, self.user_type,self.birthdate,self.contact_num,self.email, self.address, self.username, hash_password, created_on))
-                connection.commit()
-            connection.close()
+            cursor = conn.cursor()
+            hash_password = self.hash_pass(self.password)
+            created_on = datetime.datetime.now()
+            sql = """INSERT INTO User (user_id, fname, lname, user_type,birthdate,contact_num, email, address, username, passwordHash,created_on) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )"""
+            #user_id,fname, lname, user_type, birthdate, contact_num, email,address, username, password, created_on
+            cursor.execute(sql, (user_id, self.fname, self.lname, self.user_type,self.birthdate,self.contact_num,self.email, self.address, self.username, hash_password, created_on))
+            connection.commit()
+        connection.close()
         return 0
     
     def update_user(self,user_id):
         with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                sql = """UPDATE User SET fname = %s, lname = %s, user_type = %s, birthdate = %s, contact_num = %s, email = %s, address = %s, username = %s, passwordHash = %s WHERE user_id = %s"""
-                cursor.execute(sql, (self.fname, self.lname, self.user_type, self.birthdate, self.contact_num, self.email, self.address, self.username, self.hash_pass(self.password), user_id))
-                connection.commit()
-            connection.close()
+            cursor = conn.cursor()
+            sql = """UPDATE User SET fname = %s, lname = %s, user_type = %s, birthdate = %s, contact_num = %s, email = %s, address = %s, username = %s, passwordHash = %s WHERE user_id = %s"""
+            cursor.execute(sql, (self.fname, self.lname, self.user_type, self.birthdate, self.contact_num, self.email, self.address, self.username, self.hash_pass(self.password), user_id))
+            connection.commit()
+        connection.close()
         return 0
 
 

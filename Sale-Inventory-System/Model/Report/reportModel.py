@@ -7,10 +7,10 @@ import numpy as np
 class ReportModel:
     def fetch_items_database(self):
         with Database.get_db_connection() as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT * FROM Items")
-                data = cursor.fetchall()
-                cursor.close()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM Items")
+            data = cursor.fetchall()
+            cursor.close()
         return data
     
     def display_items_stock_level(self):
@@ -75,13 +75,13 @@ class ReportModel:
     def fetch_sales_report(self, date):
         print(f'Date: {date}')
         with Database.get_db_connection() as conn:
-            with conn.cursor() as cursor:
-                # Use the date parameter in the WHERE clause to filter sales for the specific date
-                query = "SELECT * FROM Invoice WHERE sold_on LIKE %s"
-                _date = f"%{date}%"
-                cursor.execute(query, (_date,))
-                data = cursor.fetchall()
-                cursor.close()
+            cursor = conn.cursor()
+            # Use the date parameter in the WHERE clause to filter sales for the specific date
+            query = "SELECT * FROM Invoice WHERE sold_on LIKE %s"
+            _date = f"%{date}%"
+            cursor.execute(query, (_date,))
+            data = cursor.fetchall()
+            cursor.close()
         return data
 
     
@@ -123,13 +123,13 @@ class ReportModel:
 
     def fetch_reorder_history(self, date):
         with Database.get_db_connection() as conn:
-            with conn.cursor() as cursor:
-                # Use the date parameter in the WHERE clause to filter supply history for the specific date
-                query = "SELECT * FROM Reordered WHERE ordered_on LIKE %s"
-                _date = f"%{date}%"
-                cursor.execute(query, (_date,))
-                data = cursor.fetchall()
-                cursor.close()
+            cursor = conn.cursor()
+            # Use the date parameter in the WHERE clause to filter supply history for the specific date
+            query = "SELECT * FROM Reordered WHERE ordered_on LIKE %s"
+            _date = f"%{date}%"
+            cursor.execute(query, (_date,))
+            data = cursor.fetchall()
+            cursor.close()
         return data
     
     def display_reorder_history(self, date):
