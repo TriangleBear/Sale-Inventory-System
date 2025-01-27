@@ -140,44 +140,42 @@ class Functions:
             return ValueError("First and last name cannot be part of the Password")
         return 0
 
-    def generate_unique_id(access_level:str):
-        with Database.get_db_connection() as vivdb:
-            cursor = vivdb.cursor()
-            while TRUE:
+    def generate_unique_id(access_level: str):
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            while True:
                 digits = ''.join(random.choices(string.digits, k=4))
                 if access_level == "Staff":
-                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
+                    sql = 'SELECT user_id FROM User WHERE user_id = ?'
                     letter = "S"
                 elif access_level == "Manager":
-                    sql = 'SELECT user_id FROM User WHERE user_id = %s'
+                    sql = 'SELECT user_id FROM User WHERE user_id = ?'
                     letter = "M"
                 elif access_level == "Item":
-                    sql = 'SELECT item_id FROM Items WHERE item_id = %s'
+                    sql = 'SELECT item_id FROM Items WHERE item_id = ?'
                     letter = "I"
                 elif access_level == "Recipe":
-                    sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = %s'
+                    sql = 'SELECT recipe_id FROM Recipes WHERE recipe_id = ?'
                     letter = "R"
                 elif access_level == "Ingredient":
-                    sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = %s'
+                    sql = 'SELECT ingd_id FROM Ingredients WHERE ingd_id = ?'
                     letter = "C"
                 elif access_level == "ProductR":
-                    sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                    sql = 'SELECT product_id FROM Product WHERE product_id = ?'
                     letter = "PR"
                 elif access_level == "ProductS":
-                    sql = 'SELECT product_id FROM Product WHERE product_id = %s'
+                    sql = 'SELECT product_id FROM Product WHERE product_id = ?'
                     letter = "PS"
                 elif access_level == "Sales":
-                    sql = 'SELECT sales_id FROM Sales WHERE sales_id = %s'
+                    sql = 'SELECT sales_id FROM Sales WHERE sales_id = ?'
                     letter = "SL"
                 elif access_level == "Invoice":
-                    sql = 'SELECT invoice_id FROM Invoice WHERE invoice_id = %s'
+                    sql = 'SELECT invoice_id FROM Invoice WHERE invoice_id = ?'
                     letter = "INV"
                 unique_id = letter + digits
                 cursor.execute(sql, (unique_id,))
                 if not cursor.fetchone():
-                    vivdb.close()
                     return unique_id
-                vivdb.close()
 
     def send_otp_email(email, otp):
         sender_email = Credentials.appemail
