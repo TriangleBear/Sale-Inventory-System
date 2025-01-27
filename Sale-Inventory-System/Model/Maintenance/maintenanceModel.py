@@ -17,7 +17,7 @@ class MaintenanceModel:
     def search_data(self):
         result = []
         try:
-            with Database.get_db_connection() as connection:
+            with Database.get_db_connection() as conn:
                 cursor = conn.cursor()
                 search_pattern = f"%{self.search_query}%"
                 if self.table_name == "Items":
@@ -88,129 +88,129 @@ class MaintenanceModel:
         except ValueError as e:
             print(e)
         finally:
-            connection.close()
+            conn.close()
         return result
     
     def fetch_data_from_user_activity(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM UserActivity"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_recipe_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Recipes"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_recipe_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Recipes LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
     
     def get_supply_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Supply"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_supply_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Supply LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
 
     def get_product_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Product"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_product_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Product LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
     
     def get_items_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Items"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_items_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Items LIMIT 0"""  # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
     
     def get_supplies_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Supply"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_supplies_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM Supply LIMIT 0""" # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
     
     def get_users_on_database(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM User"""
             cursor.execute(sql)
             result = cursor.fetchall()
-        connection.close()
+        conn.close()
         return result
     
     def get_users_column_names(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = """SELECT * FROM User LIMIT 0""" # Modified to limit the results to 0 to avoid fetching data
             cursor.execute(sql)
             # Extracting column names from the cursor's description attribute
             column_names = [desc[0] for desc in cursor.description]
-        connection.close()
+        conn.close()
         return column_names
     

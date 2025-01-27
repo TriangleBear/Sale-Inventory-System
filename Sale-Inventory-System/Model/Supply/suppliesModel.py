@@ -170,17 +170,17 @@ class SuppliesModel:
         return data
     
     def reorder(self,cart_items):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             for item in cart_items:
                 query = "INSERT INTO Reordered (item_id,item_name,amount_to_pay,quantity,arrival_date,ordered_on,Status) VALUES (%s,%s,%s,%s,%s,%s,%s)"
                 cursor.execute(query, (item[0],item[1],item[2],item[3],item[4],item[5],item[6],)) 
-            connection.commit()
+            conn.commit()
         cursor.close()
         return
     
     def fetch_all_pending_orders(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT * FROM Reordered WHERE Status = %s",("Pending",)) 
             data = cursor.fetchall()
@@ -188,7 +188,7 @@ class SuppliesModel:
         return data
     
     def add_to_items(self,data):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql0 = """SELECT quantity FROM Items WHERE item_id = %s"""
             cursor.execute(sql0, (data[1]))
@@ -198,7 +198,7 @@ class SuppliesModel:
             cursor.execute(sql1, (new_item_quantity,data[1],)) 
             sql2 = """UPDATE Reordered SET Status = %s WHERE item_id = %s"""
             cursor.execute(sql2, ("Order Received", data[1]))
-            connection.commit()
+            conn.commit()
         cursor.close()
         return
 

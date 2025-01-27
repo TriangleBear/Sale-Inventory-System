@@ -19,7 +19,7 @@ class PosModel:
         return data[0] if data else None
 
     def search_product(self, search_query):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             # Adjust the query to select only the product_id
             query = """SELECT * FROM Product 
@@ -42,7 +42,7 @@ class PosModel:
         return data
 
     def fetch_product_quantity(self, product_name):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             query = "SELECT quantity FROM Product WHERE product_name = %s"
             cursor.execute(query, (product_name,))
@@ -63,7 +63,7 @@ class PosModel:
         return True
     
     def fetch_product_id(self, product_name):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = "SELECT product_id FROM Product WHERE product_name = %s"
             cursor.execute(sql, (product_name,))
@@ -72,7 +72,7 @@ class PosModel:
         return data['product_id'] if data else None
     
     def fetch_product_unit_price(self,product_id):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             sql = "SELECT price FROM Product WHERE product_id = %s"
             cursor.execute(sql, (product_id,))
@@ -81,7 +81,7 @@ class PosModel:
         return data['price'] if data else None
 
     def save_transaction(self,sales_id):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             for item in self.cart_items:
                 product_id = self.fetch_product_id(item[0])
@@ -110,18 +110,18 @@ class PosModel:
                     item[1],
                     item[2],
                     self.sold_on,))
-            connection.commit()
-        connection.close()
+            conn.commit()
+        conn.close()
         return
 
     def save_sales(self):
-        with Database.get_db_connection() as connection:
+        with Database.get_db_connection() as conn:
             cursor = conn.cursor()
             changed = self.amount_tendered - self.total_price
             print(self.sold_on)
             sql = "INSERT INTO Sales (sales_id, user_id, amount_tendered, total, amount_changed, created_on) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (self.sales_id, self.user_id, self.amount_tendered, self.total_price, changed, self.sold_on ))
-            connection.commit()
-        connection.close()
+            conn.commit()
+        conn.close()
         return [self.sales_id,self.sold_on]
         
