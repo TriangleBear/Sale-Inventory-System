@@ -4,10 +4,10 @@ class StaffModel:
         pass
 
     def get_staff_username(self):
-        with Database.get_db_connection() as connection:
-            with connection.cursor() as cursor:
-                sql = """SELECT username FROM User WHERE user_type = 'Staff' AND username = %s""" 
-                cursor.execute(sql, (self.username,))
-                result = cursor.fetchone()
-            connection.close()
+        with Database.get_db_connection() as conn:
+            cursor = conn.cursor()
+            sql = """SELECT username FROM User WHERE user_type = 'Staff' AND username = %s""" 
+            cursor.execute(sql, (self.username,))
+            result = cursor.fetchone()
+        conn.close()
         return result
